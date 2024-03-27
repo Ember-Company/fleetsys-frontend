@@ -1,31 +1,14 @@
-<!-- - [Dashboard](https://material-kit-react.devias.io)
-- [Customers](https://material-kit-react.devias.io/dashboard/customers)
-- [Integrations](https://material-kit-react.devias.io/dashboard/integrations)
-- [Settings](https://material-kit-react.devias.io/dashboard/settings)
-- [Account](https://material-kit-react.devias.io/dashboard/account)
-- [Sign In](https://material-kit-react.devias.io/auth/sign-in)
-- [Sign Up](https://material-kit-react.devias.io/auth/sign-up)
-- [Reset Password](https://material-kit-react.devias.io/auth/reset-password) -->
-
-<!-- - [Duplicate File](https://www.figma.com/file/b3L1Np4RYiicZAOMopHNkm/Devias-Dashboard-Design-Library-Kit) -->
-
-<!-- ## Upgrade to PRO Version
-
-We also have a pro version of this product which bundles even more pages and components if you want
-to save more time and design efforts :)
-
-| Free Version (this one)  | [Devias Kit Pro](https://mui.com/store/items/devias-kit-pro/)                |
-| ------------------------ | :--------------------------------------------------------------------------- |
-| **8** Pages              | **80+** Pages                                                                |
-| ✔ Custom Authentication  | ✔ Authentication with **Amplify**, **Auth0**, **Firebase** and **Supabase**  |
-| -                        | ✔ Vite Version                                                               |
-| -                        | ✔ Dark Mode Support                                                          |
-| -                        | ✔ Complete Users Flows                                                       |
-| -                        | ✔ Premium Technical Support                                                  | -->
+- [Customers](http://localhost:3000/dashboard/maintenance)
+- [Integrations](https//localhost:3000/dashboard/teams)
+- [Settings](http://material-kit-react.devias.io/dashboard/settings)
+- [Account](http://material-kit-react.devias.io/dashboard/account)
+- [Sign In](http://material-kit-react.devias.io/auth/sign-in)
+- [Sign Up](http://material-kit-react.devias.io/auth/sign-up)
+- [Reset Password](http://material-kit-react.devias.io/auth/reset-password)
 
 ## Quick start
 
-- Clone the repo: `git clone https://github.com/devias-io/material-kit-react.git`
+- Clone the repo: `git clone https://github.com/Ember-Company/truckwatch-frontend.git`
 - Make sure your Node.js and npm versions are up to date
 - Install dependencies: `npm install` or `yarn`
 - Start the server: `npm run dev` or `yarn dev`
