@@ -1,5 +1,5 @@
-- [Customers](http://localhost:3000/dashboard/maintenance)
-- [Integrations](https//localhost:3000/dashboard/teams)
+- [Vehicle Maintenance](https//localhost:3000/dashboard/teams)
+- [Teams / Employees](http://localhost:3000/dashboard/maintenance)
 - [Settings](http://material-kit-react.devias.io/dashboard/settings)
 - [Account](http://material-kit-react.devias.io/dashboard/account)
 - [Sign In](http://material-kit-react.devias.io/auth/sign-in)
