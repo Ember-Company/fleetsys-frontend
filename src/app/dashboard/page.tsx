@@ -7,9 +7,9 @@ import { config } from '@/config';
 import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
 import { LatestProducts } from '@/components/dashboard/overview/latest-products';
 import { LoadsDone } from '@/components/dashboard/overview/loads-done';
-import { Sales } from '@/components/dashboard/overview/sales';
-import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
-import { TotalCustomers } from '@/components/dashboard/overview/total-customers';
+import { LoadsProgress } from '@/components/dashboard/overview/loads-inprogress';
+import { LoadsPaid } from '@/components/dashboard/overview/loads-paid';
+import { LoadTrends } from '@/components/dashboard/overview/LoadTrends';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
 
@@ -22,20 +22,17 @@ export default function Page(): React.JSX.Element {
         <LoadsDone diff={12} trend="up" sx={{ height: '100%' }} value="500" />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalCustomers diff={16} trend="down" sx={{ height: '100%' }} value="1.6k" />
+        <LoadsPaid diff={16} trend="down" sx={{ height: '100%' }} value="200" />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TasksProgress sx={{ height: '100%' }} value={75.5} />
+        <LoadsProgress sx={{ height: '100%' }} value={75.5} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </Grid>
       <Grid lg={8} xs={12}>
-        <Sales
-          chartSeries={[
-            { name: 'This year', data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20] },
-            { name: 'Last year', data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13] },
-          ]}
+        <LoadTrends
+          chartSeries={[{ name: 'Load Quantity', data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20] }]}
           sx={{ height: '100%' }}
         />
       </Grid>

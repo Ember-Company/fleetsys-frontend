@@ -1,37 +1,47 @@
 'use client';
 
 import * as React from 'react';
+import { FormControl, InputLabel, MenuItem, Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
+import Select from '@mui/material/Select';
+import type { SelectChangeEvent } from '@mui/material/Select';
 import { alpha, useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
 import { ArrowClockwise as ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import type { ApexOptions } from 'apexcharts';
 
+import type { ChartFilterOptions } from '@/types/charts';
 import { Chart } from '@/components/core/chart';
 
-export interface SalesProps {
+export interface LoadTrendsProps {
   chartSeries: { name: string; data: number[] }[];
   sx?: SxProps;
 }
 
-export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
+interface CardActionsProps {
+  filter: ChartFilterOptions;
+  handleFilterSelection: (event: SelectChangeEvent) => void;
+}
+
+export function LoadTrends({ chartSeries, sx }: LoadTrendsProps): React.JSX.Element {
+  const [filter, setFilter] = React.useState<ChartFilterOptions>('6months');
   const chartOptions = useChartOptions();
+
+  const handleFilterSelection = (event: SelectChangeEvent): void => {
+    setFilter(event.target.value as ChartFilterOptions);
+  };
 
   return (
     <Card sx={sx}>
       <CardHeader
-        action={
-          <Button color="inherit" size="small" startIcon={<ArrowClockwiseIcon fontSize="var(--icon-fontSize-md)" />}>
-            Sync
-          </Button>
-        }
-        title="Sales"
+        action={<CardHeaderActions filter={filter} handleFilterSelection={handleFilterSelection} />}
+        title="Loading Trends"
       />
       <CardContent>
         <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />
@@ -43,6 +53,38 @@ export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
         </Button>
       </CardActions>
     </Card>
+  );
+}
+
+function CardHeaderActions({ filter, handleFilterSelection }: CardActionsProps): React.JSX.Element {
+  const filterTypes: Record<ChartFilterOptions, string> = {
+    'last-month': 'Last month',
+    '6months': 'Last 6 months',
+    '1year': '1 Year',
+  };
+
+  return (
+    <Stack direction="row" sx={{ alignItems: 'center' }}>
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-standard-label">Filter by:</InputLabel>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={filter}
+          onChange={handleFilterSelection}
+          label="Filter"
+        >
+          {Object.entries(filterTypes).map(([key, value]) => (
+            <MenuItem key={key} value={key}>
+              {value}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Button color="inherit" size="small" startIcon={<ArrowClockwiseIcon fontSize="var(--icon-fontSize-md)" />}>
+        Sync
+      </Button>
+    </Stack>
   );
 }
 
@@ -72,7 +114,7 @@ function useChartOptions(): ApexOptions {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value) => (value > 0 ? value.toString() : value.toString()),
         offsetX: -10,
         style: { colors: theme.palette.text.secondary },
       },
