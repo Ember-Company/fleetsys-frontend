@@ -16,48 +16,49 @@ import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/Arr
 import dayjs from 'dayjs';
 
 const statusMap = {
-  pending: { label: 'Pending', color: 'warning' },
-  delivered: { label: 'Delivered', color: 'success' },
-  refunded: { label: 'Refunded', color: 'error' },
+  maintenance: { label: 'Maintenance', color: 'warning' },
+  ready: { label: 'Ready', color: 'success' },
+  unavailable: { label: 'Unavailable', color: 'error' },
+  ongoing: { label: 'Ongoing', color: 'info' },
 } as const;
 
-export interface Order {
+export interface VehicleStatus {
   id: string;
-  customer: { name: string };
+  driver: { name: string };
   amount: number;
-  status: 'pending' | 'delivered' | 'refunded';
+  status: 'maintenance' | 'ready' | 'unavailable' | 'ongoing';
   createdAt: Date;
 }
 
-export interface LatestOrdersProps {
-  orders?: Order[];
+export interface LatestVehicleUpdatesProps {
+  vehicleUpdates?: VehicleStatus[];
   sx?: SxProps;
 }
 
-export function LatestOrders({ orders = [], sx }: LatestOrdersProps): React.JSX.Element {
+export function LatestVehicleUpdates({ vehicleUpdates = [], sx }: LatestVehicleUpdatesProps): React.JSX.Element {
   return (
     <Card sx={sx}>
-      <CardHeader title="Latest orders" />
+      <CardHeader title="Latest Updates on Vehicles" />
       <Divider />
       <Box sx={{ overflowX: 'auto' }}>
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Order</TableCell>
-              <TableCell>Customer</TableCell>
+              <TableCell>Number Plate</TableCell>
+              <TableCell>Driver</TableCell>
               <TableCell sortDirection="desc">Date</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
-              const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
+            {vehicleUpdates.map(({ status, id, driver, createdAt }) => {
+              const { label, color } = statusMap[status] ?? { label: 'Unknown', color: 'default' };
 
               return (
-                <TableRow hover key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
-                  <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
+                <TableRow hover key={id}>
+                  <TableCell>{id}</TableCell>
+                  <TableCell>{driver.name}</TableCell>
+                  <TableCell>{dayjs(createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
                   </TableCell>
