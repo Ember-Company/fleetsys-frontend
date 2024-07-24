@@ -1,5 +1,5 @@
 import React from 'react';
-import { Error } from '@mui/icons-material';
+import { ArrowRight, Error } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -10,7 +10,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import type { SxProps } from '@mui/material/styles';
-import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import dayjs from 'dayjs';
 
 export interface Issue {
@@ -49,12 +48,7 @@ export function LatestVehicleIssues({ issues = [], sx }: LatestVehicleIssuesProp
       </List>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
-          size="small"
-          variant="text"
-        >
+        <Button color="inherit" endIcon={<ArrowRight fontSize="medium" />} size="small" variant="text">
           View all
         </Button>
       </CardActions>

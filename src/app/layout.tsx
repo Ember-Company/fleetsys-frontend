@@ -3,6 +3,8 @@ import type { Viewport } from 'next';
 
 import '@/styles/global.css';
 
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+
 import { UserProvider } from '@/contexts/user-context';
 import { LocalizationProvider } from '@/components/core/localization-provider';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
@@ -17,11 +19,13 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
   return (
     <html lang="en">
       <body>
-        <LocalizationProvider>
-          <UserProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </UserProvider>
-        </LocalizationProvider>
+        <AppRouterCacheProvider>
+          <LocalizationProvider>
+            <UserProvider>
+              <ThemeProvider>{children}</ThemeProvider>
+            </UserProvider>
+          </LocalizationProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

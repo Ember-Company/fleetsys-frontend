@@ -3,6 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 // import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -54,7 +55,7 @@ export function SideNav(): React.JSX.Element {
       <Stack spacing={2} sx={{ p: 3 }}>
         <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex', textDecoration: 'none' }}>
           <Typography color="ghostwhite" variant="h5">
-            TruckWatch
+            Fleetsys
           </Typography>
           {/* <Logo color="light" height={32} width={122} /> */}
         </Box>
