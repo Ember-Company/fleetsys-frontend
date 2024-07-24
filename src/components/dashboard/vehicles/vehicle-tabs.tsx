@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { Box, Tab, Tabs, Typography } from '@mui/material';
 
-import { VTabsConfigTransformed, type VTabsConfig } from '@/types/vehicles';
+import { type VTabsConfig, type VTabsConfigTransformed } from '@/types/vehicles';
 
 interface VehicleTabsProps {
   VTabsConfig: VTabsConfig[];
@@ -61,13 +61,13 @@ function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
     );
   }, [VTabsConfig]);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: number): void => {
     setTabValue(newValue);
   };
 
   return (
     <>
-      <Box borderBottom={1} borderColor={'divider'}>
+      <Box borderBottom={1} borderColor="divider">
         <Tabs value={tabValue} onChange={handleChange}>
           {/* <Tab label='Vehicles List' /> */}
           {tabs.titles.map((title) => (
@@ -76,7 +76,7 @@ function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
         </Tabs>
       </Box>
       {tabs.panels.map((PanelComponent, index) => (
-        <TabPanel value={tabValue} index={index} key={index}>
+        <TabPanel value={tabValue} index={index} key={PanelComponent?.toString()}>
           {PanelComponent}
         </TabPanel>
       ))}
