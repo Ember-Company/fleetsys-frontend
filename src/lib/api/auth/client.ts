@@ -2,6 +2,11 @@
 
 import type { User } from '@/types/user';
 
+import CoreAPI from '..';
+import CoreApiRouteList from '../api-routes';
+
+// import CoreAPI fro..api';
+
 function generateToken(): string {
   const arr = new Uint8Array(12);
   window.crypto.getRandomValues(arr);
@@ -17,14 +22,9 @@ const user = {
 } satisfies User;
 
 export interface SignUpParams {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   password: string;
-}
-
-export interface SignInWithOAuthParams {
-  provider: 'google' | 'discord';
 }
 
 export interface SignInWithPasswordParams {
@@ -37,14 +37,16 @@ export interface ResetPasswordParams {
 }
 
 class AuthClient {
-  async signUp(_: SignUpParams): Promise<{ error?: string }> {
-    // Make API request
+  async signUp(userData: SignUpParams): Promise<{ error?: string }> {
+    const { method, path } = CoreApiRouteList.register;
+    const response = await CoreAPI[method](path, {
+      ...userData,
+    });
 
-    // We do not handle the API, so we'll just generate a token and store it in localStorage.
-    const token = generateToken();
-    localStorage.setItem('custom-auth-token', token);
+    // const token = generateToken();
+    // localStorage.setItem('custom-auth-token', token);
 
-    return {};
+    // return {};
   }
 
   async signInWithOAuth(_: SignInWithOAuthParams): Promise<{ error?: string }> {
