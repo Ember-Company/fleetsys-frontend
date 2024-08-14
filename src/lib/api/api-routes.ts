@@ -1,10 +1,26 @@
-import { type ApiRouteList } from '@/types/api';
+import { type ApiGroup } from '@/types/api';
 
-const CoreApiRouteList = {
-  register: {
-    method: 'post',
-    path: '/register',
+const CoreApiRoutes = {
+  auth: {
+    register: {
+      method: 'post',
+      path: '/register',
+    },
+    login: {
+      method: 'post',
+      path: '/login',
+    },
+    logout: {
+      method: 'post',
+      path: '/logout',
+    },
   },
-} satisfies ApiRouteList;
+  user: {
+    showUser: {
+      method: 'get',
+      path: '/user',
+    },
+  },
+} satisfies ApiGroup;
 
-export default CoreApiRouteList;
+export default CoreApiRoutes;

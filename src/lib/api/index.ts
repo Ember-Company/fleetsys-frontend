@@ -1,10 +1,12 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios';
+
+import type { ApiMeta, Response } from '@/types/api';
 
 import { getBackendURL } from '../get-site-url';
 import { Logger } from '../logger';
 import { getBearerToken } from './auth/token-handler';
 
-const CoreAPI = axios.create({
+export const CoreAPI = axios.create({
   baseURL: getBackendURL(),
   withCredentials: true,
   headers: {
@@ -50,4 +52,14 @@ CoreAPI.interceptors.response.use(
   }
 );
 
-export default CoreAPI;
+export async function makeRequest<R, P = void>(
+  { method, path }: ApiMeta,
+  payload?: P & AxiosRequestConfig<P>
+): Promise<Response<R>> {
+  const { data, ...metadata }: Response<R> = await CoreAPI[method](path, payload);
+
+  return {
+    data,
+    ...metadata,
+  };
+}
