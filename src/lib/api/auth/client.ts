@@ -1,8 +1,8 @@
-import type { User, UserPayload } from '@/types/user';
+import type { Response } from '@/types/api';
+import type { LoginResponse, User, UserPayload } from '@/types/user';
+import { makeRequest } from '@/lib/api';
+import CoreApiRoutes from '@/lib/api/api-routes';
 import { Logger } from '@/lib/logger';
-
-import { makeRequest } from '..';
-import CoreApiRoutes from '../api-routes';
 
 const logger = new Logger({
   level: 'DEBUG',
@@ -11,27 +11,19 @@ const logger = new Logger({
 });
 
 class AuthClient {
-  async signUp(userData: UserPayload): Promise<User> {
+  async signUp(userData: UserPayload): Promise<Response<User>> {
     const { register } = CoreApiRoutes.auth;
-    const { data } = await makeRequest<User, UserPayload>(register, userData);
-
-    logger.debug(data);
-    return data;
+    return await makeRequest<User, UserPayload>(register, userData);
   }
 
-  async login(userData: UserPayload): Promise<User> {
+  async login(userData: UserPayload): Promise<Response<LoginResponse>> {
     const { login } = CoreApiRoutes.auth;
-    const { data } = await makeRequest<User, UserPayload>(login, userData);
-
-    logger.debug(data);
-    return data;
+    return await makeRequest<LoginResponse, UserPayload>(login, userData);
   }
 
-  async getUser(): Promise<User> {
+  async getUser(): Promise<Response<User>> {
     const { showUser } = CoreApiRoutes.user;
-    const { data } = await makeRequest<User>(showUser);
-
-    return data;
+    return await makeRequest<User>(showUser);
   }
 
   async signOut(): Promise<void> {

@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import type { AxiosError, AxiosResponse } from 'axios';
 
 export type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -11,6 +11,7 @@ type ApiName = Record<string, ApiMeta>;
 export type ApiGroup = Readonly<Record<string, ApiName>> | Readonly<ApiName>;
 
 export interface Response<T> {
-  data: T;
-  metadata: Partial<AxiosResponse>;
+  data: T | null;
+  metadata: Partial<AxiosResponse> | null;
+  error?: AxiosError | null;
 }

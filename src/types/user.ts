@@ -10,9 +10,16 @@ export interface User {
   role: string;
 }
 
-export interface UserPayload extends Pick<User, 'email' | 'phone'> {
+export interface LoginResponse {
+  user: User;
+  accessToken: string;
+  token_type: string;
+}
+
+export interface UserPayload extends Pick<User, 'email'> {
   name?: string;
   password: string;
+  phone?: string;
 }
 
 export interface Profile {
