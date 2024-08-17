@@ -60,8 +60,7 @@ NextAPI.interceptors.response.use(
 
 export async function makeRequest<R, P = void>(
   requestParams: ApiMeta | boolean = false,
-  payload?: P,
-  config: AxiosRequestConfig = {}
+  payload?: P
 ): Promise<Response<R>> {
   try {
     if (typeof requestParams === 'boolean') {
@@ -73,20 +72,7 @@ export async function makeRequest<R, P = void>(
     }
 
     const { method, path } = requestParams;
-
-    // const serverConfig =
-    //   typeof window === 'undefined'
-    //     ? {
-    //         Authorization: `Bearer ${(await getBearerToken()) || ''}`,
-    //       }
-    //     : null;
-
-    const { data, ...metadata }: AxiosResponse<R> = await CoreAPI[method](
-      path,
-      payload ?? {
-        ...config,
-      }
-    );
+    const { data, ...metadata }: AxiosResponse<R> = await CoreAPI[method](path, payload ?? {});
 
     return {
       data,
