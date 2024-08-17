@@ -13,14 +13,18 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
-import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
+import { Eye, Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
+import { EyeSlash, EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
+import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
+import { User, UserPayload } from '@/types/user';
 import { paths } from '@/paths';
+import { NextAPI } from '@/lib/api';
 import { authClient } from '@/lib/api/auth/client';
-import { useUser } from '@/hooks/use-user';
+import { logger } from '@/lib/default-logger';
+import useMounted from '@/hooks/use-mounted';
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -30,10 +34,11 @@ const schema = zod.object({
 type Values = zod.infer<typeof schema>;
 const defaultValues = { email: '', password: '' } satisfies Values;
 
-export function SignInForm(): React.JSX.Element {
+export function SignInForm(): React.JSX.Element | null {
+  const mounted = useMounted();
+
   const router = useRouter();
-  const { checkSession } = useUser();
-  const [showPassword, setShowPassword] = React.useState<boolean>();
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const [isPending, setIsPending] = React.useState<boolean>(false);
 
   const {
@@ -47,30 +52,46 @@ export function SignInForm(): React.JSX.Element {
     async (values: Values): Promise<void> => {
       setIsPending(true);
 
-      const data = await authClient.login(values);
+      try {
+        const { data } = await authClient.login(values);
+        // const response = await NextAPI.post('sign-in', values);
 
-      if (!data) {
-        setError('root', { type: 'server', message: 'error occurred' });
+        // const data = response.data as { user: User };
+
+        logger.debug(data);
+
+        if (!data) {
+          setError('root', { type: 'server', message: 'An error occurred during login' });
+          setIsPending(false);
+          return;
+        }
+
+        router.refresh();
+      } catch (error) {
+        console.error(error);
+
+        setError('root', { type: 'server', message: 'An error occurred during login' });
+      } finally {
         setIsPending(false);
-        return;
       }
-
-      await checkSession?.();
-      router.refresh();
     },
-    [checkSession, router, setError]
+    [router, setError]
   );
+
+  React.useEffect(() => {
+    const test = async (): Promise<void> => {
+      await authClient.getSession();
+    };
+
+    void test();
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <Stack spacing={4}>
       <Stack spacing={1}>
         <Typography variant="h4">Sign in</Typography>
-        <Typography color="text.secondary" variant="body2">
-          Don&apos;t have an account?{' '}
-          <Link component={RouterLink} href={paths.auth.signUp} underline="hover" variant="subtitle2">
-            Sign up
-          </Link>
-        </Typography>
       </Stack>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
@@ -81,7 +102,8 @@ export function SignInForm(): React.JSX.Element {
               <FormControl error={Boolean(errors.email)}>
                 <InputLabel>Email address</InputLabel>
                 <OutlinedInput {...field} label="Email address" type="email" />
-                {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}
+                <FormHelperText>{errors?.email?.message ?? null}</FormHelperText>
+                {/* {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null} */}
               </FormControl>
             )}
           />
@@ -115,15 +137,16 @@ export function SignInForm(): React.JSX.Element {
                   label="Password"
                   type={showPassword ? 'text' : 'password'}
                 />
-                {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null}
+                <FormHelperText>{errors?.password?.message ?? null}</FormHelperText>
+                {/* {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null} */}
               </FormControl>
             )}
           />
-          <div>
-            <Link component={RouterLink} href={paths.auth.resetPassword} variant="subtitle2">
-              Forgot password?
-            </Link>
-          </div>
+          {/* <div> */}
+          <Link component={RouterLink} href={paths.auth.resetPassword} variant="subtitle2" sx={{ display: 'block' }}>
+            Forgot password?
+          </Link>
+          {/* </div> */}
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
           <Button disabled={isPending} type="submit" variant="contained">
             Sign in

@@ -1,7 +1,9 @@
+'use server';
+
 import { cookies } from 'next/headers';
 import { TOKEN_COOKIE_KEY } from '@/constants';
 
-export function getBearerToken(): string | null {
+export async function getBearerToken(): Promise<string | null> {
   const cookieStore = cookies();
   const bearerToken = cookieStore.get(TOKEN_COOKIE_KEY);
 
@@ -12,7 +14,7 @@ export function getBearerToken(): string | null {
   return null;
 }
 
-export function setBearerToken(token: string): void {
+export async function setBearerToken(token: string): Promise<void> {
   if (!token) return;
 
   const maxAge = 60 * 60 * 24; // 24 hours
@@ -28,6 +30,6 @@ export function setBearerToken(token: string): void {
   });
 }
 
-export function deleteBearerToken(): void {
+export async function deleteBearerToken(): Promise<void> {
   cookies().delete(TOKEN_COOKIE_KEY);
 }

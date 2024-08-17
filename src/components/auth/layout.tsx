@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import RouterLink from 'next/link';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -34,7 +34,10 @@ export function Layout({ children }: LayoutProps): React.JSX.Element {
           </Box>
         </Box>
         <Box sx={{ alignItems: 'center', display: 'flex', flex: '1 1 auto', justifyContent: 'center', p: 3 }}>
-          <Box sx={{ maxWidth: '450px', width: '100%' }}>{children}</Box>
+          <Box sx={{ maxWidth: '450px', width: '100%' }}>
+            {children}
+            {/* <React.Suspense fallback={<div>loading</div>}>{children}</React.Suspense> */}
+          </Box>
         </Box>
       </Box>
       <Box

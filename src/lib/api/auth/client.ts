@@ -1,4 +1,7 @@
-import type { Response } from '@/types/api';
+import { STATUS_CODES } from '@/constants';
+import type { AxiosResponse } from 'axios';
+
+import type { NoContent, Response } from '@/types/api';
 import type { LoginResponse, User, UserPayload } from '@/types/user';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
@@ -11,26 +14,29 @@ const logger = new Logger({
 });
 
 class AuthClient {
-  async signUp(userData: UserPayload): Promise<Response<User>> {
-    const { register } = CoreApiRoutes.auth;
-    return await makeRequest<User, UserPayload>(register, userData);
-  }
-
   async login(userData: UserPayload): Promise<Response<LoginResponse>> {
     const { login } = CoreApiRoutes.auth;
-    return await makeRequest<LoginResponse, UserPayload>(login, userData);
+
+    return makeRequest<LoginResponse, UserPayload>(login, userData);
+  }
+
+  async getSession(): Promise<NoContent> {
+    const { csrfCookie } = CoreApiRoutes.auth;
+
+    return await makeRequest<NoContent>(csrfCookie);
   }
 
   async getUser(): Promise<Response<User>> {
     const { showUser } = CoreApiRoutes.user;
+
     return await makeRequest<User>(showUser);
   }
 
   async signOut(): Promise<void> {
     const { logout } = CoreApiRoutes.auth;
-    const { metadata } = await makeRequest<unknown>(logout);
+    const { metadata } = await makeRequest<AxiosResponse>(logout);
 
-    if (metadata.status === 204) {
+    if (metadata?.status === 204) {
       return;
     }
 

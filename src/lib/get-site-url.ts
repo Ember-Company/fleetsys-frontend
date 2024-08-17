@@ -1,13 +1,14 @@
 export function getSiteURL(): string {
-  const url = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL ?? 'http://localhost:3000/';
+  const url = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL ?? 'http://localhost:3000/api/';
 
-  return validateURL(url);
+  return url;
 }
 
 export function getBackendURL(): string {
-  const url = process.env.NEXT_APP_BACKEND_URL ?? 'http://127.0.0.1:8000/api/';
+  const url = 'http://localhost:8000/';
 
-  return validateURL(url);
+  // return validateURL(url);
+  return url;
 }
 
 function validateURL(url: string): string {

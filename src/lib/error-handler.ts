@@ -4,7 +4,7 @@ import { Logger } from './logger';
 
 const logger = new Logger({
   level: 'DEBUG',
-  prefix: 'Response Interceptor:',
+  prefix: 'Error Handlers: :',
   showLevel: true,
 });
 

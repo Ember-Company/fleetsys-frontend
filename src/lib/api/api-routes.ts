@@ -1,26 +1,36 @@
-import { type ApiGroup } from '@/types/api';
+import { type ApiGroup, type StatusCodes } from '@/types/api';
 
 const CoreApiRoutes = {
   auth: {
-    register: {
-      method: 'post',
-      path: '/register',
-    },
     login: {
       method: 'post',
-      path: '/login',
+      path: 'api/login',
     },
     logout: {
       method: 'post',
-      path: '/logout',
+      path: 'api/logout',
+    },
+    csrfCookie: {
+      method: 'get',
+      path: 'sanctum/csrf-cookie',
     },
   },
   user: {
     showUser: {
       method: 'get',
-      path: '/user',
+      path: 'api/user',
     },
   },
-} satisfies ApiGroup;
+  vehicles: {
+    findAll: {
+      method: 'get',
+      path: 'api/vehicles',
+    },
+    createVehicle: {
+      method: 'post',
+      path: 'api/vehicles',
+    },
+  },
+} as const satisfies ApiGroup;
 
 export default CoreApiRoutes;

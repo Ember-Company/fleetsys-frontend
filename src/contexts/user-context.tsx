@@ -28,19 +28,11 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
 
   const checkSession = React.useCallback(async (): Promise<void> => {
     try {
-      const { data: user, error } = await authClient.getUser();
+      await authClient.getSession().then(async () => {
+        const { data: user } = await authClient.getUser();
 
-      if (error) {
-        logger.error(error);
-        throw error;
-      }
-      // if (!user) {
-      //   logger.error(user);
-      //   setState((prev) => ({ ...prev, user: null, error: 'Something went wrong', isLoading: false }));
-      //   return;
-      // }
-
-      setState((prev) => ({ ...prev, user, error: null, isLoading: false }));
+        setState((prev) => ({ ...prev, user, error: null, isLoading: false }));
+      });
     } catch (err) {
       logger.error(err);
       setState((prev) => ({ ...prev, user: null, error: 'Something went wrong', isLoading: false }));

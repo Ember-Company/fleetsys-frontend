@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import type { Metadata } from 'next';
 
 import { config } from '@/config';
@@ -11,11 +11,9 @@ export const metadata = { title: `Sign in | Auth | ${config.site.name}` } satisf
 export default function Page(): React.JSX.Element {
   return (
     <Layout>
-      <React.Suspense fallback={<div>loading</div>}>
-        <GuestGuard>
-          <SignInForm />
-        </GuestGuard>
-      </React.Suspense>
+      <GuestGuard>
+        <SignInForm />
+      </GuestGuard>
     </Layout>
   );
 }

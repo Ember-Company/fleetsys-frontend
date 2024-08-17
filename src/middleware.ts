@@ -2,40 +2,25 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { CoreAPI } from './lib/api';
 import { getBearerToken } from './lib/api/auth/token-handler';
+import { logger } from './lib/default-logger';
 
 const protectedRoutes = ['/dashboard'];
-const publicRoutes = ['/auth', '/'];
+const publicRoutes = ['/auth'];
+const ignoredRoutes = ['/favicon.ico'];
 
-CoreAPI.interceptors.request.use(
-  (config) => {
-    const token = getBearerToken();
-
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+function isProtectedRoute(path: string): boolean {
+  let result = false;
+  protectedRoutes.forEach((r) => {
+    if (path.startsWith(r)) {
+      result = true;
+      return result;
     }
+  });
 
-    return config;
-  }
-  // (error) => {
-  //   logger.error(error);
-  // }
-);
+  return result;
+}
 
 export default async function middleware(req: NextRequest): Promise<NextResponse> {
-  const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
-
-  const token = getBearerToken();
-
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL('/auth/sign-in', req.nextUrl));
-  }
-
-  if (isPublicRoute && token && !req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
-  }
-
   return NextResponse.next();
 }
 

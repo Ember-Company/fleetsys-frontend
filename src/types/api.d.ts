@@ -13,5 +13,9 @@ export type ApiGroup = Readonly<Record<string, ApiName>> | Readonly<ApiName>;
 export interface Response<T> {
   data: T | null;
   metadata: Partial<AxiosResponse> | null;
-  error?: AxiosError | null;
+  error?: AxiosError | Error | null;
 }
+
+export type NoContent = Omit<Response<never>, 'data'>;
+
+export type StatusCodes = Record<string, number>;
