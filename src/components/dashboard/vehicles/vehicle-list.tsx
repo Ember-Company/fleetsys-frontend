@@ -4,9 +4,7 @@ import React from 'react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useDemoData } from '@mui/x-data-grid-generator';
 
-type Props = {};
-
-function VehicleDataTable(props: Props) {
+function VehicleDataTable(): React.JSX.Element {
   const { data } = useDemoData({
     dataSet: 'Commodity',
     rowLength: 46,

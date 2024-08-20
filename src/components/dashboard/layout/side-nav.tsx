@@ -3,7 +3,6 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 // import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -14,15 +13,20 @@ import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/C
 
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
+import { logger } from '@/lib/default-logger';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
+import useNavLayout from '@/hooks/use-nav-layout';
+import { useUser } from '@/hooks/use-user';
 
-// import { Logo } from '@/components/core/logo';
-
-import { navItems } from './config';
 import { navIcons } from './nav-icons';
 
 export function SideNav(): React.JSX.Element {
+  const { user } = useUser();
   const pathname = usePathname();
+
+  const navLayout = useNavLayout(user!.role);
+  logger.debug(user?.role);
+  logger.debug(navLayout);
 
   return (
     <Box
@@ -83,7 +87,7 @@ export function SideNav(): React.JSX.Element {
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-        {renderNavItems({ pathname, items: navItems })}
+        {renderNavItems({ pathname, items: navLayout })}
       </Box>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
     </Box>
