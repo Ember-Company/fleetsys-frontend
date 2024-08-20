@@ -17,7 +17,7 @@ class AuthClient {
   async login(userData: UserPayload): Promise<Response<LoginResponse>> {
     const { login } = CoreApiRoutes.auth;
 
-    return makeRequest<LoginResponse, UserPayload>(login, userData);
+    return await makeRequest<LoginResponse, UserPayload>(login, userData);
   }
 
   async getSession(): Promise<NoContent> {
@@ -32,15 +32,10 @@ class AuthClient {
     return await makeRequest<User>(showUser);
   }
 
-  async signOut(): Promise<void> {
+  async signOut(): Promise<NoContent> {
     const { logout } = CoreApiRoutes.auth;
-    const { metadata } = await makeRequest<AxiosResponse>(logout);
 
-    if (metadata?.status === 204) {
-      return;
-    }
-
-    logger.error('Failed to logout');
+    return await makeRequest<NoContent>(logout);
   }
 }
 

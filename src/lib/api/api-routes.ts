@@ -1,4 +1,4 @@
-import { type ApiGroup, type StatusCodes } from '@/types/api';
+import { type ApiGroup } from '@/types/api';
 
 const CoreApiRoutes = {
   auth: {
@@ -13,6 +13,16 @@ const CoreApiRoutes = {
     csrfCookie: {
       method: 'get',
       path: 'sanctum/csrf-cookie',
+    },
+  },
+  vehicleStatus: {
+    findAll: {
+      method: 'get',
+      path: '/api/vehicle-status',
+    },
+    create: {
+      method: 'post',
+      path: '/api/vehicle-status',
     },
   },
   user: {

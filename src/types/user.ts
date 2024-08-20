@@ -2,12 +2,15 @@ export interface ResetPasswordParams {
   email: string;
 }
 
+export type Role = 'MASTER' | 'ADMIN' | 'USER' | 'DRIVER';
+// export type Roles = Record<string, RoleName>;
+
 export interface User {
   id: string;
   name: string;
   email: string;
   phone: string;
-  role: string;
+  role: number;
 }
 
 export interface LoginResponse {

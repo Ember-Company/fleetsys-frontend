@@ -13,15 +13,12 @@ import Link from '@mui/material/Link';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Eye, Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
-import { EyeSlash, EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
-import axios from 'axios';
+import { Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
+import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import { User, UserPayload } from '@/types/user';
 import { paths } from '@/paths';
-import { NextAPI } from '@/lib/api';
 import { authClient } from '@/lib/api/auth/client';
 import { logger } from '@/lib/default-logger';
 import useMounted from '@/hooks/use-mounted';
@@ -48,19 +45,22 @@ export function SignInForm(): React.JSX.Element | null {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
+  React.useEffect(() => {
+    void authClient.getSession().then((res) => {
+      logger.warn('session fetched');
+      logger.warn(res);
+    });
+  }, []);
+
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
       setIsPending(true);
 
       try {
         const { data } = await authClient.login(values);
-        // const response = await NextAPI.post('sign-in', values);
+        logger.debug(data?.user);
 
-        // const data = response.data as { user: User };
-
-        logger.debug(data);
-
-        if (!data) {
+        if (!data?.user) {
           setError('root', { type: 'server', message: 'An error occurred during login' });
           setIsPending(false);
           return;
@@ -68,23 +68,14 @@ export function SignInForm(): React.JSX.Element | null {
 
         router.refresh();
       } catch (error) {
-        console.error(error);
-
         setError('root', { type: 'server', message: 'An error occurred during login' });
+        return;
       } finally {
         setIsPending(false);
       }
     },
-    [router, setError]
+    [router, setError, setIsPending]
   );
-
-  React.useEffect(() => {
-    const test = async (): Promise<void> => {
-      await authClient.getSession();
-    };
-
-    void test();
-  }, []);
 
   if (!mounted) return null;
 

@@ -37,6 +37,7 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
   };
 
   React.useEffect(() => {
+
     checkPermissions().catch(() => {
       logger.debug('Checking permissions failed');
     });

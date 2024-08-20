@@ -1,5 +1,6 @@
 import { Wrench } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react/dist/lib/types';
+import { Buildings } from '@phosphor-icons/react/dist/ssr';
 import { ChartPie as ChartPieIcon } from '@phosphor-icons/react/dist/ssr/ChartPie';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
 import { PlugsConnected as PlugsConnectedIcon } from '@phosphor-icons/react/dist/ssr/PlugsConnected';
@@ -15,4 +16,5 @@ export const navIcons = {
   wrench: Wrench,
   user: UserIcon,
   users: UsersIcon,
+  companies: Buildings,
 } as Record<string, Icon>;

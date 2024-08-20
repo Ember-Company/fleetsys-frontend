@@ -1,4 +1,5 @@
 import type { StatusCodes } from './types/api';
+import { Role, Roles } from './types/user';
 
 export const TOKEN_COOKIE_KEY = 'XSRF-TOKEN';
 
