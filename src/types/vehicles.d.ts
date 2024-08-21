@@ -9,3 +9,7 @@ export interface VTabsConfigTransformed {
   titles: string[];
   panels: ReactNode[];
 }
+
+export interface Vehicle {
+  name: string;
+}

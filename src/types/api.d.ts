@@ -17,9 +17,11 @@ export type ApiGroup = Readonly<Record<string, ApiName>> | Readonly<ApiName>;
 //   error?: AxiosError | Error | null;
 // }
 
-export interface Response<T> extends AxiosResponse<T> {}
+export interface Response<T> {
+  data: T;
+}
 
 export type NoContent = Omit<Response<never>, 'data'>;
-export type QueryResult<T> = UseQueryResult<Response<T>>;
+export type QueryResult<T> = UseQueryResult<T>;
 
 export type StatusCodes = Record<string, number>;
