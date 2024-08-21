@@ -53,15 +53,17 @@ NextAPI.interceptors.response.use(
 export async function makeRequest<R, P = void>(
   requestParams: ApiMeta | boolean = false,
   payload?: P | AxiosRequestConfig
-): Promise<Response<R>> {
+): Promise<R> {
   if (typeof requestParams === 'boolean') {
     if (!requestParams) {
       throw new Error('Empty Conditional request');
     }
 
-    return {} as Response<R>; // cancel the request
+    return {} as R; // cancel the request
   }
 
   const { method, path } = requestParams;
-  return await CoreAPI[method](path, payload ?? {});
+  const { data }: AxiosResponse<R> = await CoreAPI[method](path, payload ?? {});
+
+  return data;
 }

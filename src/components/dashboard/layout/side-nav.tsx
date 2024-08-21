@@ -13,18 +13,14 @@ import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/C
 
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import useNavLayout from '@/hooks/use-nav-layout';
 import { useUser } from '@/hooks/use-user';
 
 import { navIcons } from './nav-icons';
 
 export function SideNav(): React.JSX.Element {
-  const { user } = useUser();
+  const { user, appLayout } = useUser();
   const pathname = usePathname();
-
-  const navLayout = useNavLayout(user!.role);
 
   return (
     <Box
@@ -85,7 +81,7 @@ export function SideNav(): React.JSX.Element {
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-        {renderNavItems({ pathname, items: navLayout })}
+        {renderNavItems({ pathname, items: appLayout })}
       </Box>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
     </Box>
