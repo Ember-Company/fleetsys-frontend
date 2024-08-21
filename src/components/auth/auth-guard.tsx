@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Alert from '@mui/material/Alert';
 
 import { paths } from '@/paths';
@@ -14,8 +14,17 @@ export interface AuthGuardProps {
 
 export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | null {
   const router = useRouter();
-  const { user, error, isLoading } = useUser();
+  const pathname = usePathname();
+  const { user, error, isLoading, appLayout } = useUser();
   const [isChecking, setIsChecking] = React.useState<boolean>(true);
+
+  const permissionAllowed = (): boolean => {
+    if (!appLayout.some((item) => item.href && item.href.includes(pathname))) {
+      return false;
+    }
+
+    return true;
+  };
 
   const checkPermissions = async (): Promise<void> => {
     if (isLoading) {
@@ -33,7 +42,12 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       return;
     }
 
-    setIsChecking(false);
+    if (permissionAllowed()) {
+      setIsChecking(false);
+      return;
+    }
+
+    router.push('/dashboard/not-authorized');
   };
 
   React.useEffect(() => {
@@ -41,7 +55,7 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       // noop
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Expected
-  }, [user, error, isLoading]);
+  }, [user, error, isLoading, permissionAllowed]);
 
   if (isChecking) {
     return null;

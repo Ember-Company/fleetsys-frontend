@@ -41,6 +41,12 @@ const CoreApiRoutes = {
       path: 'api/vehicles',
     },
   },
+  companies: {
+    listCompanies: {
+      method: 'get',
+      path: 'api/companies',
+    },
+  },
 } as const satisfies ApiGroup;
 
 export default CoreApiRoutes;

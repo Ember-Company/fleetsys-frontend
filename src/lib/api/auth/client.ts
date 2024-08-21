@@ -1,7 +1,4 @@
-import { STATUS_CODES } from '@/constants';
-import type { AxiosResponse } from 'axios';
-
-import type { NoContent, Response } from '@/types/api';
+import type { NoContent } from '@/types/api';
 import type { LoginResponse, User, UserPayload } from '@/types/user';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
@@ -14,7 +11,7 @@ const logger = new Logger({
 });
 
 class AuthClient {
-  async login(userData: UserPayload): Promise<Response<LoginResponse>> {
+  async login(userData: UserPayload): Promise<LoginResponse> {
     const { login } = CoreApiRoutes.auth;
 
     return await makeRequest<LoginResponse, UserPayload>(login, userData);
@@ -26,7 +23,7 @@ class AuthClient {
     return await makeRequest<NoContent>(csrfCookie);
   }
 
-  async getUser(): Promise<Response<User>> {
+  async getUser(): Promise<User> {
     const { showUser } = CoreApiRoutes.user;
 
     return await makeRequest<User>(showUser);

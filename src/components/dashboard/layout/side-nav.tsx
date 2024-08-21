@@ -13,20 +13,14 @@ import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/C
 
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
-import { logger } from '@/lib/default-logger';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import useNavLayout from '@/hooks/use-nav-layout';
 import { useUser } from '@/hooks/use-user';
 
 import { navIcons } from './nav-icons';
 
 export function SideNav(): React.JSX.Element {
-  const { user } = useUser();
+  const { user, appLayout } = useUser();
   const pathname = usePathname();
-
-  const navLayout = useNavLayout(user!.role);
-  logger.debug(user?.role);
-  logger.debug(navLayout);
 
   return (
     <Box
@@ -78,8 +72,8 @@ export function SideNav(): React.JSX.Element {
             <Typography color="var(--mui-palette-neutral-400)" variant="body2">
               Role
             </Typography>
-            <Typography color="inherit" variant="subtitle1">
-              Admin
+            <Typography color="inherit" variant="subtitle1" textTransform="capitalize">
+              {user?.role}
             </Typography>
           </Box>
           <CaretUpDownIcon />
@@ -87,7 +81,7 @@ export function SideNav(): React.JSX.Element {
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-        {renderNavItems({ pathname, items: navLayout })}
+        {renderNavItems({ pathname, items: appLayout })}
       </Box>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
     </Box>
@@ -114,12 +108,25 @@ interface NavItemProps extends Omit<NavItemConfig, 'items'> {
   pathname: string;
 }
 
-function NavItem({ disabled, external, href, icon, matcher, pathname, title }: NavItemProps): React.JSX.Element {
+function NavItem({
+  disabled,
+  external,
+  href,
+  icon,
+  matcher,
+  pathname,
+  title,
+  hidden,
+}: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
 
   return (
-    <li>
+    <li
+      style={{
+        display: hidden ? 'none' : 'block',
+      }}
+    >
       <Box
         {...(href
           ? {

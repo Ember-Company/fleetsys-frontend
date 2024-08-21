@@ -4,8 +4,10 @@ import type { Viewport } from 'next';
 import '@/styles/global.css';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 import { UserProvider } from '@/contexts/user-context';
+import { queryClient } from '@/hooks/queries';
 import { LocalizationProvider } from '@/components/core/localization-provider';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
 
@@ -21,9 +23,11 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
       <body>
         <AppRouterCacheProvider>
           <LocalizationProvider>
-            <UserProvider>
-              <ThemeProvider>{children}</ThemeProvider>
-            </UserProvider>
+            <QueryClientProvider client={queryClient}>
+              <UserProvider>
+                <ThemeProvider>{children}</ThemeProvider>
+              </UserProvider>
+            </QueryClientProvider>
           </LocalizationProvider>
         </AppRouterCacheProvider>
       </body>

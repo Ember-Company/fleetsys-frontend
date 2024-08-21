@@ -29,7 +29,7 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
 
     if (user) {
       logger.debug('[GuestGuard]: User is logged in, redirecting to dashboard');
-      router.replace(paths.dashboard.overview);
+      router.replace(user.role === 'MASTER' ? paths.dashboard.clients : paths.dashboard.overview);
       return;
     }
 
@@ -37,7 +37,6 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
   };
 
   React.useEffect(() => {
-
     checkPermissions().catch(() => {
       logger.debug('Checking permissions failed');
     });

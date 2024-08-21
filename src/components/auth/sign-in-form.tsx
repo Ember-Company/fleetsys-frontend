@@ -57,7 +57,7 @@ export function SignInForm(): React.JSX.Element | null {
       setIsPending(true);
 
       try {
-        const { data } = await authClient.login(values);
+        const data = await authClient.login(values);
         logger.debug(data?.user);
 
         if (!data?.user) {
