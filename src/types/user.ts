@@ -10,7 +10,8 @@ export interface User {
   name: string;
   email: string;
   phone: string;
-  role: number;
+  role: Role;
+  profile: Profile;
 }
 
 export interface LoginResponse {

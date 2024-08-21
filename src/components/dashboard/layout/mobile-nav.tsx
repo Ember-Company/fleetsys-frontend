@@ -15,10 +15,11 @@ import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/C
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
+import useNavLayout from '@/hooks/use-nav-layout';
+import { useUser } from '@/hooks/use-user';
 
 // import { Logo } from '@/components/core/logo';
 
-import { navItems } from './config';
 import { navIcons } from './nav-icons';
 
 export interface MobileNavProps {
@@ -28,7 +29,10 @@ export interface MobileNavProps {
 }
 
 export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element {
+  const { user } = useUser();
   const pathname = usePathname();
+
+  const navLayout = useNavLayout(user!.role);
 
   return (
     <Drawer
@@ -89,7 +93,7 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-        {renderNavItems({ pathname, items: navItems })}
+        {renderNavItems({ pathname, items: navLayout })}
       </Box>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
     </Drawer>

@@ -25,8 +25,6 @@ export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
 
   const navLayout = useNavLayout(user!.role);
-  logger.debug(user?.role);
-  logger.debug(navLayout);
 
   return (
     <Box
@@ -78,8 +76,8 @@ export function SideNav(): React.JSX.Element {
             <Typography color="var(--mui-palette-neutral-400)" variant="body2">
               Role
             </Typography>
-            <Typography color="inherit" variant="subtitle1">
-              Admin
+            <Typography color="inherit" variant="subtitle1" textTransform="capitalize">
+              {user!.role}
             </Typography>
           </Box>
           <CaretUpDownIcon />
