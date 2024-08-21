@@ -16,7 +16,7 @@ const defaultNavItems = [
   { key: 'overview', title: 'Overview', href: paths.dashboard.overview, icon: 'chart-pie' },
   { key: 'settings', title: 'Settings', href: paths.dashboard.settings, icon: 'gear-six' },
   { key: 'account', title: 'Account', href: paths.dashboard.account, icon: 'user' },
-  { key: 'not-authorized', disabled: true, href: '/dashboard/not-authorized' },
+  { key: 'not-authorized', disabled: true, href: '/dashboard/not-authorized', hidden: true },
 ] satisfies NavItemConfig[];
 
 const userNavItems = withRoleAccess(

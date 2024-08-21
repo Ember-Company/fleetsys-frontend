@@ -73,7 +73,7 @@ export function SideNav(): React.JSX.Element {
               Role
             </Typography>
             <Typography color="inherit" variant="subtitle1" textTransform="capitalize">
-              {user!.role}
+              {user?.role}
             </Typography>
           </Box>
           <CaretUpDownIcon />
@@ -108,12 +108,25 @@ interface NavItemProps extends Omit<NavItemConfig, 'items'> {
   pathname: string;
 }
 
-function NavItem({ disabled, external, href, icon, matcher, pathname, title }: NavItemProps): React.JSX.Element {
+function NavItem({
+  disabled,
+  external,
+  href,
+  icon,
+  matcher,
+  pathname,
+  title,
+  hidden,
+}: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
 
   return (
-    <li>
+    <li
+      style={{
+        display: hidden ? 'none' : 'block',
+      }}
+    >
       <Box
         {...(href
           ? {

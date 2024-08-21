@@ -10,6 +10,7 @@ export interface NavItemConfig {
   href?: string;
   items?: NavItemConfig[];
   roleAccess?: Role | Role[];
+  hidden?: boolean;
   // Matcher cannot be a function in order
   // to be able to use it on the server.
   // If you need to match multiple paths,

@@ -79,7 +79,7 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
               Role
             </Typography>
             <Typography color="inherit" variant="subtitle1">
-              {user!.role}
+              {user?.role}
             </Typography>
           </Box>
           <CaretUpDownIcon />

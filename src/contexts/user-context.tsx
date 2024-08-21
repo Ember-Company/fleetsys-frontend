@@ -37,7 +37,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
       logger.debug(user);
 
       setState((prev) => ({ ...prev, user, error: null, isLoading: false }));
-      setAppLayout(getAppLayout(user.role));
+      setAppLayout(getAppLayout(user?.role ?? []));
     } catch (err) {
       logger.error(err);
       setState((prev) => ({ ...prev, user: null, error: 'Something went wrong', isLoading: false }));
