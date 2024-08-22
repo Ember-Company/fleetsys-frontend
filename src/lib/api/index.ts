@@ -63,7 +63,7 @@ export async function makeRequest<R, P = void>(
   }
 
   const { method, path } = requestParams;
-  const { data }: AxiosResponse<R> = await CoreAPI[method](path, payload ?? {});
+  const { data: res }: AxiosResponse<Response<R>> = await CoreAPI[method](path, payload ?? {});
 
-  return data;
+  return res?.data ? res.data : (res as R);
 }
