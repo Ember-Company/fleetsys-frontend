@@ -6,6 +6,7 @@ export interface Company {
   name: string;
   users_count: number;
   vehicles_count: number;
+  active: boolean;
 }
 
 export interface CompanyDetails extends Company {
