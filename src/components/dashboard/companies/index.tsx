@@ -1,66 +1,61 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import React, { useMemo } from 'react';
+import { DataGrid, GridToolbar, type GridColDef } from '@mui/x-data-grid';
 
-import { Company } from '@/types/company';
-import { logger } from '@/lib/default-logger';
+import type { Company } from '@/types/company';
 import { useGetCompanies } from '@/hooks/queries';
 
-interface CompanyRow {
-  id: string;
-  name: string;
-  user_quantity: number;
-  vehicle_quantity: number;
-}
-
-function buildCompanyRows(data: Company[] | undefined): CompanyRow[] {
-  return [];
-}
+const VISIBLE_FIELDS = ['name', 'users_count', 'vehicles_count'];
+const dataColumns: GridColDef<Company[][number]>[] = [
+  { field: 'name', headerName: 'Name', width: 250, editable: true, sortable: true, type: 'string' },
+  {
+    field: 'users_count',
+    headerName: 'Employee Amount',
+    width: 250,
+    editable: false,
+    sortable: true,
+    type: 'number',
+    align: 'left',
+    headerAlign: 'left',
+  },
+  {
+    field: 'vehicles_count',
+    headerName: 'Vehicle Amount',
+    width: 250,
+    editable: false,
+    sortable: true,
+    type: 'number',
+    align: 'left',
+    headerAlign: 'left',
+  },
+];
 
 export default function CompanyList(): React.JSX.Element {
-  const { data, isLoading, isSuccess } = useGetCompanies();
-  // const [rows, setRows] = useState<CompanyRow[]>([]);
-  // const [columns, setColumns] = useState<GridColDef<(typeof rows)[number]>[]>();
-
-  const rows = useMemo(() => {
-    logger.debug(isLoading);
-
-    logger.debug(data);
-    if (!isLoading && data) {
-      return data.reduce((acc: CompanyRow[], item): CompanyRow[] => {
-        acc.push({
-          id: item.id,
-          name: item.name,
-          user_quantity: item.users.length,
-          vehicle_quantity: item.vehicles.length,
-        });
-        return acc;
-      }, []);
-    }
-
-    return [];
-  }, [data, isLoading]);
-
-  const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: 'name', headerName: 'Name', width: 150, editable: true, sortable: true },
-    { field: 'user_quantity', headerName: 'Employee Amount', width: 150, editable: false, sortable: true },
-    { field: 'vehicle_quantity', headerName: 'Vehicle Amount', width: 150, editable: false, sortable: true },
-  ];
+  const { data, isLoading } = useGetCompanies();
+  const columns = useMemo(() => {
+    return dataColumns.filter((col) => VISIBLE_FIELDS.includes(col.field));
+  }, []);
 
   return (
     <DataGrid
       columns={columns}
-      rows={rows}
+      rows={data}
       loading={isLoading}
       pageSizeOptions={[5, 10, 25, 50]}
       autoHeight
+      disableColumnFilter
       initialState={{
         pagination: {
           paginationModel: {
             pageSize: 10,
             page: 0,
           },
+        },
+      }}
+      slotProps={{
+        toolbar: {
+          showQuickFilter: true,
         },
       }}
       slots={{
