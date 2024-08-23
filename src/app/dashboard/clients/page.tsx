@@ -6,12 +6,10 @@ import CompanyList from '@/components/dashboard/companies';
 export default function ClientsPage(): React.JSX.Element {
   return (
     <div className="">
-      {/* <Suspense fallback={<div>Loading</div>}> */}
       <Typography variant="h4" mb={6}>
         Companies
       </Typography>
       <CompanyList />
-      {/* </Suspense> */}
     </div>
   );
 }
