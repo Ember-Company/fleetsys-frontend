@@ -6,7 +6,6 @@ import '@/styles/global.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { QueryClientProvider } from '@tanstack/react-query';
 
-import SessionProvider from '@/contexts/session-context';
 import { UserProvider } from '@/contexts/user-context';
 import { queryClient } from '@/hooks/queries';
 import { LocalizationProvider } from '@/components/core/localization-provider';
@@ -25,11 +24,9 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
         <AppRouterCacheProvider>
           <LocalizationProvider>
             <QueryClientProvider client={queryClient}>
-              {/* <SessionProvider> */}
               <UserProvider>
                 <ThemeProvider>{children}</ThemeProvider>
               </UserProvider>
-              {/* </SessionProvider> */}
             </QueryClientProvider>
           </LocalizationProvider>
         </AppRouterCacheProvider>

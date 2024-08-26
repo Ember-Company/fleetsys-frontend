@@ -19,9 +19,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { paths } from '@/paths';
-import { authClient } from '@/lib/api/auth/client';
 import { logger } from '@/lib/default-logger';
-import { useGetSession, useLoginQuery } from '@/hooks/queries/auth';
+import { useLoginQuery } from '@/hooks/queries/auth';
 import useMounted from '@/hooks/use-mounted';
 
 const schema = zod.object({
@@ -35,7 +34,6 @@ const defaultValues = { email: '', password: '' } satisfies Values;
 export function SignInForm(): React.JSX.Element | null {
   const mounted = useMounted();
   const { mutate, isPending: isLoginPending } = useLoginQuery();
-  // const _ = useGetSession();
 
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState<boolean>(false);

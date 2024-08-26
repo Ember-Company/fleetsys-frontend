@@ -1,22 +1,19 @@
 'use client';
 
 import {
-  InvalidateQueryFilters,
   useMutation,
   useQuery,
   useQueryClient,
-  UseQueryOptions,
-  UseQueryResult,
+  type InvalidateQueryFilters,
   type UseMutationResult,
+  type UseQueryResult,
 } from '@tanstack/react-query';
 
-import type { NoContent } from '@/types/api';
+import type { NoContent, QueryConfig } from '@/types/api';
 import type { LoginResponse, User, UserPayload } from '@/types/user';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
 import { logger } from '@/lib/default-logger';
-
-export type QueryConfig<DataT> = Omit<UseQueryOptions<DataT>, 'queryKey' | 'queryFn'> | undefined;
 
 const { showUser: userQuery } = CoreApiRoutes.user;
 

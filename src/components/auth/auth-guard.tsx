@@ -15,7 +15,7 @@ export interface AuthGuardProps {
 export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | null {
   const router = useRouter();
   const pathname = usePathname();
-  const { appLayout, user, isLoading, isError, error } = useUser();
+  const { appLayout, user, isLoading, error } = useUser();
   const [isChecking, setIsChecking] = React.useState<boolean>(true);
 
   const permissionAllowed = (): boolean => {
@@ -39,11 +39,6 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       router.replace(paths.auth.signIn);
       return;
     }
-
-    // if (isError) {
-    //   return;
-    // }
-
     if (!permissionAllowed()) {
       router.push('/dashboard/not-authorized');
       return;

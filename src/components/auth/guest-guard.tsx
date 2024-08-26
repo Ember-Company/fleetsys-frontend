@@ -2,11 +2,9 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Alert from '@mui/material/Alert';
 
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
-import { useGetUser } from '@/hooks/queries/auth';
 import { useUser } from '@/hooks/use-user';
 
 export interface GuestGuardProps {
@@ -16,7 +14,6 @@ export interface GuestGuardProps {
 export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | null {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
-  // const { data: user, error, isLoading } = useGetUser();
   const [isChecking, setIsChecking] = React.useState<boolean>(true);
 
   const checkPermissions = async (): Promise<void> => {
