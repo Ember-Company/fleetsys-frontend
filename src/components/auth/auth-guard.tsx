@@ -15,10 +15,12 @@ export interface AuthGuardProps {
 export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | null {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, error, isLoading, appLayout } = useUser();
+  const { appLayout, user, isLoading, isError, error } = useUser();
   const [isChecking, setIsChecking] = React.useState<boolean>(true);
 
   const permissionAllowed = (): boolean => {
+    logger.warn(appLayout);
+
     if (!appLayout.some((item) => item.href && item.href.includes(pathname))) {
       return false;
     }
@@ -27,12 +29,8 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
   };
 
   const checkPermissions = async (): Promise<void> => {
+    logger.debug(user);
     if (isLoading) {
-      return;
-    }
-
-    if (error) {
-      setIsChecking(false);
       return;
     }
 
@@ -42,12 +40,16 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       return;
     }
 
-    if (permissionAllowed()) {
-      setIsChecking(false);
+    // if (isError) {
+    //   return;
+    // }
+
+    if (!permissionAllowed()) {
+      router.push('/dashboard/not-authorized');
       return;
     }
 
-    router.push('/dashboard/not-authorized');
+    setIsChecking(false);
   };
 
   React.useEffect(() => {
@@ -55,15 +57,15 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
       // noop
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Expected
-  }, [user, error, isLoading, permissionAllowed]);
+  }, [user, error, isLoading]);
 
   if (isChecking) {
     return null;
   }
 
-  if (error) {
-    return <Alert color="error">{error}</Alert>;
-  }
+  // if (error) {
+  //   return <Alert color="error">{error.message}</Alert>;
+  // }
 
   return <React.Fragment>{children}</React.Fragment>;
 }

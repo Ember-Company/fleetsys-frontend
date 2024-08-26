@@ -11,7 +11,7 @@ const logger = new Logger({
 });
 
 class AuthClient {
-  async login(userData: UserPayload): Promise<LoginResponse> {
+  login = async (userData: UserPayload): Promise<LoginResponse> => {
     const { login } = CoreApiRoutes.auth;
 
     return await makeRequest<LoginResponse, UserPayload>(login, userData);

@@ -21,6 +21,7 @@ import { z as zod } from 'zod';
 import { paths } from '@/paths';
 import { authClient } from '@/lib/api/auth/client';
 import { logger } from '@/lib/default-logger';
+import { useGetSession, useLoginQuery } from '@/hooks/queries/auth';
 import useMounted from '@/hooks/use-mounted';
 
 const schema = zod.object({
@@ -33,10 +34,11 @@ const defaultValues = { email: '', password: '' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element | null {
   const mounted = useMounted();
+  const { mutate, isPending: isLoginPending } = useLoginQuery();
+  // const _ = useGetSession();
 
   const router = useRouter();
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
-  const [isPending, setIsPending] = React.useState<boolean>(false);
 
   const {
     control,
@@ -45,36 +47,19 @@ export function SignInForm(): React.JSX.Element | null {
     formState: { errors },
   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
-  React.useEffect(() => {
-    void authClient.getSession().then((res) => {
-      logger.warn('session fetched');
-      logger.warn(res);
-    });
-  }, []);
-
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
-      setIsPending(true);
-
-      try {
-        const data = await authClient.login(values);
-        logger.debug(data?.user);
-
-        if (!data?.user) {
-          setError('root', { type: 'server', message: 'An error occurred during login' });
-          setIsPending(false);
-          return;
-        }
-
-        router.refresh();
-      } catch (error) {
-        setError('root', { type: 'server', message: 'An error occurred during login' });
-        return;
-      } finally {
-        setIsPending(false);
-      }
+      mutate(values, {
+        onSuccess: ({ user }) => {
+          logger.debug('login success... time to refresh');
+          router.refresh();
+        },
+        onError: ({ message }) => {
+          setError('root', { type: 'server', message });
+        },
+      });
     },
-    [router, setError, setIsPending]
+    [router, setError, mutate]
   );
 
   if (!mounted) return null;
@@ -94,7 +79,6 @@ export function SignInForm(): React.JSX.Element | null {
                 <InputLabel>Email address</InputLabel>
                 <OutlinedInput {...field} label="Email address" type="email" />
                 <FormHelperText>{errors?.email?.message ?? null}</FormHelperText>
-                {/* {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null} */}
               </FormControl>
             )}
           />
@@ -139,8 +123,8 @@ export function SignInForm(): React.JSX.Element | null {
           </Link>
           {/* </div> */}
           {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
-          <Button disabled={isPending} type="submit" variant="contained">
-            Sign in
+          <Button disabled={isLoginPending} type="submit" variant="contained">
+            {isLoginPending ? 'Loading...' : 'Sign in'}
           </Button>
         </Stack>
       </form>
