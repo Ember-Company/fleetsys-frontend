@@ -8,17 +8,17 @@ const logger = new Logger({
   showLevel: true,
 });
 
-export function handleHttpErrors(error: AxiosError): Promise<{ message: string } | Promise<AxiosError>> {
+export function handleHttpErrors(error: AxiosError): Promise<{ error: string } | Promise<AxiosError>> {
   const { response } = error;
 
   if (response) {
     switch (response.status) {
       case 401:
         logger.warn('Unauthorized access - 401');
-        return Promise.resolve({ message: 'Unauthorized, please log in.' });
+        return Promise.reject(error);
       case 403:
         logger.warn('Forbidden access - 403');
-        return Promise.resolve({ message: 'You do not have permission to access this resource.' });
+        return Promise.resolve({ error: 'You do not have permission to access this resource.' });
       default:
         logger.error(`Unhandled HTTP status code: ${response.status.toString()}`);
         return Promise.reject(error);

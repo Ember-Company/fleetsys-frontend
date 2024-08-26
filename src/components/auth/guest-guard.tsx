@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Alert from '@mui/material/Alert';
 
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
@@ -19,11 +18,6 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
 
   const checkPermissions = async (): Promise<void> => {
     if (isLoading) {
-      return;
-    }
-
-    if (error) {
-      setIsChecking(false);
       return;
     }
 
@@ -47,9 +41,9 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
     return null;
   }
 
-  if (error) {
-    return <Alert color="error">{error}</Alert>;
-  }
+  // if (error) {
+  //   return <Alert color="error">{error.message}</Alert>;
+  // }
 
   return <React.Fragment>{children}</React.Fragment>;
 }

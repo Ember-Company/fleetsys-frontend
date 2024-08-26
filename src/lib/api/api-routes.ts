@@ -11,7 +11,7 @@ const CoreApiRoutes = {
       path: 'api/logout',
     },
     csrfCookie: {
-      method: 'get',
+      method: 'head',
       path: 'sanctum/csrf-cookie',
     },
   },
@@ -44,6 +44,10 @@ const CoreApiRoutes = {
   companies: {
     listCompanies: {
       method: 'get',
+      path: 'api/companies',
+    },
+    createCompany: {
+      method: 'post',
       path: 'api/companies',
     },
   },

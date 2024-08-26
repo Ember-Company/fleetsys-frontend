@@ -1,4 +1,5 @@
-import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import { STATUS_CODES } from '@/constants';
+import axios, { AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 import type { ApiMeta, Response } from '@/types/api';
 
@@ -63,7 +64,15 @@ export async function makeRequest<R, P = void>(
   }
 
   const { method, path } = requestParams;
-  const { data: res }: AxiosResponse<Response<R>> = await CoreAPI[method](path, payload ?? {});
+  const { data: res, ...metadata }: AxiosResponse<Response<R>> = await CoreAPI[method](path, payload ?? {});
 
-  return res?.data ? res.data : (res as R);
+  if (!res?.data) {
+    if (metadata.status !== STATUS_CODES.NO_CONTENT) {
+      throw new AxiosError(metadata.statusText, metadata.status.toString());
+    }
+
+    return {} as R;
+  }
+
+  return res.data;
 }
