@@ -4,7 +4,7 @@ import { type GridColDef } from '@mui/x-data-grid';
 import { type Company } from '@/types/company';
 import { type DTableField } from '@/types/tables';
 
-const VISIBLE_FIELDS: DTableField<Company>[] = ['name', 'users_count', 'vehicles_count', 'active', 'actions'];
+const VISIBLE_FIELDS: readonly DTableField<Company>[] = ['name', 'users_count', 'vehicles_count', 'active', 'actions'];
 
 export function getCompaniesTableFields(): GridColDef<Company[][number]>[] {
   const dataColumns: GridColDef<Company[][number]>[] = [

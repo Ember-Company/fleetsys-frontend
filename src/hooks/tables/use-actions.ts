@@ -4,7 +4,7 @@ import { type DTableActionHandler } from '@/types/tables';
 import { logger } from '@/lib/default-logger';
 import TableActionSelecter from '@/components/shared/datagrid/action-fields';
 
-export function useActionFields<T extends GridValidRowModel>(actions: DTableActionHandler[]): GridColDef<T>[] {
+export default function useActionFields<T extends GridValidRowModel>(actions: DTableActionHandler[]): GridColDef<T>[] {
   const actionSelecter = new TableActionSelecter<T>();
 
   const compiledActions = actions.reduce((colDefs: GridColDef<T>[], action) => {

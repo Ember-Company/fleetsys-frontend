@@ -1,17 +1,11 @@
 import React from 'react';
-import { GridActionsCellItem, type GridColDef, type GridValidRowModel } from '@mui/x-data-grid';
+import { GridActionsCellItem, type GridValidRowModel } from '@mui/x-data-grid';
 import { Trash } from '@phosphor-icons/react';
 
-import { type DTableActionHandler } from '@/types/tables';
-
-type ColDefRow<T> = GridColDef<T & { id: string }>;
-
-interface TableActionHandler<T extends GridValidRowModel> {
-  delete: (handler: DTableActionHandler) => ColDefRow<T>;
-  edit: (handler: DTableActionHandler) => ColDefRow<T>;
-}
+import { type ColDefRow, type DTableActionHandler, type TableActionHandler } from '@/types/tables';
 
 class TableActionSelecter<T extends GridValidRowModel> implements TableActionHandler<T> {
+  // TODO update to only return the <GridActionsCellItem /> component instead of the whole field object like below
   delete({ name, handler }: DTableActionHandler): ColDefRow<T> {
     return {
       field: 'actions',
