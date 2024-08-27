@@ -13,3 +13,7 @@ export interface VTabsConfigTransformed {
 export interface Vehicle {
   name: string;
 }
+
+export interface VehiclePayload {
+  name: string;
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { DataGrid, GridActionsCellItem, GridRowId, GridSlots, GridToolbar, type GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowId, type GridSlots } from '@mui/x-data-grid';
 import { Trash } from '@phosphor-icons/react';
 
 import type { Company } from '@/types/company';
@@ -58,10 +58,10 @@ export default function CompanyList(): React.JSX.Element {
         width: 100,
         cellClassName: 'actions',
         getActions: ({ id }) => {
-          // const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
           return [
             <GridActionsCellItem
               icon={<Trash fill="var(--NavItem-icon-active-color)" fontSize="2rem" weight="fill" />}
+              title="Delete"
               key={id}
               label="Delete"
               onClick={handleDeleteClick(id)}

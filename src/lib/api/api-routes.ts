@@ -32,7 +32,7 @@ const CoreApiRoutes = {
     },
   },
   vehicles: {
-    findAll: {
+    listVehicles: {
       method: 'get',
       path: 'api/vehicles',
     },
