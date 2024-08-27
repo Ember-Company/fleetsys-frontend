@@ -14,7 +14,7 @@ import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
-import { useLogoutQuery } from '@/hooks/queries/auth';
+import { useLogoutQuery } from '@/hooks/queries';
 import { useUser } from '@/hooks/use-user';
 
 export interface UserPopoverProps {

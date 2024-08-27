@@ -9,6 +9,8 @@ export interface Company {
   active: boolean;
 }
 
+export type CompanyField = (keyof Company)[];
+
 export interface CompanyDetails extends Company {
   users: Omit<User, 'profile'>[];
   vehicles: Vehicle[];

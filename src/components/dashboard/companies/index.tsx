@@ -1,86 +1,34 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { DataGrid, GridActionsCellItem, type GridColDef, type GridRowId, type GridSlots } from '@mui/x-data-grid';
-import { Trash } from '@phosphor-icons/react';
+import React, { useCallback } from 'react';
+import { Button } from '@mui/material';
+import { DataGrid, type GridSlots } from '@mui/x-data-grid';
 
-import type { Company } from '@/types/company';
+import { type Company } from '@/types/company';
 import { logger } from '@/lib/default-logger';
 import { useGetCompanies } from '@/hooks/queries';
+import { useActionFields } from '@/hooks/tables';
 import ToolBar from '@/components/shared/datagrid/tool-bar';
 
-const VISIBLE_FIELDS = ['name', 'users_count', 'vehicles_count', 'active', 'actions'];
+import { getCompaniesTableFields } from './company-columns';
 
 export default function CompanyList(): React.JSX.Element {
   const { data, isLoading } = useGetCompanies();
 
-  const handleDeleteClick = (id: GridRowId) => () => {
+  const handleDeleteClick = useCallback((id: string) => {
     logger.warn(id);
-  };
-
-  const columns = useMemo(() => {
-    const dataColumns: GridColDef<Company[][number]>[] = [
-      { field: 'name', headerName: 'Name', width: 200, editable: false, sortable: true, type: 'string' },
-      {
-        field: 'users_count',
-        headerName: 'Employee Amount',
-        width: 200,
-        editable: false,
-        sortable: true,
-        type: 'number',
-        align: 'left',
-        headerAlign: 'left',
-      },
-      {
-        field: 'vehicles_count',
-        headerName: 'Vehicle Amount',
-        width: 200,
-        editable: false,
-        sortable: true,
-        type: 'number',
-        align: 'left',
-        headerAlign: 'left',
-      },
-      {
-        field: 'active',
-        headerName: 'Active Status',
-        width: 200,
-        editable: true,
-        sortable: true,
-        type: 'boolean',
-        align: 'left',
-        headerAlign: 'left',
-      },
-      {
-        field: 'actions',
-        type: 'actions',
-        headerName: 'Actions',
-        width: 100,
-        cellClassName: 'actions',
-        getActions: ({ id }) => {
-          return [
-            <GridActionsCellItem
-              icon={<Trash fill="var(--NavItem-icon-active-color)" fontSize="2rem" weight="fill" />}
-              title="Delete"
-              key={id}
-              label="Delete"
-              onClick={handleDeleteClick(id)}
-              color="inherit"
-              size="large"
-              sx={{
-                fontSize: '2rem',
-              }}
-            />,
-          ];
-        },
-      },
-    ];
-    return dataColumns.filter((col) => VISIBLE_FIELDS.includes(col.field));
   }, []);
+
+  const actionCols = useActionFields<Company>([
+    {
+      name: 'delete',
+      handler: handleDeleteClick,
+    },
+  ]);
 
   return (
     <DataGrid
-      columns={columns}
+      columns={[...getCompaniesTableFields(), ...actionCols]}
       rows={data}
       loading={isLoading}
       pageSizeOptions={[5, 10, 25, 50]}
@@ -97,7 +45,7 @@ export default function CompanyList(): React.JSX.Element {
       }}
       slotProps={{
         toolbar: {
-          showQuickFilter: true,
+          title: 'Company',
         },
       }}
       slots={{
