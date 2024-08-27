@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useCallback } from 'react';
-import { Toolbar } from '@mui/material';
-import { DataGrid, type GridSlots } from '@mui/x-data-grid';
+import React, { useCallback, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { DataGrid, GridColDef, GridRowParams, type GridSlots } from '@mui/x-data-grid';
 
 import { type Vehicle } from '@/types/vehicles';
+import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
 import { useVehiclesIndex } from '@/hooks/queries/vehicles';
 import { useActionFields } from '@/hooks/tables';
@@ -14,10 +15,19 @@ import { getVehiclesTableFields } from './vehicle-columns';
 
 function VehicleDataTable(): React.JSX.Element {
   const { data: vehicleDataIndex, isLoading } = useVehiclesIndex();
+  const router = useRouter();
+
+  useEffect(() => {
+    logger.warn(vehicleDataIndex);
+  }, [vehicleDataIndex, isLoading]);
 
   const handleDeleteClick = useCallback((id: string) => {
     logger.warn(id);
   }, []);
+
+  const showVehicleDetailsPage = (id: string): void => {
+    router.push(paths.dashboard.vehicles + id);
+  };
 
   const actionCols = useActionFields<Vehicle>([
     {
@@ -34,7 +44,10 @@ function VehicleDataTable(): React.JSX.Element {
       pageSizeOptions={[5, 10, 25, 50]}
       autoHeight
       disableColumnFilter
-      checkboxSelection
+      disableRowSelectionOnClick
+      onRowDoubleClick={({ row }: GridRowParams<Vehicle>) => {
+        showVehicleDetailsPage(row.id);
+      }}
       initialState={{
         pagination: {
           paginationModel: {
@@ -50,8 +63,6 @@ function VehicleDataTable(): React.JSX.Element {
       }}
       slots={{
         toolbar: ToolBar as GridSlots['toolbar'],
-        // toolbar: <ToolBar actionButtons={null} /> as GridSlots['toolbar']
-        // toolbar: ToolbarWithButtons('add vehicle').toolbar as unknown as GridSlots['toolbar'],
       }}
     />
   );

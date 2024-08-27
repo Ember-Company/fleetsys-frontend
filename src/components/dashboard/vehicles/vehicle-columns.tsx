@@ -1,8 +1,9 @@
 import React from 'react';
-import { type GridColDef } from '@mui/x-data-grid';
+import { Chip } from '@mui/material';
+import { type GridColDef, type GridRenderCellParams } from '@mui/x-data-grid';
 
 import { type DTableField } from '@/types/tables';
-import { type Vehicle } from '@/types/vehicles';
+import { type Vehicle, type VehicleStatus, type VehicleType } from '@/types/vehicles';
 
 const VISIBLE_VEHICLE_FIELDS: readonly DTableField<Vehicle>[] = [
   'name',
@@ -15,8 +16,8 @@ const VISIBLE_VEHICLE_FIELDS: readonly DTableField<Vehicle>[] = [
   'actions',
 ];
 
-export function getVehiclesTableFields(): GridColDef<Vehicle>[] {
-  const vehicleColumns: GridColDef<Vehicle>[] = [
+export function getVehiclesTableFields(): GridColDef<Vehicle[][number]>[] {
+  const vehicleColumns: GridColDef<Vehicle[][number]>[] = [
     { field: 'name', headerName: 'Vehicle Name', width: 200, editable: false, sortable: true, type: 'string' },
     {
       field: 'license_plate',
@@ -39,23 +40,34 @@ export function getVehiclesTableFields(): GridColDef<Vehicle>[] {
       headerAlign: 'left',
     },
     {
-      field: 'vehicle_type.name',
+      field: 'vehicle_type',
       headerName: 'Type',
       width: 100,
       editable: false,
       sortable: true,
-      type: 'number',
+      type: 'string',
       align: 'left',
       headerAlign: 'left',
+      valueGetter: (value, row) => {
+        return row.vehicle_type.name;
+      },
+      renderCell: ({ value }: GridRenderCellParams<Vehicle, VehicleType['name']>) => (
+        <Chip variant="filled" size="medium" color="default" label={value} />
+      ),
     },
     {
-      field: 'vehicle_status.name',
+      field: 'vehicle_status',
       headerName: 'Status',
       width: 150,
       editable: false,
       sortable: true,
       type: 'string',
-      renderCell: (params) => <span style={{ color: params.row.vehicle_status.status_color }}>{params.value}</span>,
+      valueGetter: (value, row) => {
+        return row.vehicle_status.name;
+      },
+      renderCell: ({ value }: GridRenderCellParams<Vehicle, VehicleStatus['name']>) => (
+        <Chip variant="filled" size="medium" color="error" label={value} />
+      ),
     },
   ];
 

@@ -58,7 +58,7 @@ export interface Vehicle {
   color: string;
   license_plate: string;
   vin: string;
-  year: number;
+  year: string;
   make: string;
   model: string;
   trim: string | null;
