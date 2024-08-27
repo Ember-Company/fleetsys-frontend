@@ -16,8 +16,8 @@ const VISIBLE_VEHICLE_FIELDS: readonly DTableField<Vehicle>[] = [
   'actions',
 ];
 
-export function getVehiclesTableFields(): GridColDef<Vehicle[][number]>[] {
-  const vehicleColumns: GridColDef<Vehicle[][number]>[] = [
+export function getVehiclesTableFields(): GridColDef<Vehicle>[] {
+  const vehicleColumns: GridColDef<Vehicle>[] = [
     { field: 'name', headerName: 'Vehicle Name', width: 200, editable: false, sortable: true, type: 'string' },
     {
       field: 'license_plate',
@@ -48,7 +48,7 @@ export function getVehiclesTableFields(): GridColDef<Vehicle[][number]>[] {
       type: 'string',
       align: 'left',
       headerAlign: 'left',
-      valueGetter: (value, row) => {
+      valueGetter: (_, row) => {
         return row.vehicle_type.name;
       },
       renderCell: ({ value }: GridRenderCellParams<Vehicle, VehicleType['name']>) => (
@@ -62,7 +62,7 @@ export function getVehiclesTableFields(): GridColDef<Vehicle[][number]>[] {
       editable: false,
       sortable: true,
       type: 'string',
-      valueGetter: (value, row) => {
+      valueGetter: (_, row) => {
         return row.vehicle_status.name;
       },
       renderCell: ({ value }: GridRenderCellParams<Vehicle, VehicleStatus['name']>) => (

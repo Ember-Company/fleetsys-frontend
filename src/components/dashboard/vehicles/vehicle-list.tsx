@@ -2,12 +2,12 @@
 
 import React, { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { DataGrid, GridColDef, GridRowParams, type GridSlots } from '@mui/x-data-grid';
+import { DataGrid, type GridRowParams, type GridSlots } from '@mui/x-data-grid';
 
 import { type Vehicle } from '@/types/vehicles';
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
-import { useVehiclesIndex } from '@/hooks/queries/vehicles';
+import { useVehiclesIndex } from '@/hooks/queries';
 import { useActionFields } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 
@@ -16,10 +16,6 @@ import { getVehiclesTableFields } from './vehicle-columns';
 function VehicleDataTable(): React.JSX.Element {
   const { data: vehicleDataIndex, isLoading } = useVehiclesIndex();
   const router = useRouter();
-
-  useEffect(() => {
-    logger.warn(vehicleDataIndex);
-  }, [vehicleDataIndex, isLoading]);
 
   const handleDeleteClick = useCallback((id: string) => {
     logger.warn(id);

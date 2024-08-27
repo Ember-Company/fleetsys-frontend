@@ -24,7 +24,7 @@ export function useCreateVehicle(): UseMutationResult<Vehicle, Error, VehiclePay
 
   return useMutation({
     mutationKey: [createVehicle.path],
-    mutationFn: async (vehiclePayload: VehiclePayload) => {
+    mutationFn: async (vehiclePayload) => {
       return await makeRequest<Vehicle, VehiclePayload>(createVehicle, vehiclePayload);
     },
     onSuccess: async () => {
