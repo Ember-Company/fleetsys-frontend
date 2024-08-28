@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 
 import { type VTabsConfig } from '@/types/vehicles';
 import { config } from '@/config';
+import VStatusPanel from '@/components/dashboard/vehicles/panels/vehicle-status-panel';
 import VehicleDataTable from '@/components/dashboard/vehicles/vehicle-list';
 import VehicleTabs from '@/components/dashboard/vehicles/vehicle-tabs';
 
@@ -22,6 +23,10 @@ const VehicleTabsData: VTabsConfig[] = [
   {
     title: 'Service History',
     panel: <Box>Ola mundo</Box>,
+  },
+  {
+    title: 'Vehicle Statuses',
+    panel: <VStatusPanel />,
   },
 ];
 

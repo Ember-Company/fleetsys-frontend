@@ -16,11 +16,11 @@ const CoreApiRoutes = {
     },
   },
   vehicleStatus: {
-    findAll: {
+    listVehicleStatus: {
       method: 'get',
       path: '/api/vehicle-status',
     },
-    create: {
+    createVehicleStatus: {
       method: 'post',
       path: '/api/vehicle-status',
     },

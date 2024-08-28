@@ -22,6 +22,7 @@ export interface VehicleType {
 }
 
 export interface VehicleStatus {
+  // map(arg0: (t: any) => any): any;
   id: string;
   company_id: string;
   name: string;
@@ -29,6 +30,8 @@ export interface VehicleStatus {
   created_at: string;
   updated_at: string;
 }
+
+export type VehicleStatusPayload = Pick<VehicleStatus, 'name'>;
 
 export interface Vehicle {
   id: string;

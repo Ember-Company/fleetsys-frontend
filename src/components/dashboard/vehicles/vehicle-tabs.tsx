@@ -71,7 +71,7 @@ function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
         <Tabs value={tabValue} onChange={handleChange}>
           {/* <Tab label='Vehicles List' /> */}
           {tabs.titles.map((title) => (
-            <Tab label={title} key={title} />
+            <Tab label={title} key={title} sx={{ paddingX: 10 }} />
           ))}
         </Tabs>
       </Box>
