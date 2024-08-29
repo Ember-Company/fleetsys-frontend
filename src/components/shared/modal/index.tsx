@@ -59,8 +59,6 @@ function Modal({
     <>
       {isIcon ? (
         <IconButton {...iconButtonProps} onClick={handleOpen}>
-          {/* <Typography variant="subtitle2"></Typography> */}
-          {/* <Icon /> */}
           {Icon}
         </IconButton>
       ) : (

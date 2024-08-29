@@ -84,3 +84,24 @@ export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleSt
     enabled: Boolean(id),
   });
 }
+
+export function useDeleteVehicleStatus(id?: string): UseMutationResult {
+  const queryClient = useQueryClient();
+  const { listVehicleStatus } = CoreApiRoutes.vehicleStatus;
+  const deleteStatus: ApiMeta = {
+    path: `${listVehicleStatus.path}/${id ?? ''}`,
+    method: 'delete',
+  };
+
+  return useMutation({
+    mutationKey: [deleteStatus.path],
+    mutationFn: async () => {
+      return await makeRequest<unknown>(deleteStatus);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [listVehicleStatus.path],
+      });
+    },
+  });
+}
