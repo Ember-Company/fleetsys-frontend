@@ -177,7 +177,7 @@ function Create({ children, submitHandler, defaultValues }: CreateStatusProps & 
     <form onSubmit={submitHandler(handleCreate)}>
       <Stack direction='column' spacing={4}>
         {children}
-        {message ? <Alert color={message.statusColor} variant='filled'>{message.text}</Alert> : null}
+        {message ? <Alert color={message.statusColor} variant='standard'>{message.text}</Alert> : null}
         <Button disabled={isPending} type="submit" variant="contained">
           {isPending ? 'Loading...' : 'Create Status'}
         </Button>

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Edit } from '@mui/icons-material';
-import { Chip, CircularProgress, Stack } from '@mui/material';
+import { Delete, Edit } from '@mui/icons-material';
+import { Button, Chip, CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Divider from '@mui/material/Divider';
@@ -17,9 +17,11 @@ import Typography from '@mui/material/Typography';
 import { type VehicleStatus } from '@/types/vehicles';
 import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
+import Dialog from '@/components/shared/dialog';
 import Modal from '@/components/shared/modal';
 
 import { StatusForm } from '../modals';
+import DeleteStatusDialog from '../status/delete-dialog';
 
 function noop(): void {
   // do nothing
@@ -38,7 +40,7 @@ function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProp
   return (
     <>
       <Stack width="100%">
-        <Box ml="auto">
+        <Box ml="auto" mb={2}>
           <Modal
             buttonTitle="Create New Status"
             modalLabel="Create Vehicle Status"
@@ -124,13 +126,13 @@ function VStatusPanelRows({
             </TableCell>
             <TableCell>
               <Modal
-                buttonTitle="Edit"
                 isIcon
-                Icon={<Edit />}
+                Icon={<Edit color="action" />}
                 iconButtonProps={{ color: 'secondary' }}
                 Content={<StatusForm variant="edit" targetId={row.id} />}
                 modalLabel="Edit Vehicle Status"
               />
+              <DeleteStatusDialog row={row} />
             </TableCell>
           </TableRow>
         );
