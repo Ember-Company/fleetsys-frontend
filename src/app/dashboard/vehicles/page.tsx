@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 
 import { type VTabsConfig } from '@/types/vehicles';
 import { config } from '@/config';
-import VStatusPanel from '@/components/dashboard/vehicles/panels/vehicle-status-panel';
+import { VStatusPanel } from '@/components/dashboard/vehicles/status';
 import VehicleDataTable from '@/components/dashboard/vehicles/vehicle-list';
 import VehicleTabs from '@/components/dashboard/vehicles/vehicle-tabs';
 

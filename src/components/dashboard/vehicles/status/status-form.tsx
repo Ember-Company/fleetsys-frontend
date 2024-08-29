@@ -34,7 +34,7 @@ const schema = zod.object({
 
 type Values = zod.infer<typeof schema>;
 
-export default function StatusForm({ variant, targetId }: StatusFormProps): React.JSX.Element {
+export function StatusForm({ variant, targetId }: StatusFormProps): React.JSX.Element {
   const { data, isLoading } = useGetTargetVehicleStatus(targetId); // only enabled if targetId exists, enables edit mode
   const [defaultValues, setDefaultValues] = useState<Values>({ name: '', status_color: 'default' });
   const {handleSubmit, ...formHandlers} = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
