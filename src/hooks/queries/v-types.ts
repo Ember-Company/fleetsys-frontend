@@ -1,5 +1,3 @@
-'use client';
-
 import {
   useMutation,
   useQuery,
@@ -8,29 +6,44 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query';
 
-import { type VehicleStatus, type VehicleStatusPayload } from '@/types/vehicles';
+import { type VehicleType, type VehicleTypePayload } from '@/types/vehicles';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
 
-export function useGetVehicleStatuses(): UseQueryResult<VehicleStatus[]> {
-  const { find } = CoreApiRoutes.vehicleStatus;
+export function useGetVehicleTypes(): UseQueryResult<VehicleType[]> {
+  const { find } = CoreApiRoutes.vehicleType;
 
   return useQuery({
     queryKey: [find.path],
     queryFn: async () => {
-      return await makeRequest<VehicleStatus[]>(find);
+      return await makeRequest<VehicleType[]>(find);
     },
   });
 }
 
-export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error, VehicleStatusPayload> {
-  const { find, create } = CoreApiRoutes.vehicleStatus;
+export function useGetTargetVehicleType(id?: string): UseQueryResult<VehicleType> {
+  const {
+    find: { routeById },
+  } = CoreApiRoutes.vehicleType;
+  const { findOne } = routeById(id);
+
+  return useQuery({
+    queryKey: [findOne.path],
+    queryFn: async () => {
+      return await makeRequest<VehicleType>(findOne);
+    },
+    enabled: Boolean(id),
+  });
+}
+
+export function useCreateVehicleType(): UseMutationResult<VehicleType, Error, VehicleTypePayload> {
+  const { create, find } = CoreApiRoutes.vehicleType;
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: [create.path],
-    mutationFn: async (vStatusPayload) => {
-      return await makeRequest<VehicleStatus, VehicleStatusPayload>(create, vStatusPayload);
+    mutationFn: async (vehicleTypePayload) => {
+      return await makeRequest<VehicleType, VehicleTypePayload>(create, vehicleTypePayload);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -40,13 +53,12 @@ export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error
   });
 }
 
-export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Error, Partial<VehicleStatusPayload>> {
+export function useUpdateVehicleType(id?: string): UseMutationResult<unknown, Error, VehicleTypePayload> {
   if (!id) throw Error('No Id provided');
-
   const {
     create: { routeById },
     find,
-  } = CoreApiRoutes.vehicleStatus;
+  } = CoreApiRoutes.vehicleType;
   const { update } = routeById(id);
   const { findOne } = find.routeById(id);
 
@@ -54,8 +66,8 @@ export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Er
 
   return useMutation({
     mutationKey: [update.path],
-    mutationFn: async (vStatusPayload) => {
-      return await makeRequest<unknown, Partial<VehicleStatusPayload>>(update, vStatusPayload);
+    mutationFn: async (vehicleTypePayload) => {
+      return await makeRequest<unknown, VehicleTypePayload>(update, vehicleTypePayload);
     },
     onSuccess: async () => {
       return Promise.all([
@@ -67,31 +79,19 @@ export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Er
         }),
       ]);
     },
+
+    // enabled: Boolean(id),
   });
 }
 
-export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleStatus> {
+export function useDeleteVehicleType(id?: string): UseMutationResult {
+  if (!id) throw Error('No Id provided');
   const {
-    find: { routeById },
-  } = CoreApiRoutes.vehicleStatus;
-  const { findOne } = routeById(id);
-
-  return useQuery({
-    queryKey: [findOne.path],
-    queryFn: async () => {
-      return await makeRequest<VehicleStatus>(findOne);
-    },
-    enabled: Boolean(id),
-  });
-}
-
-export function useDeleteVehicleStatus(id?: string): UseMutationResult {
-  const queryClient = useQueryClient();
-  const {
-    find,
     create: { routeById },
-  } = CoreApiRoutes.vehicleStatus;
+    find,
+  } = CoreApiRoutes.vehicleType;
   const { remove } = routeById(id);
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: [remove.path],

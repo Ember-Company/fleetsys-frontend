@@ -1,49 +1,53 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Delete, Edit } from '@mui/icons-material';
-import { Button, Chip, CircularProgress, Stack } from '@mui/material';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
+import { Edit } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  Divider,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+} from '@mui/material';
 
-import { type VehicleStatus } from '@/types/vehicles';
-import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
+import { VehicleType } from '@/types/vehicles';
+import { useGetVehicleTypes } from '@/hooks/queries';
 import { useSelection } from '@/hooks/use-selection';
 import Modal from '@/components/shared/modal';
 
-import { DeleteStatusDialog, StatusForm } from './status';
+import { TypesForm } from './v-types/v-types-form';
 
 function noop(): void {
   // do nothing
 }
 
-interface VStatusPanelProps {
+interface VTypesPanelProps {
   count?: number;
   page?: number;
   rowsPerPage?: number;
 }
 
-const tableHeaders: readonly string[] = ['ID', 'Status', 'Vehicle Count', 'Actions'];
+const tableHeaders: readonly string[] = ['ID', 'Name', 'Vehicle Amount', 'Actions'];
 
-export default function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProps): React.JSX.Element {
-  const { data: rows, isLoading } = useGetVehicleStatuses();
+function VehicleTypesPanel({ count = 0, page = 0, rowsPerPage = 0 }: VTypesPanelProps): React.JSX.Element {
+  const { data: rows, isLoading } = useGetVehicleTypes();
 
   return (
     <>
       <Stack width="100%">
         <Box ml="auto" mb={2}>
           <Modal
-            buttonTitle="Create New Status"
-            modalLabel="Create Vehicle Status"
-            Content={<StatusForm variant="create" />}
+            buttonTitle="New Vehicle Type"
+            modalLabel="New Vehicle type"
+            Content={<TypesForm variant="create" />}
           />
         </Box>
       </Stack>
@@ -59,7 +63,8 @@ export default function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: V
                 ))}
               </TableRow>
             </TableHead>
-            <VStatusPanelRows rows={rows} isLoading={isLoading} />
+            <VTypesPanelRows rows={rows} isLoading={isLoading} />
+            {/* <VStatusPanelRows rows={rows} isLoading={isLoading} /> */}
           </Table>
         </Box>
         <Divider />
@@ -77,11 +82,11 @@ export default function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: V
   );
 }
 
-function VStatusPanelRows({
+function VTypesPanelRows({
   rows,
   isLoading,
 }: {
-  rows: VehicleStatus[] | undefined;
+  rows: VehicleType[] | undefined;
   isLoading: boolean;
 }): React.JSX.Element | null {
   const rowIds: string[] = useMemo((): string[] => {
@@ -117,7 +122,7 @@ function VStatusPanelRows({
               </Typography>
             </TableCell>
             <TableCell>
-              <Chip label={row.name} variant="filled" color={row.status_color} />
+              <Typography variant="subtitle2">{row.name}</Typography>
             </TableCell>
             <TableCell>
               <Typography variant="overline" component="div">
@@ -129,10 +134,9 @@ function VStatusPanelRows({
                 isIcon
                 Icon={<Edit color="action" />}
                 iconButtonProps={{ color: 'secondary' }}
-                Content={<StatusForm variant="edit" targetId={row.id} />}
+                Content={<TypesForm variant="edit" targetId={row.id} />}
                 modalLabel="Edit Vehicle Status"
               />
-              <DeleteStatusDialog row={row} />
             </TableCell>
           </TableRow>
         );
@@ -140,3 +144,5 @@ function VStatusPanelRows({
     </TableBody>
   );
 }
+
+export default VehicleTypesPanel;

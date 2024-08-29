@@ -1,17 +1,13 @@
-/* eslint-disable camelcase */
 import React, { useCallback, useEffect, type PropsWithChildren } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Alert,
   Button,
-  Chip,
   CircularProgress,
   FormControl,
   FormHelperText,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
   Stack,
   Typography,
 } from '@mui/material';
@@ -25,27 +21,24 @@ import {
   type FormVariantTitle,
   type RootFormProps,
 } from '@/types/forms';
-import { type StatusColors } from '@/types/vehicles';
-import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries/v-status';
+import { useCreateVehicleType, useGetTargetVehicleType, useUpdateVehicleType } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 
-const colors: StatusColors[] = ['default', 'error', 'info', 'success', 'warning', 'primary', 'secondary'];
-
 const schema = zod.object({
-  name: zod.string().min(1, { message: 'Status Name is required' }),
-  status_color: zod.enum(['default', 'error', 'info', 'success', 'warning', 'primary', 'secondary']),
+  name: zod.string().min(1, { message: 'Type Name is required' }),
 });
 
 type Values = zod.infer<typeof schema>;
-const defaultValues = { name: '', status_color: 'default' } satisfies Values;
+const defaultValues = { name: '' } satisfies Values;
 
-export function StatusForm({ variant, targetId }: RootFormProps): React.JSX.Element {
-  const { data, isLoading } = useGetTargetVehicleStatus(targetId); // only enabled if targetId exists, enables edit mode
+export function TypesForm({ variant, targetId }: RootFormProps): React.JSX.Element {
+  const { data, isLoading } = useGetTargetVehicleType(targetId);
+
   const { handleSubmit, ...formHandlers } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
   const formHeader: FormVariantTitle = {
-    create: 'Create Status',
-    edit: 'Edit Status',
+    create: 'Create Vehicle Type',
+    edit: 'Edit Vehicle Type',
   };
 
   const isEdit = useCallback((): boolean => {
@@ -55,10 +48,9 @@ export function StatusForm({ variant, targetId }: RootFormProps): React.JSX.Elem
   useEffect(() => {
     if (isEdit() && !isLoading) {
       if (data) {
-        const { name, status_color } = data;
+        const { name } = data;
 
         formHandlers.setValue('name', name);
-        formHandlers.setValue('status_color', status_color);
       }
     }
   }, [data, formHandlers, isEdit, isLoading]);
@@ -90,14 +82,14 @@ export function StatusForm({ variant, targetId }: RootFormProps): React.JSX.Elem
 
 function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & PropsWithChildren): React.JSX.Element {
   const { AlertMessage, updateAlertMessage } = useAlertMessage();
-  const { mutate, isPending } = useEditVehicleStatus(targetId);
+  const { mutate, isPending } = useUpdateVehicleType(targetId);
 
   const handleEdit = useCallback(
     async (values: Values) => {
       mutate(values, {
         onSuccess: () => {
           updateAlertMessage({
-            text: 'Status Modified Successfully',
+            text: 'Type Modified Successfully',
             isError: false,
           });
         },
@@ -127,7 +119,7 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
 
         <AlertMessage />
         <Button disabled={isPending} type="submit" variant="contained">
-          {isPending ? 'Loading...' : 'Edit Status'}
+          {isPending ? 'Loading...' : 'Edit Vehicle Type'}
         </Button>
       </Stack>
     </form>
@@ -136,7 +128,7 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
 
 function Create({ children, submitHandler }: CreateFormProps<Values> & PropsWithChildren): React.JSX.Element {
   const { AlertMessage, updateAlertMessage } = useAlertMessage();
-  const { mutate, isPending } = useCreateVehicleStatus();
+  const { mutate, isPending } = useCreateVehicleType();
 
   const handleCreate = useCallback(
     async (values: Values) => {
@@ -180,39 +172,8 @@ function FormContent({ control, formState: { errors } }: FormContentProps<Values
         render={({ field }) => (
           <FormControl error={Boolean(errors.name)}>
             <InputLabel>Status Title</InputLabel>
-            <OutlinedInput {...field} label="Status Title" type="text" />
+            <OutlinedInput {...field} label="Vehicle Type Title" type="text" />
             <FormHelperText>{errors?.name?.message ?? null}</FormHelperText>
-          </FormControl>
-        )}
-      />
-      <Controller
-        control={control}
-        name="status_color"
-        defaultValue="default"
-        render={({ field }) => (
-          <FormControl sx={{ minWidth: '100%' }} error={Boolean(errors.status_color)}>
-            <Select
-              {...field}
-              inputProps={{ 'aria-label': 'Without label' }}
-              sx={{
-                textTransform: 'capitalize',
-              }}
-            >
-              {colors.map((color) => (
-                <MenuItem
-                  key={color}
-                  value={color}
-                  sx={{
-                    textTransform: 'capitalize',
-                  }}
-                >
-                  {color}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText sx={{ p: 0, m: 0 }}>
-              <Chip component="span" sx={{ mt: 1 }} label="Status Color" color={field.value} size="medium" />
-            </FormHelperText>
           </FormControl>
         )}
       />
