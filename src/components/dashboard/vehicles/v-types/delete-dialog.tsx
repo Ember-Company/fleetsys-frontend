@@ -4,12 +4,12 @@ import React from 'react';
 import { Delete } from '@mui/icons-material';
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 
-import { VehicleStatus } from '@/types/vehicles';
+import { type VehicleType } from '@/types/vehicles';
 import { useDeleteVehicleType } from '@/hooks/queries';
 import Dialog from '@/components/shared/dialog';
 
 interface DeleteStatusDialogProps {
-  row: VehicleStatus;
+  row: VehicleType;
 }
 
 export function DeleteTypeDialog({ row }: DeleteStatusDialogProps): React.JSX.Element {
@@ -24,7 +24,7 @@ export function DeleteTypeDialog({ row }: DeleteStatusDialogProps): React.JSX.El
       isIcon
       Icon={<Delete color="error" />}
       iconButtonProps={{ color: 'secondary' }}
-      title="Delete Vehicle Status"
+      title="Delete Vehicle Type"
       customBody={
         <Box>
           Are you sure you want to delete{' '}
