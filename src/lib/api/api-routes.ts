@@ -16,13 +16,29 @@ const CoreApiRoutes = {
     },
   },
   vehicleStatus: {
-    listVehicleStatus: {
+    find: {
       method: 'get',
       path: '/api/vehicle-status',
+      routeById: (id?: string) => ({
+        findOne: {
+          method: 'get',
+          path: `/api/vehicle-status/${id ?? ''}`,
+        },
+      }),
     },
-    createVehicleStatus: {
+    create: {
       method: 'post',
       path: '/api/vehicle-status',
+      routeById: (id?: string) => ({
+        update: {
+          method: 'put',
+          path: `/api/vehicle-status/${id ?? ''}`,
+        },
+        remove: {
+          method: 'delete',
+          path: `/api/vehicle-status/${id ?? ''}`,
+        },
+      }),
     },
   },
   vehicleType: {

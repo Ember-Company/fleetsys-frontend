@@ -8,33 +8,33 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query';
 
-import { type ApiMeta } from '@/types/api';
 import { type VehicleStatus, type VehicleStatusPayload } from '@/types/vehicles';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
 
 export function useGetVehicleStatuses(): UseQueryResult<VehicleStatus[]> {
-  const { listVehicleStatus } = CoreApiRoutes.vehicleStatus;
+  const { find } = CoreApiRoutes.vehicleStatus;
+
   return useQuery({
-    queryKey: [listVehicleStatus.path],
+    queryKey: [find.path],
     queryFn: async () => {
-      return await makeRequest<VehicleStatus[]>(listVehicleStatus);
+      return await makeRequest<VehicleStatus[]>(find);
     },
   });
 }
 
 export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error, VehicleStatusPayload> {
-  const { listVehicleStatus, createVehicleStatus } = CoreApiRoutes.vehicleStatus;
+  const { find, create } = CoreApiRoutes.vehicleStatus;
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [createVehicleStatus.path],
+    mutationKey: [create.path],
     mutationFn: async (vStatusPayload) => {
-      return await makeRequest<VehicleStatus, VehicleStatusPayload>(createVehicleStatus, vStatusPayload);
+      return await makeRequest<VehicleStatus, VehicleStatusPayload>(create, vStatusPayload);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [listVehicleStatus.path],
+        queryKey: [find.path],
       });
     },
   });
@@ -43,26 +43,27 @@ export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error
 export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Error, Partial<VehicleStatusPayload>> {
   if (!id) throw Error('No Id provided');
 
-  const { listVehicleStatus, createVehicleStatus } = CoreApiRoutes.vehicleStatus;
-  const editOne: ApiMeta = {
-    path: `${createVehicleStatus.path}/${id}`,
-    method: 'put',
-  };
+  const {
+    create: { routeById },
+    find,
+  } = CoreApiRoutes.vehicleStatus;
+  const { update } = routeById(id);
+  const { findOne } = find.routeById(id);
 
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [editOne.path],
+    mutationKey: [update.path],
     mutationFn: async (vStatusPayload) => {
-      return await makeRequest<unknown, Partial<VehicleStatusPayload>>(editOne, vStatusPayload);
+      return await makeRequest<unknown, Partial<VehicleStatusPayload>>(update, vStatusPayload);
     },
     onSuccess: async () => {
       return Promise.all([
         queryClient.invalidateQueries({
-          queryKey: [listVehicleStatus.path],
+          queryKey: [find.path],
         }),
         queryClient.invalidateQueries({
-          queryKey: [`${listVehicleStatus.path}/${id ?? ''}`],
+          queryKey: [findOne.path],
         }),
       ]);
     },
@@ -70,11 +71,10 @@ export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Er
 }
 
 export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleStatus> {
-  const { listVehicleStatus } = CoreApiRoutes.vehicleStatus;
-  const findOne: ApiMeta = {
-    path: `${listVehicleStatus.path}/${id ?? ''}`,
-    method: 'get',
-  };
+  const {
+    find: { routeById },
+  } = CoreApiRoutes.vehicleStatus;
+  const { findOne } = routeById(id);
 
   return useQuery({
     queryKey: [findOne.path],
@@ -87,20 +87,20 @@ export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleSt
 
 export function useDeleteVehicleStatus(id?: string): UseMutationResult {
   const queryClient = useQueryClient();
-  const { listVehicleStatus } = CoreApiRoutes.vehicleStatus;
-  const deleteStatus: ApiMeta = {
-    path: `${listVehicleStatus.path}/${id ?? ''}`,
-    method: 'delete',
-  };
+  const {
+    find,
+    create: { routeById },
+  } = CoreApiRoutes.vehicleStatus;
+  const { remove } = routeById(id);
 
   return useMutation({
-    mutationKey: [deleteStatus.path],
+    mutationKey: [remove.path],
     mutationFn: async () => {
-      return await makeRequest<unknown>(deleteStatus);
+      return await makeRequest<unknown>(remove);
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: [listVehicleStatus.path],
+        queryKey: [find.path],
       });
     },
   });
