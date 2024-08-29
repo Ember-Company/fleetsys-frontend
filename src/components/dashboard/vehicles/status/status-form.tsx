@@ -69,7 +69,9 @@ export function StatusForm({ variant, targetId }: StatusFormProps): React.JSX.El
       {isEdit() ? (
         <Edit targetId={targetId} submitHandler={handleSubmit} >
           {isLoading ? (
-            <CircularProgress />
+            <Stack alignItems='center' justifyContent='center'>
+              <CircularProgress />
+            </Stack>
           ) : (
             <FormContent {...formHandlers} />
           )}
@@ -181,9 +183,6 @@ function FormContent({ control, formState: { errors } }: Omit<UseFormReturn<Valu
       control={control}
       name='status_color'
       defaultValue='default'
-      rules={{
-        min: 1
-      }}
       render={({field}) => (
         <FormControl sx={{  minWidth: '100%' }} error={Boolean(errors.status_color)} >
         <Select

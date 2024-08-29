@@ -93,7 +93,7 @@ function VStatusPanelRows({
     return (
       <TableBody>
         <TableRow>
-          <TableCell colSpan={3} align="center">
+          <TableCell colSpan={4} align="center">
             <CircularProgress />
           </TableCell>
         </TableRow>
