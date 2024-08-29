@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Delete } from '@mui/icons-material';
-import { Alert, AlertProps, Button, CircularProgress, Typography } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 import { type VehicleStatus } from '@/types/vehicles';
@@ -11,7 +11,7 @@ interface DeleteStatusDialogProps {
   row: VehicleStatus;
 }
 
-function DeleteStatusDialog({ row }: DeleteStatusDialogProps): React.JSX.Element {
+export function DeleteStatusDialog({ row }: DeleteStatusDialogProps): React.JSX.Element {
   const { mutate, isPending } = useDeleteVehicleStatus(row.id);
 
   const handleDelete = (): void => {
@@ -40,5 +40,3 @@ function DeleteStatusDialog({ row }: DeleteStatusDialogProps): React.JSX.Element
     />
   );
 }
-
-export default DeleteStatusDialog;

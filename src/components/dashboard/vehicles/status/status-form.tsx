@@ -6,8 +6,9 @@ import { z as zod } from 'zod';
 
 import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries/v-status';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type StatusColors, type VehicleStatus } from '@/types/vehicles';
+import { type StatusColors } from '@/types/vehicles';
 import { logger } from '@/lib/default-logger';
+import useAlertMessage from '@/hooks/use-alert-message';
 
 type FormVariant = 'create' | 'edit';
 
@@ -18,8 +19,7 @@ interface StatusFormProps {
 
 interface EditStatusProps {
   targetId?: string;
-  defaultValues: Values;
-  currentValues: () => Values;
+  defaultValues?: Values;
   submitHandler: UseFormHandleSubmit<Values>
 }
 
@@ -33,10 +33,10 @@ const schema = zod.object({
 });
 
 type Values = zod.infer<typeof schema>;
+const defaultValues = { name: '', status_color: 'default' } satisfies Values;
 
-export default function StatusForm({ variant, targetId }: StatusFormProps): React.JSX.Element {
+export function StatusForm({ variant, targetId }: StatusFormProps): React.JSX.Element {
   const { data, isLoading } = useGetTargetVehicleStatus(targetId); // only enabled if targetId exists, enables edit mode
-  const [defaultValues, setDefaultValues] = useState<Values>({ name: '', status_color: 'default' });
   const {handleSubmit, ...formHandlers} = useForm<Values>({ defaultValues, resolver: zodResolver(schema) })
 
   const formHeader: Record<FormVariant, string> = {
@@ -67,16 +67,18 @@ export default function StatusForm({ variant, targetId }: StatusFormProps): Reac
       </Stack>
 
       {isEdit() ? (
-        <Edit targetId={targetId} defaultValues={defaultValues}  submitHandler={handleSubmit} currentValues={formHandlers.getValues}>
+        <Edit targetId={targetId} submitHandler={handleSubmit} >
           {isLoading ? (
-            <CircularProgress />
+            <Stack alignItems='center' justifyContent='center'>
+              <CircularProgress />
+            </Stack>
           ) : (
             <FormContent {...formHandlers} />
           )}
 
         </Edit>
       ) : (
-        <Create defaultValues={defaultValues} submitHandler={handleSubmit}>
+        <Create submitHandler={handleSubmit}>
           <FormContent {...formHandlers} />
         </Create>
       )}
@@ -84,47 +86,26 @@ export default function StatusForm({ variant, targetId }: StatusFormProps): Reac
   );
 }
 
-function Edit({targetId, children, submitHandler, defaultValues, currentValues}: EditStatusProps & PropsWithChildren): React.JSX.Element {
-  const [message, setMessage] = useState<{ text: string, statusColor: AlertProps['color'], isError: boolean }|null>(null);
+function Edit({targetId, children, submitHandler}: EditStatusProps & PropsWithChildren): React.JSX.Element {
+  const { AlertMessage, updateAlertMessage } = useAlertMessage();
   const { mutate, isPending } = useEditVehicleStatus(targetId);
-  const current = currentValues();
-
-  const removeUnchangedValues = useCallback((values: Values): Partial<Values> => {
-    const modifiedValues: Partial<Values> = {};
-
-    for (const key in values) {
-      const field = key as keyof Values;
-
-      if (values[field] !== current[field]) {
-        modifiedValues[field] = values[field] as StatusColors;
-      }
-    }
-
-    return modifiedValues;
-  }, [current]);
 
   const handleEdit = useCallback(async (values: Values) => {
-    // const payload = removeUnchangedValues(values);
-    // logger.debug(payload);
-
     mutate(values, {
       onSuccess: () => {
-        setMessage({
+        updateAlertMessage({
           text: 'Status Modified Successfully',
-          statusColor: 'success',
           isError: false
-        });
+        })
       },
       onError: (err) => {
-        logger.error(err);
-        setMessage({
+        updateAlertMessage({
           text: err.message,
-          statusColor:'error',
           isError: true
-        });
+        })
       }
     });
-  }, [mutate]);
+  }, [mutate, updateAlertMessage]);
 
   if (!targetId) {
     return (
@@ -139,7 +120,8 @@ function Edit({targetId, children, submitHandler, defaultValues, currentValues}:
     <Stack direction='column' spacing={4}>
       {children}
 
-    {message ? <Alert color={message.statusColor} variant='standard'>{message.text}</Alert> : null}
+    {/* {message ? <Alert color={message.statusColor} variant='standard'>{message.text}</Alert> : null} */}
+    <AlertMessage />
     <Button disabled={isPending} type="submit" variant="contained">
       {isPending ? 'Loading...' : 'Edit Status'}
     </Button>
@@ -148,36 +130,33 @@ function Edit({targetId, children, submitHandler, defaultValues, currentValues}:
  )
 }
 
-function Create({ children, submitHandler, defaultValues }: CreateStatusProps & PropsWithChildren): React.JSX.Element {
-  const [message, setMessage] = useState<{ text: string, statusColor: AlertProps['color'], isError: boolean }|null>(null);
+function Create({ children, submitHandler }: CreateStatusProps & PropsWithChildren): React.JSX.Element {
+  const { AlertMessage, updateAlertMessage } = useAlertMessage();
   const { mutate, isPending } = useCreateVehicleStatus();
 
 
   const handleCreate = useCallback(async (values: Values) => {
     mutate(values, {
       onSuccess: () => {
-        setMessage({
+        updateAlertMessage({
           text: 'Status Created Successfully',
-          statusColor: 'success',
           isError: false
-        });
+        })
       },
       onError: (err) => {
-        logger.error(err);
-        setMessage({
+        updateAlertMessage({
           text: err.message,
-          statusColor:'error',
           isError: true
-        });
+        })
       }
     });
-  }, [mutate, setMessage]);
+  }, [mutate, updateAlertMessage]);
 
   return (
     <form onSubmit={submitHandler(handleCreate)}>
       <Stack direction='column' spacing={4}>
         {children}
-        {message ? <Alert color={message.statusColor} variant='standard'>{message.text}</Alert> : null}
+        <AlertMessage />
         <Button disabled={isPending} type="submit" variant="contained">
           {isPending ? 'Loading...' : 'Create Status'}
         </Button>
@@ -186,8 +165,7 @@ function Create({ children, submitHandler, defaultValues }: CreateStatusProps & 
   )
 }
 
-function FormContent({ control,  setError, formState: { errors } }: Omit<UseFormReturn<Values>, 'handleSubmit'>): React.JSX.Element {
-
+function FormContent({ control, formState: { errors } }: Omit<UseFormReturn<Values>, 'handleSubmit'>): React.JSX.Element {
   return (
     <>
       <Controller
@@ -205,9 +183,6 @@ function FormContent({ control,  setError, formState: { errors } }: Omit<UseForm
       control={control}
       name='status_color'
       defaultValue='default'
-      rules={{
-        min: 1
-      }}
       render={({field}) => (
         <FormControl sx={{  minWidth: '100%' }} error={Boolean(errors.status_color)} >
         <Select
@@ -232,6 +207,7 @@ function FormContent({ control,  setError, formState: { errors } }: Omit<UseForm
       </FormControl>
       )}
     />
+    {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
     </>
   )
 }

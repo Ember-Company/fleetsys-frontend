@@ -17,11 +17,9 @@ import Typography from '@mui/material/Typography';
 import { type VehicleStatus } from '@/types/vehicles';
 import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
-import Dialog from '@/components/shared/dialog';
 import Modal from '@/components/shared/modal';
 
-import { StatusForm } from '../modals';
-import DeleteStatusDialog from '../status/delete-dialog';
+import { DeleteStatusDialog, StatusForm } from './status';
 
 function noop(): void {
   // do nothing
@@ -30,11 +28,10 @@ function noop(): void {
 interface VStatusPanelProps {
   count?: number;
   page?: number;
-  // rows?: VehicleStatus[];
   rowsPerPage?: number;
 }
 
-function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProps): React.JSX.Element {
+export default function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProps): React.JSX.Element {
   const { data: rows, isLoading } = useGetVehicleStatuses();
 
   return (
@@ -96,7 +93,7 @@ function VStatusPanelRows({
     return (
       <TableBody>
         <TableRow>
-          <TableCell colSpan={3} align="center">
+          <TableCell colSpan={4} align="center">
             <CircularProgress />
           </TableCell>
         </TableRow>
@@ -140,5 +137,3 @@ function VStatusPanelRows({
     </TableBody>
   );
 }
-
-export default VStatusPanel;
