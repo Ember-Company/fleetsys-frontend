@@ -8,6 +8,7 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query';
 
+import { type ApiMeta } from '@/types/api';
 import { type VehicleStatus, type VehicleStatusPayload } from '@/types/vehicles';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
@@ -36,5 +37,47 @@ export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error
         queryKey: [listVehicleStatus.path],
       });
     },
+  });
+}
+
+export function useEditVehicleStatus(
+  id?: string
+): UseMutationResult<VehicleStatus, Error, Partial<VehicleStatusPayload>> {
+  if (!id) throw Error('No Id provided');
+
+  const { listVehicleStatus, createVehicleStatus } = CoreApiRoutes.vehicleStatus;
+  const editOne: ApiMeta = {
+    path: `${createVehicleStatus.path}/${id}`,
+    method: 'put',
+  };
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [editOne.path],
+    mutationFn: async (vStatusPayload) => {
+      return await makeRequest<VehicleStatus, Partial<VehicleStatusPayload>>(editOne, vStatusPayload);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [listVehicleStatus.path],
+      });
+    },
+  });
+}
+
+export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleStatus> {
+  const { listVehicleStatus } = CoreApiRoutes.vehicleStatus;
+  const findOne: ApiMeta = {
+    path: `${listVehicleStatus.path}/${id ?? ''}`,
+    method: 'get',
+  };
+
+  return useQuery({
+    queryKey: [findOne.path],
+    queryFn: async () => {
+      return await makeRequest<VehicleStatus>(findOne);
+    },
+    enabled: id !== undefined,
   });
 }

@@ -1,13 +1,10 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { CircularProgress } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import { Chip, CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,12 +12,13 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
 
-import { VehicleStatus } from '@/types/vehicles';
-import { logger } from '@/lib/default-logger';
+import { type VehicleStatus } from '@/types/vehicles';
 import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
+import Modal from '@/components/shared/modal';
+
+import { StatusForm } from '../modals';
 
 function noop(): void {
   // do nothing
@@ -37,29 +35,41 @@ function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProp
   const { data: rows, isLoading } = useGetVehicleStatuses();
 
   return (
-    <Card>
-      <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <VStatusPanelRows rows={rows} isLoading={isLoading} />
-        </Table>
-      </Box>
-      <Divider />
-      <TablePagination
-        component="div"
-        count={rows?.length || 0}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
-        page={page}
-        rowsPerPage={10}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
-    </Card>
+    <>
+      <Stack width="100%">
+        <Box ml="auto">
+          <Modal
+            buttonTitle="Create New Status"
+            modalLabel="Create Vehicle Status"
+            Content={<StatusForm variant="create" />}
+          />
+        </Box>
+      </Stack>
+      <Card variant="elevation">
+        <Box sx={{ overflowX: 'auto' }}>
+          <Table sx={{ minWidth: '800px' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Vehicle Count</TableCell>
+              </TableRow>
+            </TableHead>
+            <VStatusPanelRows rows={rows} isLoading={isLoading} />
+          </Table>
+        </Box>
+        <Divider />
+        <TablePagination
+          component="div"
+          count={rows?.length || 0}
+          onPageChange={noop}
+          onRowsPerPageChange={noop}
+          page={page}
+          rowsPerPage={10}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
+      </Card>
+    </>
   );
 }
 
@@ -78,7 +88,16 @@ function VStatusPanelRows({
 
   const { selected } = useSelection(rowIds);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading)
+    return (
+      <TableBody>
+        <TableRow>
+          <TableCell colSpan={3} align="center">
+            <CircularProgress />
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    );
   if (!rows) return null;
 
   return (
@@ -87,14 +106,19 @@ function VStatusPanelRows({
         const isSelected = selected?.has(row.id);
 
         return (
-          <TableRow hover key={row.name} selected={isSelected}>
+          <TableRow hover key={row.id} selected={isSelected}>
             <TableCell>
-              <Stack spacing={2}>
-                <Typography variant="overline">{row.id}</Typography>
-              </Stack>
+              <Typography variant="overline" component="div">
+                {row.id}
+              </Typography>
             </TableCell>
-            <TableCell scope="row">
-              <Typography variant="subtitle2">{row.name}</Typography>
+            <TableCell>
+              <Chip label={row.name} variant="filled" color={row.status_color} />
+            </TableCell>
+            <TableCell>
+              <Typography variant="overline" component="div">
+                {row.vehicles_count}
+              </Typography>
             </TableCell>
           </TableRow>
         );

@@ -65,8 +65,8 @@ export function getVehiclesTableFields(): GridColDef<Vehicle>[] {
       valueGetter: (_, row) => {
         return row.vehicle_status.name;
       },
-      renderCell: ({ value }: GridRenderCellParams<Vehicle, VehicleStatus['name']>) => (
-        <Chip variant="filled" size="medium" color="error" label={value} />
+      renderCell: ({ value, row }: GridRenderCellParams<Vehicle, VehicleStatus['name']>) => (
+        <Chip variant="filled" size="medium" color={row.vehicle_status.status_color} label={value} />
       ),
     },
   ];

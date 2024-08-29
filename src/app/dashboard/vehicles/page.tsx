@@ -9,7 +9,7 @@ import VStatusPanel from '@/components/dashboard/vehicles/panels/vehicle-status-
 import VehicleDataTable from '@/components/dashboard/vehicles/vehicle-list';
 import VehicleTabs from '@/components/dashboard/vehicles/vehicle-tabs';
 
-export const metadata = { title: `Maintenance | Dashboard | ${config.site.name}` } satisfies Metadata;
+export const metadata = { title: `Vehicles | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 const VehicleTabsData: VTabsConfig[] = [
   {
@@ -25,16 +25,15 @@ const VehicleTabsData: VTabsConfig[] = [
     panel: <Box>Ola mundo</Box>,
   },
   {
-    title: 'Vehicle Statuses',
+    title: 'Statuses',
     panel: <VStatusPanel />,
   },
 ];
 
 export default function Page(): React.JSX.Element {
   return (
-    <Stack spacing={3}>
-      <VehicleTabs VTabsConfig={VehicleTabsData} />
-      {/* <VehicleDataTable /> */}
-    </Stack>
+    // <Stack spacing={3} >
+    <VehicleTabs VTabsConfig={VehicleTabsData} />
+    // </Stack>
   );
 }

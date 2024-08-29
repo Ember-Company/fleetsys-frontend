@@ -1,5 +1,7 @@
 import type { NavItemConfig } from '@/types/nav';
 
+import { logger } from './default-logger';
+
 export function isNavItemActive({
   disabled,
   external,
@@ -23,5 +25,5 @@ export function isNavItemActive({
     return false;
   }
 
-  return pathname === href;
+  return `${pathname}/` === href;
 }

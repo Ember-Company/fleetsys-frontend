@@ -27,11 +27,7 @@ function TabPanel(props: TabPanelProps): React.JSX.Element {
       aria-labelledby={`full-width-tab-${index.toString()}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -69,14 +65,13 @@ function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
     <>
       <Box borderBottom={1} borderColor="divider">
         <Tabs value={tabValue} onChange={handleChange}>
-          {/* <Tab label='Vehicles List' /> */}
-          {tabs.titles.map((title) => (
-            <Tab label={title} key={title} sx={{ paddingX: 10 }} />
+          {tabs.titles.map((title, index) => (
+            <Tab label={title} tabIndex={index} key={title} sx={{ paddingX: 5 }} />
           ))}
         </Tabs>
       </Box>
       {tabs.panels.map((PanelComponent, index) => (
-        <TabPanel value={tabValue} index={index} key={PanelComponent?.toString()}>
+        <TabPanel value={tabValue} index={index} key={PanelComponent?.toLocaleString()}>
           {PanelComponent}
         </TabPanel>
       ))}

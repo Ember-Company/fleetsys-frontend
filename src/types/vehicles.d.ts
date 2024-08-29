@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { ChipOwnProps } from '@mui/material';
 
 export interface VTabsConfig {
   title: string;
@@ -26,7 +27,8 @@ export interface VehicleStatus {
   id: string;
   company_id: string;
   name: string;
-  status_color: string;
+  status_color: ChipOwnProps['color'];
+  vehicles_count: number;
   created_at: string;
   updated_at: string;
 }
