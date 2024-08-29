@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { DataGrid, type GridRowParams, type GridSlots } from '@mui/x-data-grid';
 
@@ -11,7 +11,7 @@ import { useVehiclesIndex } from '@/hooks/queries';
 import { useActionFields } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 
-import { getVehiclesTableFields } from './vehicle-columns';
+import { getVehiclesTableFields } from './columns';
 
 function VehicleDataTable(): React.JSX.Element {
   const { data: vehicleDataIndex, isLoading } = useVehiclesIndex();

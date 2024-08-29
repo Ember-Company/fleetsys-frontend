@@ -104,9 +104,6 @@ function Edit({targetId, children, submitHandler, defaultValues, currentValues}:
   }, [current]);
 
   const handleEdit = useCallback(async (values: Values) => {
-    // const payload = removeUnchangedValues(values);
-    // logger.debug(payload);
-
     mutate(values, {
       onSuccess: () => {
         setMessage({

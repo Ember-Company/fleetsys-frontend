@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 
 import { type VTabsConfig, type VTabsConfigTransformed } from '@/types/vehicles';
 
-interface VehicleTabsProps {
-  VTabsConfig: VTabsConfig[];
-}
+import { VehicleTabsData } from './config';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,11 +30,11 @@ function TabPanel(props: TabPanelProps): React.JSX.Element {
   );
 }
 
-function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
+function VehicleTabs(): React.JSX.Element {
   const [tabValue, setTabValue] = useState(0);
 
   const tabs = useMemo(() => {
-    return VTabsConfig.reduce(
+    return VehicleTabsData.reduce(
       (acc: VTabsConfigTransformed, config: VTabsConfig): VTabsConfigTransformed => {
         const { title, panel } = config;
 
@@ -55,7 +53,7 @@ function VehicleTabs({ VTabsConfig }: VehicleTabsProps): React.JSX.Element {
       },
       { titles: [], panels: [] } satisfies VTabsConfigTransformed
     );
-  }, [VTabsConfig]);
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number): void => {
     setTabValue(newValue);

@@ -19,8 +19,7 @@ import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
 import Modal from '@/components/shared/modal';
 
-import { DeleteStatusDialog } from './delete-dialog';
-import { StatusForm } from './status-form';
+import { DeleteStatusDialog, StatusForm } from './status';
 
 function noop(): void {
   // do nothing
@@ -32,7 +31,7 @@ interface VStatusPanelProps {
   rowsPerPage?: number;
 }
 
-export function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProps): React.JSX.Element {
+export default function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProps): React.JSX.Element {
   const { data: rows, isLoading } = useGetVehicleStatuses();
 
   return (
