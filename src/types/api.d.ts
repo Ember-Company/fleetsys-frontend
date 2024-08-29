@@ -6,10 +6,12 @@ export type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'optio
 export interface ApiMeta {
   path: string;
   method: RequestMethod;
+  routeById?: (param: string) => ApiGroup;
 }
 
 type ApiName = Record<string, ApiMeta>;
 export type ApiGroup = Readonly<Record<string, ApiName>> | Readonly<ApiName>;
+
 export interface Response<T> {
   data: T;
   metadata: Partial<AxiosResponse>;

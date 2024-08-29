@@ -25,6 +25,32 @@ const CoreApiRoutes = {
       path: '/api/vehicle-status',
     },
   },
+  vehicleType: {
+    find: {
+      method: 'get',
+      path: '/api/vehicle-types',
+      routeById: (id?: string) => ({
+        findOne: {
+          method: 'get',
+          path: `/api/vehicle-types/${id ?? ''}`,
+        },
+      }),
+    },
+    create: {
+      method: 'post',
+      path: '/api/vehicle-types',
+      routeById: (id?: string) => ({
+        update: {
+          method: 'put',
+          path: `/api/vehicle-types/${id ?? ''}`,
+        },
+        remove: {
+          method: 'delete',
+          path: `/api/vehicle-types/${id ?? ''}`,
+        },
+      }),
+    },
+  },
   user: {
     showUser: {
       method: 'get',

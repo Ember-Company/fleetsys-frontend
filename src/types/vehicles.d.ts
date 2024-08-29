@@ -20,6 +20,7 @@ export interface VehicleType {
   id: string;
   company_id: string;
   name: string;
+  vehicles_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -35,7 +36,8 @@ export interface VehicleStatus {
   updated_at: string;
 }
 
-export type VehicleStatusPayload = Pick<VehicleStatus, 'name'>;
+export type VehicleStatusPayload = Pick<VehicleStatus, 'name' | 'status_color'>;
+export type VehicleTypePayload = Pick<VehicleType, 'name'>;
 
 export interface Vehicle {
   id: string;

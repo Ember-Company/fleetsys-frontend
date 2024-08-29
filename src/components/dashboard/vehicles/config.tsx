@@ -5,6 +5,7 @@ import { type VTabsConfig } from '@/types/vehicles';
 
 import VehicleDataTable from './overview-panel';
 import VStatusPanel from './status-panel';
+import VehicleTypesPanel from './v-types-panel';
 
 export const VehicleTabsData: VTabsConfig[] = [
   {
@@ -22,5 +23,9 @@ export const VehicleTabsData: VTabsConfig[] = [
   {
     title: 'Statuses',
     panel: <VStatusPanel />,
+  },
+  {
+    title: 'Types',
+    panel: <VehicleTypesPanel />,
   },
 ];
