@@ -23,7 +23,7 @@ import { useGetVehicleTypes } from '@/hooks/queries';
 import { useSelection } from '@/hooks/use-selection';
 import Modal from '@/components/shared/modal';
 
-import { TypesForm } from './v-types/v-types-form';
+import { DeleteTypeDialog, TypesForm } from './v-types';
 
 function noop(): void {
   // do nothing
@@ -137,6 +137,7 @@ function VTypesPanelRows({
                 Content={<TypesForm variant="edit" targetId={row.id} />}
                 modalLabel="Edit Vehicle Status"
               />
+              <DeleteTypeDialog row={row} />
             </TableCell>
           </TableRow>
         );
