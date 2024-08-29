@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import { Edit } from '@mui/icons-material';
 import { Chip, CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -51,8 +52,9 @@ function VStatusPanel({ count = 0, page = 0, rowsPerPage = 0 }: VStatusPanelProp
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
+                <TableCell>Status</TableCell>
                 <TableCell>Vehicle Count</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <VStatusPanelRows rows={rows} isLoading={isLoading} />
@@ -119,6 +121,16 @@ function VStatusPanelRows({
               <Typography variant="overline" component="div">
                 {row.vehicles_count}
               </Typography>
+            </TableCell>
+            <TableCell>
+              <Modal
+                buttonTitle="Edit"
+                isIcon
+                Icon={<Edit />}
+                iconButtonProps={{ color: 'secondary' }}
+                Content={<StatusForm variant="edit" targetId={row.id} />}
+                modalLabel="Edit Vehicle Status"
+              />
             </TableCell>
           </TableRow>
         );

@@ -1,5 +1,7 @@
 import { type ReactNode } from 'react';
-import { ChipOwnProps } from '@mui/material';
+
+// export interface StatusColors extends Pick<ChipOwnProps, 'color'>{};
+export type StatusColors = 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 
 export interface VTabsConfig {
   title: string;
@@ -27,7 +29,7 @@ export interface VehicleStatus {
   id: string;
   company_id: string;
   name: string;
-  status_color: ChipOwnProps['color'];
+  status_color: StatusColors;
   vehicles_count: number;
   created_at: string;
   updated_at: string;

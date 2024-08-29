@@ -40,9 +40,7 @@ export function useCreateVehicleStatus(): UseMutationResult<VehicleStatus, Error
   });
 }
 
-export function useEditVehicleStatus(
-  id?: string
-): UseMutationResult<VehicleStatus, Error, Partial<VehicleStatusPayload>> {
+export function useEditVehicleStatus(id?: string): UseMutationResult<unknown, Error, Partial<VehicleStatusPayload>> {
   if (!id) throw Error('No Id provided');
 
   const { listVehicleStatus, createVehicleStatus } = CoreApiRoutes.vehicleStatus;
@@ -56,12 +54,17 @@ export function useEditVehicleStatus(
   return useMutation({
     mutationKey: [editOne.path],
     mutationFn: async (vStatusPayload) => {
-      return await makeRequest<VehicleStatus, Partial<VehicleStatusPayload>>(editOne, vStatusPayload);
+      return await makeRequest<unknown, Partial<VehicleStatusPayload>>(editOne, vStatusPayload);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [listVehicleStatus.path],
-      });
+      return Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: [listVehicleStatus.path],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: [`${listVehicleStatus.path}/${id ?? ''}`],
+        }),
+      ]);
     },
   });
 }
@@ -78,6 +81,6 @@ export function useGetTargetVehicleStatus(id?: string): UseQueryResult<VehicleSt
     queryFn: async () => {
       return await makeRequest<VehicleStatus>(findOne);
     },
-    enabled: id !== undefined,
+    enabled: Boolean(id),
   });
 }

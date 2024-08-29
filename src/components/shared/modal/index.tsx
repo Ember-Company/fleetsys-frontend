@@ -5,22 +5,29 @@ import {
   Box,
   Button,
   Card,
+  IconButton,
   Modal as MuiModal,
+  Typography,
   type ButtonOwnProps,
   type ButtonProps,
+  type IconButtonOwnProps,
+  type IconButtonProps,
   type ModalOwnProps,
 } from '@mui/material';
 
 interface ModalProps {
   buttonTitle?: string;
   buttonProps?: ButtonProps & ButtonOwnProps;
+  iconButtonProps?: IconButtonProps & IconButtonOwnProps;
   modalLabel?: string;
   modalDescription?: string;
   Content: ModalOwnProps['children'];
+  isIcon?: boolean;
+  Icon?: React.ReactNode;
 }
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -29,8 +36,18 @@ const style = {
   p: 4,
 };
 
-function Modal({ Content, buttonTitle, buttonProps, modalDescription, modalLabel }: ModalProps): React.JSX.Element {
+function Modal({
+  Content,
+  buttonTitle,
+  buttonProps,
+  iconButtonProps,
+  modalDescription,
+  modalLabel,
+  Icon,
+  isIcon = false,
+}: ModalProps): React.JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
+
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -40,9 +57,17 @@ function Modal({ Content, buttonTitle, buttonProps, modalDescription, modalLabel
 
   return (
     <>
-      <Button variant="contained" {...buttonProps} onClick={handleOpen}>
-        {buttonTitle ?? 'Open Modal'}
-      </Button>
+      {isIcon ? (
+        <IconButton {...iconButtonProps} onClick={handleOpen}>
+          {/* <Typography variant="subtitle2"></Typography> */}
+          {/* <Icon /> */}
+          {Icon}
+        </IconButton>
+      ) : (
+        <Button variant="contained" {...buttonProps} onClick={handleOpen}>
+          {buttonTitle ?? 'Open Modal'}
+        </Button>
+      )}
       <MuiModal
         open={open}
         onClose={handleClose}
