@@ -17,9 +17,10 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { type VehicleType } from '@/types/vehicles';
-import { useGetVehicleTypes } from '@/hooks/queries';
+import { prefetchTargetVehicleType, useGetVehicleTypes } from '@/hooks/queries';
 import { useSelection } from '@/hooks/use-selection';
 
 import { DeleteTypeDialog, TypesForm } from './v-types';
@@ -65,7 +66,6 @@ function VehicleTypesPanel({ count = 0, page = 0, rowsPerPage = 0 }: VTypesPanel
               </TableRow>
             </TableHead>
             <VTypesPanelRows rows={rows} isLoading={isLoading} />
-            {/* <VStatusPanelRows rows={rows} isLoading={isLoading} /> */}
           </Table>
         </Box>
         <Divider />
@@ -90,6 +90,7 @@ function VTypesPanelRows({
   rows: VehicleType[] | undefined;
   isLoading: boolean;
 }): React.JSX.Element | null {
+  const queryClient = useQueryClient();
   const rowIds: string[] = useMemo((): string[] => {
     if (!rows) return [];
 
@@ -97,6 +98,10 @@ function VTypesPanelRows({
   }, [rows]);
 
   const { selected } = useSelection(rowIds);
+
+  const handlePrefetchingOnHover = async (id: string): Promise<void> => {
+    await prefetchTargetVehicleType(queryClient, id);
+  };
 
   if (isLoading)
     return (
@@ -134,7 +139,12 @@ function VTypesPanelRows({
               <Modal
                 isIcon
                 Icon={<Edit color="action" />}
-                iconButtonProps={{ color: 'secondary' }}
+                iconButtonProps={{
+                  color: 'secondary',
+                  onMouseEnter: async () => {
+                    await handlePrefetchingOnHover(row.id);
+                  },
+                }}
                 Content={<TypesForm variant="edit" targetId={row.id} />}
                 modalLabel="Edit Vehicle Status"
               />
