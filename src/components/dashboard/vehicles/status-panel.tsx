@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { Edit } from '@mui/icons-material';
 import { Chip, CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -18,9 +19,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { type VehicleStatus } from '@/types/vehicles';
 import { prefetchTargetVehicle, useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
-import Modal from '@/components/shared/modal';
 
 import { DeleteStatusDialog, StatusForm } from './status';
+
+const Modal = dynamic(() => import('@/components/shared/modal'));
 
 function noop(): void {
   // do nothing

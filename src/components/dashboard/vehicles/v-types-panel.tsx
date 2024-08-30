@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { Edit } from '@mui/icons-material';
 import {
   Box,
-  Button,
   Card,
   CircularProgress,
   Divider,
@@ -18,12 +18,13 @@ import {
   Typography,
 } from '@mui/material';
 
-import { VehicleType } from '@/types/vehicles';
+import { type VehicleType } from '@/types/vehicles';
 import { useGetVehicleTypes } from '@/hooks/queries';
 import { useSelection } from '@/hooks/use-selection';
-import Modal from '@/components/shared/modal';
 
 import { DeleteTypeDialog, TypesForm } from './v-types';
+
+const Modal = dynamic(() => import('@/components/shared/modal'));
 
 function noop(): void {
   // do nothing
