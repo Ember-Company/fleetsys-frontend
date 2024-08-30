@@ -119,7 +119,7 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
 
         <AlertMessage />
         <Button disabled={isPending} type="submit" variant="contained">
-          {isPending ? 'Loading...' : 'Edit Vehicle Type'}
+          {isPending ? 'Loading...' : 'Edit'}
         </Button>
       </Stack>
     </form>
@@ -156,7 +156,7 @@ function Create({ children, submitHandler }: CreateFormProps<Values> & PropsWith
         {children}
         <AlertMessage />
         <Button disabled={isPending} type="submit" variant="contained">
-          {isPending ? 'Loading...' : 'Create Status'}
+          {isPending ? 'Loading...' : 'Create'}
         </Button>
       </Stack>
     </form>

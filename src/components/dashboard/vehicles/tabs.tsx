@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
 
-import { type VTabsConfig, type VTabsConfigTransformed } from '@/types/vehicles';
+import { type VTabsConfigTransformed } from '@/types/vehicles';
 
-import { VehicleTabsData } from './config';
+interface VehicleTabsProps {
+  tabs: VTabsConfigTransformed;
+}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,30 +32,8 @@ function TabPanel(props: TabPanelProps): React.JSX.Element {
   );
 }
 
-function VehicleTabs(): React.JSX.Element {
+function VehicleTabs({ tabs }: VehicleTabsProps): React.JSX.Element {
   const [tabValue, setTabValue] = useState(0);
-
-  const tabs = useMemo(() => {
-    return VehicleTabsData.reduce(
-      (acc: VTabsConfigTransformed, config: VTabsConfig): VTabsConfigTransformed => {
-        const { title, panel } = config;
-
-        if (!acc?.panels) {
-          acc.panels = [];
-        }
-
-        if (!acc?.titles) {
-          acc.titles = [];
-        }
-
-        acc.titles.push(title);
-        acc.panels.push(panel);
-
-        return acc;
-      },
-      { titles: [], panels: [] } satisfies VTabsConfigTransformed
-    );
-  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number): void => {
     setTabValue(newValue);
@@ -62,9 +42,9 @@ function VehicleTabs(): React.JSX.Element {
   return (
     <>
       <Box borderBottom={1} borderColor="divider">
-        <Tabs value={tabValue} onChange={handleChange}>
+        <Tabs value={tabValue} onChange={handleChange} variant="scrollable">
           {tabs.titles.map((title, index) => (
-            <Tab label={title} tabIndex={index} key={title} sx={{ paddingX: 5 }} />
+            <Tab label={title} tabIndex={index} key={title} sx={{ paddingX: 3 }} />
           ))}
         </Tabs>
       </Box>

@@ -43,9 +43,10 @@ export function getVehiclesTableFields(): GridColDef<Vehicle>[] {
       field: 'vehicle_type',
       headerName: 'Type',
       width: 100,
-      editable: false,
+      editable: true,
       sortable: true,
       type: 'string',
+      // valueOptions: [],
       align: 'left',
       headerAlign: 'left',
       valueGetter: (_, row) => {

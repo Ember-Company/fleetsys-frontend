@@ -1,11 +1,12 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { Box } from '@mui/system';
 
 import { type VTabsConfig } from '@/types/vehicles';
 
-import VehicleDataTable from './overview-panel';
-import VStatusPanel from './status-panel';
-import VehicleTypesPanel from './v-types-panel';
+const VStatusPanel = dynamic(() => import('./status-panel'));
+const VehicleTypesPanel = dynamic(() => import('./v-types-panel'));
+const VehicleDataTable = dynamic(() => import('./overview-panel'));
 
 export const VehicleTabsData: VTabsConfig[] = [
   {
@@ -25,7 +26,7 @@ export const VehicleTabsData: VTabsConfig[] = [
     panel: <VStatusPanel />,
   },
   {
-    title: 'Types',
+    title: 'Categories & Attributes',
     panel: <VehicleTypesPanel />,
   },
 ];
