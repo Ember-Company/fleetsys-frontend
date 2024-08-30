@@ -6,6 +6,7 @@ export const paths = {
     account: '/dashboard/account/',
     vehicles: '/dashboard/vehicles/',
     team: '/dashboard/teams/',
+    createEmployee: '/dashboard/teams/create/',
     integrations: '/dashboard/tracking/',
     settings: '/dashboard/settings/',
     clients: '/dashboard/clients/',

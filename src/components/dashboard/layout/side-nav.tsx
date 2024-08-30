@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useState } from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import Box from '@mui/material/Box';
@@ -105,7 +106,7 @@ function renderNavItems({ items = [], pathname }: { items?: NavItemConfig[]; pat
   );
 }
 
-interface NavItemProps extends Omit<NavItemConfig, 'items'> {
+interface NavItemProps extends NavItemConfig {
   pathname: string;
 }
 
@@ -118,11 +119,26 @@ function NavItem({
   pathname,
   title,
   hidden,
+  items,
+  isChild,
 }: NavItemProps): React.JSX.Element {
-  // logger.debug(pathname);
+  const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
+  const childIsActive = isNavItemActive({ disabled, external, href, matcher, pathname }) && isChild;
+  const highLightActive = childIsActive || active;
   const Icon = icon ? navIcons[icon] : null;
-  // logger.debug(active);
+
+  const handleToggle = React.useCallback((): void => {
+    const showIfContainsChildren = childIsActive || (items && items.length > 0);
+
+    // if (toggleDropdown && childIsActive) {
+    //   return;
+    // }
+
+    if (showIfContainsChildren) {
+      setToggleDropdown(!toggleDropdown);
+    }
+  }, [childIsActive, items, toggleDropdown]);
 
   return (
     <li
@@ -156,15 +172,16 @@ function NavItem({
             color: 'var(--NavItem-disabled-color)',
             cursor: 'not-allowed',
           }),
-          ...(active && { bgcolor: 'var(--NavItem-active-background)', color: 'var(--NavItem-active-color)' }),
+          ...(highLightActive && { bgcolor: 'var(--NavItem-active-background)', color: 'var(--NavItem-active-color)' }),
         }}
+        onClick={handleToggle}
       >
         <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
           {Icon ? (
             <Icon
-              fill={active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
+              fill={highLightActive ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
               fontSize="var(--icon-fontSize-md)"
-              weight={active ? 'fill' : undefined}
+              weight={highLightActive ? 'fill' : undefined}
             />
           ) : null}
         </Box>
@@ -177,6 +194,19 @@ function NavItem({
           </Typography>
         </Box>
       </Box>
+
+      <Stack
+        sx={{
+          opacity: toggleDropdown ? 1 : 0,
+          pointerEvents: toggleDropdown ? 'all' : 'none',
+          transform: `translateY(${toggleDropdown ? '0px' : '-20px'})`,
+          position: toggleDropdown ? 'relative' : 'absolute',
+          transition: 'all .4s ease',
+          paddingLeft: 3,
+        }}
+      >
+        {items && items.length > 0 ? renderNavItems({ pathname, items }) : null}
+      </Stack>
     </li>
   );
 }

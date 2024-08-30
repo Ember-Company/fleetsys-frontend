@@ -1,4 +1,4 @@
-import { Wrench } from '@phosphor-icons/react';
+import { List, UserPlus, Wrench } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react/dist/lib/types';
 import { Buildings } from '@phosphor-icons/react/dist/ssr';
 import { ChartPie as ChartPieIcon } from '@phosphor-icons/react/dist/ssr/ChartPie';
@@ -17,4 +17,6 @@ export const navIcons = {
   user: UserIcon,
   users: UsersIcon,
   companies: Buildings,
+  'new-user': UserPlus,
+  list: List,
 } as Record<string, Icon>;

@@ -26,7 +26,7 @@ import {
   type RootFormProps,
 } from '@/types/forms';
 import { type StatusColors } from '@/types/vehicles';
-import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries/v-status';
+import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 
 const colors: StatusColors[] = ['default', 'error', 'info', 'success', 'warning', 'primary', 'secondary'];

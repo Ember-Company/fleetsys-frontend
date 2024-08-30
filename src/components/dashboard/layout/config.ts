@@ -33,7 +33,29 @@ const MasterNavItems = withRoleAccess(
 );
 
 const AdminNavItems = withRoleAccess(
-  [{ key: 'team', title: 'Team', href: paths.dashboard.team, icon: 'users' }],
+  [
+    {
+      key: 'team',
+      title: 'Team',
+      icon: 'users',
+      items: [
+        {
+          key: 'create',
+          title: 'Register Employee',
+          href: paths.dashboard.createEmployee,
+          icon: 'new-user',
+          isChild: true,
+        },
+        {
+          key: 'show',
+          title: 'Employee Overview',
+          href: paths.dashboard.team,
+          icon: 'list',
+          isChild: true,
+        },
+      ],
+    },
+  ],
   'ADMIN'
 );
 
