@@ -1,4 +1,5 @@
 import {
+  QueryClient,
   useMutation,
   useQuery,
   useQueryClient,
@@ -33,6 +34,20 @@ export function useGetTargetVehicleType(id?: string): UseQueryResult<VehicleType
       return await makeRequest<VehicleType>(findOne);
     },
     enabled: Boolean(id),
+  });
+}
+
+export async function prefetchTargetVehicleType(queryClient: QueryClient, id?: string): Promise<void> {
+  const {
+    find: { routeById },
+  } = CoreApiRoutes.vehicleType;
+  const { findOne } = routeById(id);
+
+  await queryClient.prefetchQuery({
+    queryKey: [findOne.path],
+    queryFn: async () => {
+      return await makeRequest<VehicleType>(findOne);
+    },
   });
 }
 

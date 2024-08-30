@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Delete, Edit } from '@mui/icons-material';
-import { Button, Chip, CircularProgress, Stack } from '@mui/material';
+import { Edit } from '@mui/icons-material';
+import { Chip, CircularProgress, Stack } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Divider from '@mui/material/Divider';
@@ -13,9 +13,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { type VehicleStatus } from '@/types/vehicles';
-import { useGetVehicleStatuses } from '@/hooks/queries/v-status';
+import { prefetchTargetVehicle, useGetVehicleStatuses } from '@/hooks/queries/v-status';
 import { useSelection } from '@/hooks/use-selection';
 import Modal from '@/components/shared/modal';
 
@@ -84,11 +85,16 @@ function VStatusPanelRows({
   rows: VehicleStatus[] | undefined;
   isLoading: boolean;
 }): React.JSX.Element | null {
+  const queryClient = useQueryClient();
   const rowIds: string[] = useMemo((): string[] => {
     if (!rows) return [];
 
     return rows.map((t) => t.id);
   }, [rows]);
+
+  const handlePrefetchingOnHover = async (id: string): Promise<void> => {
+    await prefetchTargetVehicle(queryClient, id);
+  };
 
   const { selected } = useSelection(rowIds);
 
@@ -128,7 +134,12 @@ function VStatusPanelRows({
               <Modal
                 isIcon
                 Icon={<Edit color="action" />}
-                iconButtonProps={{ color: 'secondary' }}
+                iconButtonProps={{
+                  color: 'secondary',
+                  onMouseEnter: async () => {
+                    await handlePrefetchingOnHover(row.id);
+                  },
+                }}
                 Content={<StatusForm variant="edit" targetId={row.id} />}
                 modalLabel="Edit Vehicle Status"
               />
