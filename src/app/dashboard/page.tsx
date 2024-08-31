@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Metadata } from 'next';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import dayjs from 'dayjs';
 
 import { config } from '@/config';
@@ -18,28 +18,28 @@ export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } 
 export default function Page(): React.JSX.Element {
   return (
     <Grid container spacing={3}>
-      <Grid lg={3} sm={6} xs={12}>
+      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <LoadsDone diff={12} trend="up" sx={{ height: '100%' }} value="500" />
       </Grid>
-      <Grid lg={3} sm={6} xs={12}>
+      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <LoadsPaid diff={16} trend="down" sx={{ height: '100%' }} value="200" />
       </Grid>
-      <Grid lg={3} sm={6} xs={12}>
+      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <LoadsProgress sx={{ height: '100%' }} value={75.5} />
       </Grid>
-      <Grid lg={3} sm={6} xs={12}>
+      <Grid size={{ lg: 3, sm: 6, xs: 12 }}>
         <TotalProfit sx={{ height: '100%' }} value="$15k" />
       </Grid>
-      <Grid lg={8} xs={12}>
+      <Grid size={{ lg: 8, xs: 12 }}>
         <LoadTrends
           chartSeries={[{ name: 'Load Quantity', data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20] }]}
           sx={{ height: '100%' }}
         />
       </Grid>
-      <Grid lg={4} md={6} xs={12}>
+      <Grid size={{ lg: 4, md: 6, xs: 12 }}>
         <Traffic chartSeries={[63, 15, 22]} labels={['Desktop', 'Tablet', 'Phone']} sx={{ height: '100%' }} />
       </Grid>
-      <Grid lg={4} md={6} xs={12}>
+      <Grid size={{ lg: 4, md: 6, xs: 12 }}>
         <LatestVehicleIssues
           issues={[
             {
@@ -71,7 +71,7 @@ export default function Page(): React.JSX.Element {
           sx={{ height: '100%' }}
         />
       </Grid>
-      <Grid lg={8} md={12} xs={12}>
+      <Grid size={{ lg: 8, md: 12, xs: 12 }}>
         <LatestVehicleUpdates
           vehicleUpdates={[
             {

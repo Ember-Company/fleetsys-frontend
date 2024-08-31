@@ -10,7 +10,6 @@ export interface RootFormProps {
 }
 
 export interface CreateFormProps<T> {
-  // targetId?: string;
   defaultValues?: string;
   submitHandler: UseFormHandleSubmit<T>;
 }
@@ -20,3 +19,7 @@ export interface EditFormProps<T> extends CreateFormProps<T> {
 }
 
 export type FormContentProps<T> = Omit<UseFormReturn<T>, 'handleSubmit'>;
+export interface MultiFormProps<T extends FieldValues, S extends FieldValues = T> extends UseFormReturn<T> {
+  formData: SubmitValues;
+  updateFormState: (data: Partial<S>) => void;
+}

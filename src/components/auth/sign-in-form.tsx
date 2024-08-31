@@ -111,7 +111,6 @@ export function SignInForm(): React.JSX.Element | null {
                   type={showPassword ? 'text' : 'password'}
                 />
                 <FormHelperText>{errors?.password?.message ?? null}</FormHelperText>
-                {/* {errors.password ? <FormHelperText>{errors.password.message}</FormHelperText> : null} */}
               </FormControl>
             )}
           />

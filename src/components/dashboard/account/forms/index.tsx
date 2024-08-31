@@ -1,3 +1,1 @@
-import CreateUserForm from './create-user-form';
-
-export { CreateUserForm };
+export * from './create';

@@ -165,6 +165,9 @@ function NavItem({
           gap: 1,
           p: '6px 16px',
           position: 'relative',
+          ':hover': {
+            color: 'var(--primary)',
+          },
           textDecoration: 'none',
           whiteSpace: 'nowrap',
           ...(disabled && {
@@ -199,9 +202,9 @@ function NavItem({
         sx={{
           opacity: toggleDropdown ? 1 : 0,
           pointerEvents: toggleDropdown ? 'all' : 'none',
-          transform: `translateY(${toggleDropdown ? '0px' : '-20px'})`,
+          transform: `translateY(${toggleDropdown ? '0px' : '-10px'})`,
           position: toggleDropdown ? 'relative' : 'absolute',
-          transition: 'all .4s ease',
+          transition: 'all .2s ease-in-out',
           paddingLeft: 3,
         }}
       >

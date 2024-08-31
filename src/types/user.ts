@@ -4,7 +4,7 @@ export interface ResetPasswordParams {
 
 export type Role = 'MASTER' | 'ADMIN' | 'USER' | 'DRIVER';
 // export type Roles = Record<string, RoleName>;
-
+export type RolesMap = Readonly<Omit<Role, 'MASTER'>>;
 export interface User {
   id: string;
   name: string;
