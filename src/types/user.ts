@@ -4,7 +4,7 @@ export interface ResetPasswordParams {
 
 export type Role = 'MASTER' | 'ADMIN' | 'USER' | 'DRIVER';
 // export type Roles = Record<string, RoleName>;
-
+export type RolesMap = Readonly<Omit<Role, 'MASTER'>>;
 export interface User {
   id: string;
   name: string;
@@ -26,6 +26,10 @@ export interface UserPayload extends Pick<User, 'email'> {
   phone?: string;
 }
 
+export interface UserRegisterPayload extends Omit<User, 'profile'|'id'> {
+  user_meta?: UserRegisterMetadata
+}
+
 export interface Profile {
   user: User;
   industry?: string;
@@ -37,3 +41,5 @@ export interface Profile {
   is_24_hour_format?: string;
   street_address?: string;
 }
+
+export interface UserRegisterMetadata extends Pick<Profile, 'industry'|'city'|'region'|'country'>

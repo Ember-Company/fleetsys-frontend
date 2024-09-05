@@ -41,9 +41,9 @@ function VehicleDataTable(): React.JSX.Element {
       autoHeight
       disableColumnFilter
       disableRowSelectionOnClick
-      // onRowDoubleClick={({ row }: GridRowParams<Vehicle>) => {
-      //   showVehicleDetailsPage(row.id);
-      // }}
+      onRowDoubleClick={({ row }: GridRowParams<Vehicle>) => {
+        showVehicleDetailsPage(row.id);
+      }}
       initialState={{
         pagination: {
           paginationModel: {

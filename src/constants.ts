@@ -1,6 +1,8 @@
 import type { StatusCodes } from './types/api';
+import { RolesMap } from './types/user';
 
 export const TOKEN_COOKIE_KEY = 'XSRF-TOKEN';
+export const ROLES: RolesMap[] = ['ADMIN', 'USER', 'DRIVER'];
 
 export const STATUS_CODES = {
   CONTINUE: 100,

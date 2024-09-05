@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import Alert from '@mui/material/Alert';
 
 import { paths } from '@/paths';
 import { logger } from '@/lib/default-logger';
@@ -21,15 +20,19 @@ export function AuthGuard({ children }: AuthGuardProps): React.JSX.Element | nul
   const permissionAllowed = (): boolean => {
     logger.warn(appLayout);
 
-    if (!appLayout.some((item) => item.href && item.href.includes(pathname))) {
-      return false;
-    }
+    return appLayout.some((item) => {
+      const current = item.href && item.href.includes(pathname);
+      let childState = false;
 
-    return true;
+      if (!current && item.items && item.items.length > 0) {
+        childState = item.items.some((child) => child.href && child.href.includes(pathname));
+      }
+
+      return current || childState;
+    });
   };
 
   const checkPermissions = async (): Promise<void> => {
-    logger.debug(user);
     if (isLoading) {
       return;
     }

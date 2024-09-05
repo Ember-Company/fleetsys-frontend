@@ -14,6 +14,7 @@ import {
   Select,
   Stack,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
@@ -26,7 +27,7 @@ import {
   type RootFormProps,
 } from '@/types/forms';
 import { type StatusColors } from '@/types/vehicles';
-import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries/v-status';
+import { useCreateVehicleStatus, useEditVehicleStatus, useGetTargetVehicleStatus } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 
 const colors: StatusColors[] = ['default', 'error', 'info', 'success', 'warning', 'primary', 'secondary'];
