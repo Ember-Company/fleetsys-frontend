@@ -44,6 +44,7 @@ export function AccountFormContent({
   const submitAccountDetails = useCallback(
     async (values: RegisterValues): Promise<void> => {
       updateFormState(values);
+      logger.debug(values);
     },
     [updateFormState, errors]
   );

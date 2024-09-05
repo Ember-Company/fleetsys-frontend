@@ -60,30 +60,29 @@ export function SubmitFormContent({
   };
 
   const handleUserCreation = useCallback(() => {
-    startTransition(() => {
-      mutate(formData, {
-        onSuccess: () => {
-          updateAlertMessage({
-            text: 'User Created Successfully',
-            isError: false,
-          });
-        },
-        onError: (err) => {
-          logger.error(err);
+    logger.debug(formData);
 
-          updateAlertMessage({
-            text: 'failed to create user',
-            isError: true,
-          });
-        },
-      });
+    mutate(formData, {
+      onSuccess: () => {
+        updateAlertMessage({
+          text: 'User Created Successfully',
+          isError: false,
+        });
+
+        setTimeout(() => {
+          handleNext();
+        }, 3000);
+      },
+      onError: (err) => {
+        logger.error(err);
+
+        updateAlertMessage({
+          text: 'failed to create user',
+          isError: true,
+        });
+      },
     });
-
-    setTimeout(() => {
-      if (!isPending) {
-        handleNext();
-      }
-    }, 1500);
+    // });
   }, [logger, handleNext, formData, mutate]);
 
   return (
@@ -96,8 +95,11 @@ export function SubmitFormContent({
       <FormGrid title="Finalize Creation">
         {renderFields()}
         <Grid size={12}>
+          <AlertMessage />
+        </Grid>
+        <Grid size={12}>
           {/* <Button type="submit">Submit</Button> */}
-          <MultiStepActions activeStep={2} handleBack={handleBack} loading={isPending} isEnd />
+          <MultiStepActions activeStep={2} handleBack={handleBack} loading={isLoading} isEnd />
         </Grid>
       </FormGrid>
     </form>

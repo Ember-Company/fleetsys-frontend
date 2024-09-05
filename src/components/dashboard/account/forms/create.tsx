@@ -49,10 +49,6 @@ export function CreateUserForm(): React.JSX.Element {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [formData, setFormData] = useState<SubmitValues>(defaultSubmit);
 
-  useEffect(() => {
-    logger.debug(formData);
-  }, [formData]);
-
   const registerHandler = useForm<RegisterValues>({
     defaultValues: defaultRegister,
     resolver: zodResolver(AccountFormSchema),
@@ -78,6 +74,11 @@ export function CreateUserForm(): React.JSX.Element {
 
   const handleReset = (): void => {
     setActiveStep(0);
+    setFormData(defaultSubmit);
+
+    registerHandler.reset();
+    profileHandler.reset();
+    submitHandler.reset();
   };
 
   const updateFormState = (data: Partial<SubmitValues> = {}) => {
