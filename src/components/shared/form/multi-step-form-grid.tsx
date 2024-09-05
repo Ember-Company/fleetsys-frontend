@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { Button, Stack, Step, StepLabel, Stepper } from '@mui/material';
+import { Button, CircularProgress, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Box } from '@mui/system';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
@@ -63,12 +63,14 @@ export function MultiStepActions({
   isEnd = false,
   activeStep,
   submitAction,
+  loading = false,
 }: {
   handleBack?: () => void;
   submitAction?: () => void;
   // standard?: boolean;
   activeStep: number;
   isEnd?: boolean;
+  loading?: boolean;
 }): React.JSX.Element {
   return (
     <Stack justifyContent="space-between" direction="row">
@@ -81,7 +83,7 @@ export function MultiStepActions({
         size="small"
         onClick={isEnd && submitAction ? submitAction : undefined}
       >
-        {isEnd ? 'Submit' : 'Next'}
+        {loading ? <CircularProgress /> : isEnd ? 'Submit' : 'Next'}
       </Button>
     </Stack>
   );

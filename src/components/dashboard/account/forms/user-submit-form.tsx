@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useTransition } from 'react';
 import { Box, Button, FormControl, Input, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Control, Controller } from 'react-hook-form';
@@ -9,6 +9,7 @@ import { PatternFormat } from 'react-number-format';
 import { MultiFormProps } from '@/types/forms';
 import { logger } from '@/lib/default-logger';
 import { useRegisterQuery } from '@/hooks/queries';
+import useAlertMessage from '@/hooks/use-alert-message';
 import { FormGrid, MultiStepActions } from '@/components/shared/form';
 
 import { ProfileValues, SubmitValues } from './schemas';
@@ -30,7 +31,9 @@ export function SubmitFormContent({
   handleSubmit,
   handleNext,
 }: MultiFormProps<SubmitValues>): React.JSX.Element {
-  const { mutate, isPending } = useRegisterQuery();
+  const { mutate, isPending: isLoading } = useRegisterQuery();
+  const [isPending, startTransition] = useTransition();
+  const { AlertMessage, updateAlertMessage } = useAlertMessage();
 
   const renderFields = (
     data: SubmitValues['user_meta'] | SubmitValues = formData,
@@ -57,16 +60,30 @@ export function SubmitFormContent({
   };
 
   const handleUserCreation = useCallback(() => {
-    logger.warn(formData);
+    startTransition(() => {
+      mutate(formData, {
+        onSuccess: () => {
+          updateAlertMessage({
+            text: 'User Created Successfully',
+            isError: false,
+          });
+        },
+        onError: (err) => {
+          logger.error(err);
 
-    mutate(formData, {
-      onSuccess: () => {
-        logger.warn('sucess');
-      },
-      onError: (err) => {
-        logger.error(err);
-      },
+          updateAlertMessage({
+            text: 'failed to create user',
+            isError: true,
+          });
+        },
+      });
     });
+
+    setTimeout(() => {
+      if (!isPending) {
+        handleNext();
+      }
+    }, 1500);
   }, [logger, handleNext, formData, mutate]);
 
   return (
@@ -79,12 +96,8 @@ export function SubmitFormContent({
       <FormGrid title="Finalize Creation">
         {renderFields()}
         <Grid size={12}>
-          <Button type="submit">Submit</Button>
-          {/* <MultiStepActions
-            activeStep={2}
-            handleBack={handleBack}
-            isEnd
-          /> */}
+          {/* <Button type="submit">Submit</Button> */}
+          <MultiStepActions activeStep={2} handleBack={handleBack} loading={isPending} isEnd />
         </Grid>
       </FormGrid>
     </form>
