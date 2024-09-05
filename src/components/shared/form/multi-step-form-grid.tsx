@@ -1,23 +1,19 @@
 import React, { PropsWithChildren } from 'react';
-import { Button, Step, StepLabel, Stepper } from '@mui/material';
+import { Button, Stack, Step, StepLabel, Stepper } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Box } from '@mui/system';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
 export interface StepActionProps {
   activeStep: number;
-  handleNext: () => void;
   handleBack: () => void;
-  handleReset: () => void;
   stepsMap: readonly string[];
 }
 
 export function StepActions({
   activeStep,
   children,
-  handleReset,
   handleBack,
-  handleNext,
   stepsMap,
 }: StepActionProps & PropsWithChildren): React.JSX.Element {
   const isEnd = (mod?: number): boolean => {
@@ -47,9 +43,6 @@ export function StepActions({
             px: 20,
           }}
         >
-          <Button color="primary" variant="outlined" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
-            <ArrowLeft size={20} />
-          </Button>
           <Box sx={{ flex: '1 1 auto' }}>
             <Stepper alternativeLabel>
               {stepsMap.map((label, index) => (
@@ -59,11 +52,37 @@ export function StepActions({
               ))}
             </Stepper>
           </Box>
-          <Button variant={isEnd(1) ? 'contained' : 'outlined'} onClick={handleNext} size="small">
-            {isEnd(1) ? 'Finish' : <ArrowRight size={20} />}
-          </Button>
         </Grid>
       )}
     </React.Fragment>
+  );
+}
+
+export function MultiStepActions({
+  handleBack = () => {},
+  isEnd = false,
+  activeStep,
+  submitAction,
+}: {
+  handleBack?: () => void;
+  submitAction?: () => void;
+  // standard?: boolean;
+  activeStep: number;
+  isEnd?: boolean;
+}): React.JSX.Element {
+  return (
+    <Stack justifyContent="space-between" direction="row">
+      <Button color="primary" variant="outlined" disabled={activeStep === 0} onClick={handleBack}>
+        Back
+      </Button>
+      <Button
+        variant={isEnd ? 'contained' : 'outlined'}
+        type="submit"
+        size="small"
+        onClick={isEnd && submitAction ? submitAction : undefined}
+      >
+        {isEnd ? 'Submit' : 'Next'}
+      </Button>
+    </Stack>
   );
 }

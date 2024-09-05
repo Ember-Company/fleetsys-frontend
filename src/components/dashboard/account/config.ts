@@ -1,1 +1,1 @@
-export const CreateUserSteps = ['Account Details', 'Profile Details', 'Save'] as const;
+export const CreateUserSteps = ['Account Details', 'Profile Details (Optional)', 'Save'] as const;

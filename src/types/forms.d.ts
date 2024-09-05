@@ -20,6 +20,8 @@ export interface EditFormProps<T> extends CreateFormProps<T> {
 
 export type FormContentProps<T> = Omit<UseFormReturn<T>, 'handleSubmit'>;
 export interface MultiFormProps<T extends FieldValues, S extends FieldValues = T> extends UseFormReturn<T> {
-  formData: SubmitValues;
+  formData: S;
   updateFormState: (data: Partial<S>) => void;
+  handleBack: () => void;
+  handleNext: () => void;
 }

@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, Card, Stack, Typography } from '@mui/material';
+import { Card, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { useForm } from 'react-hook-form';
 
+import { logger } from '@/lib/default-logger';
 import { StepActions } from '@/components/shared/form';
 
 import { CreateUserSteps } from '../config';
@@ -26,6 +27,7 @@ const defaultRegister = {
   name: '',
   email: '',
   role: 'USER',
+  phone: '',
   password: '',
 } satisfies RegisterValues;
 
@@ -47,12 +49,14 @@ export function CreateUserForm(): React.JSX.Element {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [formData, setFormData] = useState<SubmitValues>(defaultSubmit);
 
+  useEffect(() => {
+    logger.debug(formData);
+  }, [formData]);
+
   const registerHandler = useForm<RegisterValues>({
     defaultValues: defaultRegister,
     resolver: zodResolver(AccountFormSchema),
   });
-
-  const updateFormState = useCallback((data: Partial<SubmitValues>) => {}, []);
 
   const profileHandler = useForm<ProfileValues>({
     defaultValues: defaultProfile,
@@ -63,21 +67,6 @@ export function CreateUserForm(): React.JSX.Element {
     defaultValues: defaultSubmit,
     resolver: zodResolver(SubmitFormSchema),
   });
-
-  const getActiveForm = useCallback((): React.ReactNode => {
-    switch (activeStep) {
-      case 0:
-        return <AccountFormContent {...{ ...registerHandler, updateFormState, formData }} />;
-      case 1:
-        return <ProfileFormContent {...{ ...profileHandler, updateFormState, formData }} />;
-      case 2:
-        return <SubmitFormContent {...{ ...submitHandler, formData, updateFormState }} />;
-      default:
-        return null;
-    }
-
-    return null;
-  }, [activeStep]);
 
   const handleNext = (): void => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -91,8 +80,32 @@ export function CreateUserForm(): React.JSX.Element {
     setActiveStep(0);
   };
 
+  const updateFormState = (data: Partial<SubmitValues> = {}) => {
+    setFormData({
+      ...formData,
+      ...data,
+    });
+
+    handleNext();
+  };
+
+  const getActiveForm = useCallback((): React.ReactNode => {
+    const sharedProps = { updateFormState, formData, handleBack, handleNext };
+
+    switch (activeStep) {
+      case 0:
+        return <AccountFormContent {...{ ...registerHandler, ...sharedProps }} />;
+      case 1:
+        return <ProfileFormContent {...{ ...profileHandler, ...sharedProps }} />;
+      case 2:
+        return <SubmitFormContent {...{ ...submitHandler, ...sharedProps }} />;
+      default:
+        return null;
+    }
+  }, [activeStep]);
+
   return (
-    <Card sx={{ maxHeight: '800px', height: '600px' }}>
+    <Card sx={{ maxHeight: '800px', minHeight: '600px' }}>
       <Stack sx={{ height: '100%', py: 4 }}>
         <Grid
           container
@@ -105,14 +118,8 @@ export function CreateUserForm(): React.JSX.Element {
           alignItems="center"
           // sx={{ background: 'green' }}
         >
-          <StepActions
-            activeStep={activeStep}
-            handleBack={handleBack}
-            handleNext={handleNext}
-            handleReset={handleReset}
-            stepsMap={CreateUserSteps}
-          >
-            {activeStep === CreateUserSteps.length ? <ResetForm /> : getActiveForm()}
+          <StepActions activeStep={activeStep} handleBack={handleBack} stepsMap={CreateUserSteps}>
+            {activeStep === CreateUserSteps.length ? <ResetForm handleReset={handleReset} /> : getActiveForm()}
           </StepActions>
         </Grid>
       </Stack>

@@ -2,6 +2,10 @@ import { type ApiGroup } from '@/types/api';
 
 const CoreApiRoutes = {
   auth: {
+    register: {
+      method: 'post',
+      path: 'api/register?company=',
+    },
     login: {
       method: 'post',
       path: 'api/login',
@@ -71,6 +75,10 @@ const CoreApiRoutes = {
     showUser: {
       method: 'get',
       path: 'api/user',
+    },
+    findAll: {
+      method: 'get',
+      path: 'api/users',
     },
   },
   vehicles: {
