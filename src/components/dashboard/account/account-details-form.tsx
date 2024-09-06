@@ -1,21 +1,10 @@
 'use client';
 
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid2';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Select from '@mui/material/Select';
+import React, { useEffect } from 'react';
 import { DataGrid, GridSlots } from '@mui/x-data-grid';
 
 import { User } from '@/types/user';
+import { logger } from '@/lib/default-logger';
 import { useGetUsers } from '@/hooks/queries';
 import { useActionFields } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
@@ -30,6 +19,10 @@ export function AccountDetailsForm(): React.JSX.Element {
       handler: () => 'hello',
     },
   ]);
+
+  useEffect(() => {
+    logger.debug(data);
+  }, [data]);
 
   return (
     <DataGrid

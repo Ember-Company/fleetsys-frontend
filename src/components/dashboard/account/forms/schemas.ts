@@ -5,9 +5,9 @@ const stripNonNumeric = (value: string) => value.replace(/\D/g, '');
 export const AccountFormSchema = zod.object({
   name: zod.string().min(1, { message: 'Name is required' }),
   email: zod.string().email(),
-  phone: zod
+  phone_number: zod
     .string()
-    .transform((value) => stripNonNumeric(value))
+    .transform((value) => stripNonNumeric(value ?? ''))
     .refine((value) => value.length <= 15, {
       message: 'Phone number cannot have more than 15 digits',
     }),

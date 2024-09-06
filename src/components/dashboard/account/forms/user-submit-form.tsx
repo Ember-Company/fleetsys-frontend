@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useCallback, useMemo, useTransition } from 'react';
-import { Box, Button, FormControl, Input, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material';
+import React, { useCallback, useTransition } from 'react';
+import { formatPhoneNumber } from '@/utils/format';
+import { FormControl, Input, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Control, Controller } from 'react-hook-form';
 import { PatternFormat } from 'react-number-format';
@@ -12,17 +13,7 @@ import { useRegisterQuery } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 import { FormGrid, MultiStepActions } from '@/components/shared/form';
 
-import { ProfileValues, SubmitValues } from './schemas';
-
-const formatPhoneNumber = (phoneNumber: string): string => {
-  // Remove any existing country code and non-digit characters
-  const cleanNumber = phoneNumber.replace(/\D+/g, '');
-
-  // Format the phone number as "+255 (##) ####-####"
-  const formattedNumber = cleanNumber.replace(/^(\d{3})(\d{2})(\d{4})(\d{4})$/, '+255 ($2) $3-$4');
-
-  return formattedNumber;
-};
+import { SubmitValues } from './schemas';
 
 export function SubmitFormContent({
   control,
@@ -51,9 +42,19 @@ export function SubmitFormContent({
       if (typeof value === 'object' && value !== null) {
         return renderFields(value, fieldName);
       }
+
+      if (fieldName === 'phone_number') {
+        logger.debug(value);
+      }
+
       return (
         <>
-          <Field name={fieldName} control={control} value={value ?? ''} cellNumberFormat={fieldName === 'phone'} />
+          <Field
+            name={fieldName}
+            control={control}
+            value={value ?? ''}
+            cellNumberFormat={fieldName === 'phone_number'}
+          />
         </>
       );
     });
@@ -71,7 +72,7 @@ export function SubmitFormContent({
 
         setTimeout(() => {
           handleNext();
-        }, 3000);
+        }, 2000);
       },
       onError: (err) => {
         logger.error(err);
@@ -123,19 +124,22 @@ function Field({
         control={control}
         name={name as keyof SubmitValues}
         defaultValue={value}
+        disabled={!Boolean(value)}
         render={({ field }) => (
           <FormControl fullWidth>
-            <InputLabel sx={{ textTransform: 'capitalize' }}>{name.split('.')[1] ?? name}</InputLabel>
+            <InputLabel sx={{ textTransform: 'capitalize' }}>
+              {name.split('.')[1] ?? name.split('_')[0] ?? name}
+            </InputLabel>
             {cellNumberFormat ? (
               <PatternFormat
                 customInput={Input}
-                format="+255 (##) ####-####"
-                value={formatPhoneNumber(value) || ''}
+                format={Boolean(value) ? '+### (##) ####-####' : ''}
+                value={value}
                 name={field.name}
                 getInputRef={field.ref}
-                prefix="+255 "
+                disabled={value === ''}
                 readOnly
-                mask="_"
+                mask={!Boolean(value) ? undefined : '_'}
                 sx={{
                   paddingLeft: 1.5,
                 }}

@@ -1,11 +1,13 @@
 import React from 'react';
+import { formatPhoneNumber } from '@/utils/format';
 import { Box, Typography } from '@mui/material';
 import { GridRenderCellParams, type GridColDef } from '@mui/x-data-grid';
 
 import { type DTableField } from '@/types/tables';
 import { Profile, User } from '@/types/user';
+import { logger } from '@/lib/default-logger';
 
-const VISIBLE_USER_FIELDS: readonly DTableField<User>[] = ['name', 'email', 'phone', 'role', 'profile', 'actions'];
+// const VISIBLE_USER_FIELDS: readonly DTableField<User>[] = ['name', 'email', 'phone', 'role', 'profile', 'actions'];
 
 export function getUserTableFields(): GridColDef<User>[] {
   const userColumns: GridColDef<User>[] = [
@@ -18,10 +20,26 @@ export function getUserTableFields(): GridColDef<User>[] {
       sortable: true,
       type: 'string',
     },
-    { field: 'phone', headerName: 'Phone', width: 150, editable: false, sortable: true, type: 'string' },
+    {
+      field: 'phone_number',
+      headerName: 'Phone',
+      width: 150,
+      editable: false,
+      sortable: true,
+      type: 'string',
+      valueGetter: (_, row) => {
+        logger.warn(row.phone_number);
+        return formatPhoneNumber(row.phone_number);
+      },
+      renderCell: ({ value, row }: GridRenderCellParams<User, User['phone_number']>) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <Typography variant="subtitle2">{value ?? 'None'}</Typography>
+        </Box>
+      ),
+    },
     { field: 'role', headerName: 'Role', width: 150, editable: false, sortable: true, type: 'string' },
     {
-      field: 'profile',
+      field: 'profile.country',
       headerName: 'Country',
       width: 150,
       editable: false,
@@ -33,11 +51,33 @@ export function getUserTableFields(): GridColDef<User>[] {
       },
       renderCell: ({ value, row }: GridRenderCellParams<User, Profile['country']>) => (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-          <Typography variant="subtitle2">{value ?? 'Not Registered'}</Typography>
+          <Typography variant="subtitle2" color={value ? 'secondary' : 'warning'}>
+            {value ?? 'Not Registered'}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: 'profile.city',
+      headerName: 'City',
+      width: 150,
+      editable: false,
+      sortable: true,
+      type: 'string',
+      align: 'left',
+      valueGetter: (_, row) => {
+        return row.profile.city;
+      },
+      renderCell: ({ value, row }: GridRenderCellParams<User, Profile['city']>) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+          <Typography variant="subtitle2" color={value ? 'secondary' : 'warning'}>
+            {value ?? 'Not Registered'}
+          </Typography>
         </Box>
       ),
     },
   ];
 
-  return userColumns.filter((col) => VISIBLE_USER_FIELDS.includes(col.field as DTableField<User>));
+  // return userColumns.filter((col) => VISIBLE_USER_FIELDS.includes(col.field as DTableField<User>));
+  return userColumns;
 }

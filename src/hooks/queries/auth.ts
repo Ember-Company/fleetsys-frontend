@@ -45,7 +45,9 @@ export function useLoginQuery(): UseMutationResult<LoginResponse, Error, UserPay
       return await makeRequest<LoginResponse, UserPayload>(login, userData);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries([userQuery.path] as InvalidateQueryFilters);
+      await queryClient.invalidateQueries({
+        queryKey: [userQuery.path],
+      });
     },
   });
 }

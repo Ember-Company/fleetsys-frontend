@@ -27,7 +27,7 @@ const defaultRegister = {
   name: '',
   email: '',
   role: 'USER',
-  phone: '',
+  phone_number: '',
   password: '',
 } satisfies RegisterValues;
 
