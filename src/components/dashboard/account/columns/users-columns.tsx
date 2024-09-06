@@ -15,7 +15,7 @@ export function getUserTableFields(): GridColDef<User>[] {
     {
       field: 'email',
       headerName: 'Email',
-      width: 150,
+      width: 200,
       editable: false,
       sortable: true,
       type: 'string',
@@ -23,12 +23,13 @@ export function getUserTableFields(): GridColDef<User>[] {
     {
       field: 'phone_number',
       headerName: 'Phone',
-      width: 150,
+      width: 200,
       editable: false,
       sortable: true,
       type: 'string',
       valueGetter: (_, row) => {
-        logger.warn(row.phone_number);
+        // logger.warn(row.phone_number);
+        // return row.phone_number;
         return formatPhoneNumber(row.phone_number);
       },
       renderCell: ({ value, row }: GridRenderCellParams<User, User['phone_number']>) => (
@@ -37,11 +38,11 @@ export function getUserTableFields(): GridColDef<User>[] {
         </Box>
       ),
     },
-    { field: 'role', headerName: 'Role', width: 150, editable: false, sortable: true, type: 'string' },
+    { field: 'role', headerName: 'Role', width: 200, editable: false, sortable: true, type: 'string' },
     {
       field: 'profile.country',
       headerName: 'Country',
-      width: 150,
+      width: 200,
       editable: false,
       sortable: true,
       type: 'string',
@@ -60,7 +61,7 @@ export function getUserTableFields(): GridColDef<User>[] {
     {
       field: 'profile.city',
       headerName: 'City',
-      width: 150,
+      width: 200,
       editable: false,
       sortable: true,
       type: 'string',
