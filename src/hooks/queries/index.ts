@@ -7,5 +7,6 @@ export * from './vehicles';
 export * from './auth';
 export * from './v-status';
 export * from './v-types';
+export * from './users';
 
 export const queryClient = new QueryClient();
