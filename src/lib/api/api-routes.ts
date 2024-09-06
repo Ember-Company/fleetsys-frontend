@@ -22,25 +22,25 @@ const CoreApiRoutes = {
   vehicleStatus: {
     find: {
       method: 'get',
-      path: '/api/vehicle-status',
+      path: 'api/vehicle-status',
       routeById: (id?: string) => ({
         findOne: {
           method: 'get',
-          path: `/api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id ?? ''}`,
         },
       }),
     },
     create: {
       method: 'post',
-      path: '/api/vehicle-status',
+      path: 'api/vehicle-status',
       routeById: (id?: string) => ({
         update: {
           method: 'put',
-          path: `/api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id ?? ''}`,
         },
         remove: {
           method: 'delete',
-          path: `/api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id ?? ''}`,
         },
       }),
     },
@@ -48,25 +48,25 @@ const CoreApiRoutes = {
   vehicleType: {
     find: {
       method: 'get',
-      path: '/api/vehicle-types',
+      path: 'api/vehicle-types',
       routeById: (id?: string) => ({
         findOne: {
           method: 'get',
-          path: `/api/vehicle-types/${id ?? ''}`,
+          path: `api/vehicle-types/${id ?? ''}`,
         },
       }),
     },
     create: {
       method: 'post',
-      path: '/api/vehicle-types',
+      path: 'api/vehicle-types',
       routeById: (id?: string) => ({
         update: {
           method: 'put',
-          path: `/api/vehicle-types/${id ?? ''}`,
+          path: `api/vehicle-types/${id ?? ''}`,
         },
         remove: {
           method: 'delete',
-          path: `/api/vehicle-types/${id ?? ''}`,
+          path: `api/vehicle-types/${id ?? ''}`,
         },
       }),
     },
@@ -79,6 +79,12 @@ const CoreApiRoutes = {
     findAll: {
       method: 'get',
       path: 'api/users',
+      routeById: (id?: string) => ({
+        findOne: {
+          method: 'get',
+          path: `/api/users/${id ?? ''}`,
+        },
+      }),
     },
   },
   vehicles: {
