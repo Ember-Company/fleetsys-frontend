@@ -28,8 +28,6 @@ export function getUserTableFields(): GridColDef<User>[] {
       sortable: true,
       type: 'string',
       valueGetter: (_, row) => {
-        // logger.warn(row.phone_number);
-        // return row.phone_number;
         return formatPhoneNumber(row.phone_number);
       },
       renderCell: ({ value, row }: GridRenderCellParams<User, User['phone_number']>) => (
