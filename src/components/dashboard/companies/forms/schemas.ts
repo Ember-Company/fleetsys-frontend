@@ -1,5 +1,7 @@
 import { z as zod } from 'zod';
 
+import { Company } from '@/types/company';
+
 const stripNonNumeric = (value: string) => value.replace(/\D/g, '');
 
 export const CompanyFormSchema = zod.object({
@@ -29,3 +31,4 @@ export const CompanyFormSchema = zod.object({
 });
 
 export type CompanySchemaValues = zod.infer<typeof CompanyFormSchema>;
+export const subscriptions: readonly Company['subscription_type'][] = ['Annual', 'Monthly'];

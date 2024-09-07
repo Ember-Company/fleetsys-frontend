@@ -15,7 +15,7 @@ export function FormGrid({
       </Box>
       <Divider variant="fullWidth" />
       <Stack sx={{ px: fullWidth ? 0 + fullWidthPadding : 20, py: 4, mt: 2 }}>
-        <Grid container size={12} height="100%" width="100%" alignItems="center" spacing={3}>
+        <Grid container size={12} height="100%" width="100%" alignItems="center" spacing={2.5}>
           {children}
         </Grid>
       </Stack>

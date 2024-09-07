@@ -155,7 +155,7 @@ export function AccountFormContent({
             rules={{
               required: false,
               validate: (value?: string) => {
-                if (!value) return true; // optional value
+                if (!value) return true;
 
                 const cleanedValue = value.replace(/\D/g, '');
                 return cleanedValue.length <= 15 || 'Phone number cannot have more than 15 digits';
