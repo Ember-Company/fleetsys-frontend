@@ -25,3 +25,10 @@ export interface MultiFormProps<T extends FieldValues, S extends FieldValues = T
   handleBack: () => void;
   handleNext: () => void;
 }
+
+export interface MultiFormPropsContext<T extends FieldValues, S extends FieldValues = T> {
+  formData: S;
+  updateFormState: (data: Partial<S>) => void;
+  handleBack: () => void;
+  handleNext: () => void;
+}

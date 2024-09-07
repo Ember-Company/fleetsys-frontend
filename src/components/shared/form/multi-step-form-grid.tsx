@@ -78,7 +78,7 @@ export function MultiStepActions({
   loading?: boolean;
 }): React.JSX.Element {
   return (
-    <Stack justifyContent="space-between" direction="row">
+    <Stack justifyContent="space-between" direction="row" mt={2}>
       <Button color="primary" variant="outlined" disabled={activeStep === 0} onClick={handleBack}>
         Back
       </Button>
@@ -86,7 +86,7 @@ export function MultiStepActions({
         variant={isEnd ? 'contained' : 'outlined'}
         type="submit"
         size="small"
-        onClick={isEnd && submitAction ? submitAction : undefined}
+        onClick={!isEnd && submitAction ? submitAction : undefined}
       >
         {loading ? <CircularProgress /> : isEnd ? 'Submit' : 'Next'}
       </Button>

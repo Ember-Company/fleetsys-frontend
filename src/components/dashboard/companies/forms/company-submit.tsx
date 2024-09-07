@@ -1,7 +1,22 @@
 import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
-type Props = {};
+import { MultiFormPropsContext } from '@/types/forms';
+import { FormGrid } from '@/components/shared/form';
 
-export default function CompanySubmit({}: Props): React.JSX.Element {
-  return <div>CompanySubmit</div>;
+import { CompanySchemaValues } from './schemas';
+
+export default function CompanySubmit({
+  formData,
+  handleBack,
+  handleNext,
+  updateFormState,
+}: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {
+  const { register } = useFormContext<CompanySchemaValues>();
+
+  return (
+    <form>
+      <FormGrid title="Company Submit"></FormGrid>
+    </form>
+  );
 }

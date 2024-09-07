@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { FormProvider, useForm, UseFormReturn } from 'react-hook-form';
+import { Form, FormProvider, useForm, UseFormReturn } from 'react-hook-form';
 
-import { FormGrid, StepActions } from '@/components/shared/form';
+import { MultiFormPropsContext } from '@/types/forms';
+import { logger } from '@/lib/default-logger';
+import { FormGrid, MultiStepActions, StepActions } from '@/components/shared/form';
 
 import CompanyDetails from './company-details';
 import CompanySubmit from './company-submit';
+import ConfigurationDetails from './configuration-details';
 import ContactDetails from './contact-details';
 import { CompanyFormSchema, CompanySchemaValues } from './schemas';
 
 type Props = {};
 
 const createCompanySteps: Record<number, string> = {
-  0: 'Company Details',
-  1: 'Contact Information',
-  2: 'Finalize',
+  0: 'Basic Details',
+  1: 'Contact Information (Optional)',
+  2: 'Configuration (Recommended)',
+  3: 'Review',
 };
 
 const stepIndexes = Object.keys(createCompanySteps);
 
-const formSteps: Record<number, React.ComponentType> = {
+const formSteps: Record<number, React.ComponentType<MultiFormPropsContext<CompanySchemaValues>>> = {
   0: CompanyDetails,
   1: ContactDetails,
-  2: CompanySubmit,
+  2: ConfigurationDetails,
+  3: CompanySubmit,
 };
 
 const defaultValues = {
@@ -70,13 +75,23 @@ function CreateCompanyForm({}: Props) {
   };
 
   const getActiveForm = () => {
+    const sharedProps = { updateFormState, formData, handleBack, handleNext };
+
     const FormStep = formSteps[activeStep] ?? null;
-    return activeStep === stepIndexes.length ? <div>Hello</div> : <FormStep />;
+    return activeStep === stepIndexes.length ? <div>Hello</div> : <FormStep {...sharedProps} />;
   };
 
+  const handleCreateCompany = useCallback(
+    (values: CompanySchemaValues) => {
+      logger.debug(values);
+    },
+    [logger]
+  );
+
   return (
-    <Stack sx={{ maxHeight: '800px', minHeight: '600px' }}>
+    <Stack sx={{ maxHeight: '800px', minHeight: '600px', width: '100%' }}>
       <FormProvider {...methods}>
+        {/* <form onSubmit={methods.handleSubmit(handleCreateCompany)}> */}
         <Grid
           container
           width="100%"
@@ -96,6 +111,7 @@ function CreateCompanyForm({}: Props) {
             {getActiveForm()}
           </StepActions>
         </Grid>
+        {/* </form> */}
       </FormProvider>
     </Stack>
   );
