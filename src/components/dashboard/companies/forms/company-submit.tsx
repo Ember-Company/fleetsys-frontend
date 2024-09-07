@@ -1,72 +1,51 @@
-'use client';
-
-import React, { useCallback, useTransition } from 'react';
-import { formatPhoneNumber } from '@/utils/format';
+import React, { useCallback } from 'react';
 import { FormControl, Input, InputLabel } from '@mui/material';
-import Grid from '@mui/material/Grid2';
-import { Control, Controller } from 'react-hook-form';
+import { Grid } from '@mui/system';
+import { Control, Controller, useFormContext } from 'react-hook-form';
 import { PatternFormat } from 'react-number-format';
 
-import { MultiFormProps } from '@/types/forms';
+import { MultiFormPropsContext } from '@/types/forms';
 import { logger } from '@/lib/default-logger';
-import { useRegisterQuery } from '@/hooks/queries';
+import { useCreateCompany } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 import { FormGrid, MultiStepActions } from '@/components/shared/form';
 
-import { SubmitValues } from './schemas';
+import { CompanySchemaValues } from './schemas';
 
-export function SubmitFormContent({
-  control,
+export default function CompanySubmit({
   formData,
   handleBack,
-  handleSubmit,
   handleNext,
-}: MultiFormProps<SubmitValues>): React.JSX.Element {
-  const { mutate, isPending: isLoading } = useRegisterQuery();
-  const [isPending, startTransition] = useTransition();
+  updateFormState,
+}: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {
+  const { mutate, isPending: isLoading } = useCreateCompany();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useFormContext<CompanySchemaValues>();
   const { AlertMessage, updateAlertMessage } = useAlertMessage();
 
   const renderFields = (
-    data: SubmitValues['user_meta'] | SubmitValues = formData,
+    data: CompanySchemaValues = formData,
     parentKey: string | undefined = undefined
   ): React.ReactNode[] => {
     return Object.keys(data).map((key) => {
-      const previousKey = parentKey as keyof SubmitValues['user_meta'];
-      const fieldName = parentKey ? `${previousKey}.${key}` : key;
-
-      const value =
-        parentKey && fieldName
-          ? formData[previousKey][key as keyof SubmitValues['user_meta']]
-          : formData[key as keyof SubmitValues];
-
-      if (typeof value === 'object' && value !== null) {
-        return renderFields(value, fieldName);
-      }
-
-      if (fieldName === 'phone_number') {
-        logger.debug(value);
-      }
+      const value = formData[key as keyof CompanySchemaValues];
 
       return (
         <>
-          <Field
-            name={fieldName}
-            control={control}
-            value={value ?? ''}
-            cellNumberFormat={fieldName === 'phone_number'}
-          />
+          <Field name={key} control={control} value={value as any} cellNumberFormat={key === 'contact_phone'} />
         </>
       );
     });
   };
 
-  const handleUserCreation = useCallback(() => {
-    logger.debug(formData);
-
+  const handleCompanyCreation = useCallback(() => {
     mutate(formData, {
       onSuccess: () => {
         updateAlertMessage({
-          text: 'User Created Successfully',
+          text: 'Company Created Successfully',
           isError: false,
         });
 
@@ -75,10 +54,8 @@ export function SubmitFormContent({
         }, 2000);
       },
       onError: (err) => {
-        logger.error(err);
-
         updateAlertMessage({
-          text: 'failed to create user',
+          text: 'failed to create company',
           isError: true,
         });
       },
@@ -89,21 +66,25 @@ export function SubmitFormContent({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleUserCreation();
+        handleCompanyCreation();
       }}
     >
-      <FormGrid title="Finalize Creation">
+      <FormGrid title="Review Company Details" fullWidth fullWidthPadding={10}>
         {renderFields()}
         <Grid size={12}>
           <AlertMessage />
         </Grid>
         <Grid size={12}>
-          <MultiStepActions activeStep={2} handleBack={handleBack} loading={isLoading} isEnd />
+          <MultiStepActions activeStep={3} handleBack={handleBack} loading={isSubmitting || isLoading} isEnd />
         </Grid>
       </FormGrid>
     </form>
   );
 }
+
+const translateBool = (value: boolean) => {
+  return value ? 'Yes' : 'No';
+};
 
 function Field({
   control,
@@ -111,7 +92,7 @@ function Field({
   value,
   cellNumberFormat = false,
 }: {
-  control: Control<SubmitValues>;
+  control: Control<CompanySchemaValues>;
   name: string;
   value: string;
   cellNumberFormat?: boolean;
@@ -120,13 +101,13 @@ function Field({
     <Grid size={4} key={name}>
       <Controller
         control={control}
-        name={name as keyof SubmitValues}
-        defaultValue={value}
+        name={name as keyof CompanySchemaValues}
+        // defaultValue={typeof value === 'boolean' ? translateBool(value) : value}
         disabled={!Boolean(value)}
         render={({ field }) => (
           <FormControl fullWidth>
             <InputLabel sx={{ textTransform: 'capitalize' }}>
-              {name.split('.')[1] ?? name.split('_')[0] ?? name}
+              {name.split('.')[1] ?? name.split('_').join(' ') ?? name}
             </InputLabel>
             {cellNumberFormat ? (
               <PatternFormat
@@ -149,7 +130,8 @@ function Field({
                 type={name === 'email' ? 'email' : name === 'password' ? 'password' : 'text'}
                 readOnly
                 sx={{ paddingLeft: 1.5 }}
-                value={value}
+                value={typeof value === 'boolean' ? translateBool(value) : value}
+                // value={value}
               />
             )}
           </FormControl>

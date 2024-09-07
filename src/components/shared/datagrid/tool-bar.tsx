@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, ButtonProps } from '@mui/material';
 import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
@@ -10,7 +10,11 @@ import {
   type ToolbarPropsOverrides,
 } from '@mui/x-data-grid';
 
-export function ToolBar({ title }: GridToolbarProps & ToolbarPropsOverrides): React.JSX.Element {
+interface CustomToolBarProps extends GridToolbarProps {
+  createButtonProps: ButtonProps;
+}
+
+export function ToolBar({ title }: CustomToolBarProps & ToolbarPropsOverrides): React.JSX.Element {
   return (
     <GridToolbarContainer sx={{ paddingY: '0.75rem' }}>
       <GridToolbarColumnsButton />
@@ -18,9 +22,9 @@ export function ToolBar({ title }: GridToolbarProps & ToolbarPropsOverrides): Re
       <GridToolbarExport />
       <Box sx={{ marginLeft: 'auto' }} display="flex" gap={4}>
         <GridToolbarQuickFilter />
-        <Button variant="contained" size="small">
+        {/* <Button variant="contained" size="small" {...createButtonProps}>
           Add {title}
-        </Button>
+        </Button> */}
       </Box>
     </GridToolbarContainer>
   );

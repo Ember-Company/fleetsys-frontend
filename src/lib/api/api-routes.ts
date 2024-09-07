@@ -82,7 +82,7 @@ const CoreApiRoutes = {
       routeById: (id?: string) => ({
         findOne: {
           method: 'get',
-          path: `/api/users/${id ?? ''}`,
+          path: `api/users/${id ?? ''}`,
         },
       }),
     },
@@ -101,6 +101,12 @@ const CoreApiRoutes = {
     listCompanies: {
       method: 'get',
       path: 'api/companies',
+      routeById: (id?: string) => ({
+        findOne: {
+          method: 'get',
+          path: `api/companies/${id}`,
+        },
+      }),
     },
     createCompany: {
       method: 'post',

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Close } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
   type IconButtonProps,
   type ModalOwnProps,
 } from '@mui/material';
+import { XCircle } from '@phosphor-icons/react';
 
 interface ModalProps {
   buttonTitle?: string;
@@ -24,17 +26,8 @@ interface ModalProps {
   Content: ModalOwnProps['children'];
   isIcon?: boolean;
   Icon?: React.ReactNode;
+  size?: 'large' | 'normal';
 }
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 450,
-  boxShadow: 24,
-  p: 4,
-};
 
 function Modal({
   Content,
@@ -45,6 +38,7 @@ function Modal({
   modalLabel,
   Icon,
   isIcon = false,
+  size = 'normal',
 }: ModalProps): React.JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -53,6 +47,16 @@ function Modal({
   };
   const handleClose = (): void => {
     setOpen(false);
+  };
+
+  const style = {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: size === 'normal' ? 450 : 800,
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
@@ -73,6 +77,17 @@ function Modal({
         aria-describedby={modalDescription ?? ''}
       >
         <Card variant="elevation" sx={style}>
+          <IconButton
+            onClick={handleClose}
+            color="default"
+            sx={{ position: 'absolute', top: 16, right: 16 }}
+            size="large"
+          >
+            <Close width={32} height={32} />
+          </IconButton>
+          {/* <Icon sx={{ position: 'absolute', top: 0, right: 0 }}>
+            <Close width={32} height={32} />
+          </Icon> */}
           {Content}
         </Card>
       </MuiModal>
