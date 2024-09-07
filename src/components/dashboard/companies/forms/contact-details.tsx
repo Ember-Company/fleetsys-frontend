@@ -21,19 +21,12 @@ export default function ContactDetails({
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useFormContext<CompanySchemaValues>();
 
-  const saveContactDetails = useCallback(
-    async (values: CompanySchemaValues): Promise<void> => {
-      updateFormState(values);
-      logger.debug(values);
-    },
-    [updateFormState, logger]
-  );
-
   return (
-    <form onSubmit={handleSubmit(saveContactDetails)}>
+    <form onSubmit={handleSubmit(updateFormState)}>
       <FormGrid title="Contact Details" fullWidth fullWidthPadding={10}>
         <Grid size={12}>
           <Controller

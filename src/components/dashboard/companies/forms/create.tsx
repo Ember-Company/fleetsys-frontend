@@ -12,6 +12,7 @@ import CompanyDetails from './company-details';
 import CompanySubmit from './company-submit';
 import ConfigurationDetails from './configuration-details';
 import ContactDetails from './contact-details';
+import ResetForm from './reset-form';
 import { CompanyFormSchema, CompanySchemaValues } from './schemas';
 
 type Props = {};
@@ -34,19 +35,19 @@ const formSteps: Record<number, React.ComponentType<MultiFormPropsContext<Compan
 
 const defaultValues = {
   name: '',
-  active: false,
+  industry: '',
+  country: '',
+  state: '',
+  city: '',
   contact_phone: '',
   contact_email: '',
   contact_name: '',
-  subscription_type: 'Monthly',
-  city: '',
-  country: '',
-  state: '',
-  industry: '',
-  has_support_access: true,
   max_drivers: 10,
   max_routes: 10,
   max_vehicles: 15,
+  subscription_type: 'Monthly',
+  active: false,
+  has_support_access: true,
 } satisfies CompanySchemaValues;
 
 function CreateCompanyForm({}: Props) {
@@ -58,27 +59,37 @@ function CreateCompanyForm({}: Props) {
   });
 
   const handleNext = (): void => {
+    methods.clearErrors();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = (): void => {
+    methods.clearErrors();
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const updateFormState = (data: Partial<CompanySchemaValues> = {}) => {
+  const updateFormState = async (data: Partial<CompanySchemaValues>) => {
     setFormData({
       ...formData,
       ...data,
     });
 
+    methods.clearErrors();
     handleNext();
+  };
+
+  const handleReset = (): void => {
+    setActiveStep(0);
+    setFormData(defaultValues);
+
+    methods.reset();
   };
 
   const getActiveForm = () => {
     const sharedProps = { updateFormState, formData, handleBack, handleNext };
 
     const FormStep = formSteps[activeStep] ?? null;
-    return activeStep === stepIndexes.length ? <div>Hello</div> : <FormStep {...sharedProps} />;
+    return activeStep === stepIndexes.length ? <ResetForm handleReset={handleReset} /> : <FormStep {...sharedProps} />;
   };
 
   const handleCreateCompany = useCallback(

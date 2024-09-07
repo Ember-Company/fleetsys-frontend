@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Close } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
   type IconButtonProps,
   type ModalOwnProps,
 } from '@mui/material';
+import { XCircle } from '@phosphor-icons/react';
 
 interface ModalProps {
   buttonTitle?: string;
@@ -75,6 +77,17 @@ function Modal({
         aria-describedby={modalDescription ?? ''}
       >
         <Card variant="elevation" sx={style}>
+          <IconButton
+            onClick={handleClose}
+            color="default"
+            sx={{ position: 'absolute', top: 16, right: 16 }}
+            size="large"
+          >
+            <Close width={32} height={32} />
+          </IconButton>
+          {/* <Icon sx={{ position: 'absolute', top: 0, right: 0 }}>
+            <Close width={32} height={32} />
+          </Icon> */}
           {Content}
         </Card>
       </MuiModal>

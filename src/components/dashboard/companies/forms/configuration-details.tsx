@@ -39,16 +39,8 @@ function ConfigurationDetails({
     formState: { errors },
   } = useFormContext<CompanySchemaValues>();
 
-  const saveConfigurationDetails = useCallback(
-    async (values: CompanySchemaValues): Promise<void> => {
-      updateFormState(values);
-      logger.debug(values);
-    },
-    [updateFormState, logger]
-  );
-
   return (
-    <form onSubmit={handleSubmit(saveConfigurationDetails)}>
+    <form onSubmit={handleSubmit(updateFormState)}>
       <FormGrid title="Company Configuration" fullWidth fullWidthPadding={10}>
         <Grid size={12} container>
           <Grid size={4}>

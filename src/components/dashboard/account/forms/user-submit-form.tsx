@@ -83,7 +83,6 @@ export function SubmitFormContent({
         });
       },
     });
-    // });
   }, [logger, handleNext, formData, mutate]);
 
   return (
@@ -99,7 +98,6 @@ export function SubmitFormContent({
           <AlertMessage />
         </Grid>
         <Grid size={12}>
-          {/* <Button type="submit">Submit</Button> */}
           <MultiStepActions activeStep={2} handleBack={handleBack} loading={isLoading} isEnd />
         </Grid>
       </FormGrid>

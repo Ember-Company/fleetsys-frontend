@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { FormControl, FormHelperText, InputLabel, OutlinedInput, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -23,16 +23,8 @@ export default function CompanyDetails({
     formState: { errors },
   } = useFormContext<CompanySchemaValues>();
 
-  const handleCompanyDetails = useCallback(
-    async (values: CompanySchemaValues): Promise<void> => {
-      updateFormState(values);
-      logger.debug(values);
-    },
-    [updateFormState, logger]
-  );
-
   return (
-    <form onSubmit={handleSubmit(handleCompanyDetails)}>
+    <form onSubmit={handleSubmit(updateFormState)}>
       <FormGrid title="Company Details" fullWidth fullWidthPadding={10}>
         <Grid size={12}>
           <Controller
