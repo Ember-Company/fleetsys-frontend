@@ -14,7 +14,7 @@ import Modal from '@/components/shared/modal';
 // import ToolBar from '@/components/shared/datagrid/tool-bar';
 
 import { getCompaniesTableFields } from './company-columns';
-import CreateCompanyForm from './create-company-form';
+import CreateCompanyForm from './forms/create';
 
 export default function CompanyList(): React.JSX.Element {
   const { data, isLoading } = useGetCompanies();
@@ -44,6 +44,7 @@ export default function CompanyList(): React.JSX.Element {
             }}
             Content={<CreateCompanyForm />}
             modalLabel="Register Client"
+            size="large"
           />
         </Box>
       </Stack>

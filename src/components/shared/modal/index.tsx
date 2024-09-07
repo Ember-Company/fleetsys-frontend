@@ -24,17 +24,8 @@ interface ModalProps {
   Content: ModalOwnProps['children'];
   isIcon?: boolean;
   Icon?: React.ReactNode;
+  size?: 'large' | 'normal';
 }
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 450,
-  boxShadow: 24,
-  p: 4,
-};
 
 function Modal({
   Content,
@@ -45,6 +36,7 @@ function Modal({
   modalLabel,
   Icon,
   isIcon = false,
+  size = 'normal',
 }: ModalProps): React.JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -53,6 +45,16 @@ function Modal({
   };
   const handleClose = (): void => {
     setOpen(false);
+  };
+
+  const style = {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: size === 'normal' ? 450 : 800,
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
