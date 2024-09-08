@@ -4,7 +4,7 @@ import { Box, Grid } from '@mui/system';
 
 import { SuccessResult } from '@/components/shared/static';
 
-interface ResetFormProps {
+export interface ResetFormProps {
   handleReset: () => void;
   textContent?: string;
   showResetButton?: boolean;

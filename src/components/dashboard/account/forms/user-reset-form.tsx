@@ -5,13 +5,10 @@ import Grid from '@mui/material/Grid2';
 import { Box } from '@mui/system';
 
 import { paths } from '@/paths';
+import { ResetFormProps } from '@/components/shared/form/reset-form';
 import { SuccessResult } from '@/components/shared/static';
 
-interface ResetFormProps {
-  handleReset: () => void;
-}
-
-export function ResetForm({ handleReset }: ResetFormProps) {
+export function UserResetForm({ handleReset }: ResetFormProps) {
   return (
     <Grid size={12} container direction="column" justifyContent="space-around" alignItems="center" width="100%">
       <Grid size={6}>

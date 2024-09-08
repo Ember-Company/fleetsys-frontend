@@ -1,18 +1,22 @@
 import React, { memo, useCallback, useState } from 'react';
+import { StackProps } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Stack } from '@mui/system';
+import { Stack, SystemCssProperties } from '@mui/system';
 import { DefaultValues, FieldValues, FormProvider, Resolver, useForm, UseFormProps } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import { MultiFormPropsContext } from '@/types/forms';
 
 import { MultiStepActions, StepActions } from './multi-step-form-grid';
-import ResetForm from './reset-form';
+import ResetForm, { ResetFormProps } from './reset-form';
 
 interface MultiStepFormProps<TSchema> {
   defaultValues: TSchema;
   configProps: MultiStepFormConfig<TSchema>;
   resolver: UseFormProps['resolver'];
+  asChild?: boolean;
+  containerStyle?: SystemCssProperties;
+  ResetComponent?: React.ComponentType<ResetFormProps>;
 }
 
 export interface MultiStepFormConfig<S> {
@@ -23,7 +27,14 @@ export interface MultiStepFormConfig<S> {
   };
 }
 
-export default function MultiStepForm<S>({ configProps, defaultValues, resolver }: MultiStepFormProps<S>) {
+export default function MultiStepForm<S>({
+  configProps,
+  defaultValues,
+  resolver,
+  asChild = false,
+  containerStyle = {},
+  ResetComponent,
+}: MultiStepFormProps<S>) {
   const steps = Object.keys(configProps);
 
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -79,7 +90,11 @@ export default function MultiStepForm<S>({ configProps, defaultValues, resolver 
     } satisfies MultiFormPropsContext<S>;
 
     if (activeStep === steps.length) {
-      return <ResetForm handleReset={handleReset} textContent="Text Form Completed" />;
+      return ResetComponent ? (
+        <ResetComponent handleReset={handleReset} />
+      ) : (
+        <ResetForm handleReset={handleReset} textContent="Text Form Completed" />
+      );
     }
 
     const FormStep = configProps[activeStep]['component'] ?? null;
@@ -87,7 +102,14 @@ export default function MultiStepForm<S>({ configProps, defaultValues, resolver 
   };
 
   return (
-    <Stack sx={{ maxHeight: '800px', minHeight: '600px', width: '100%' }}>
+    <Stack
+      sx={{
+        maxHeight: asChild ? '100%' : '800px',
+        minHeight: asChild ? '100%' : '600px',
+        width: '100%',
+        ...containerStyle,
+      }}
+    >
       <FormProvider {...methods}>
         <Grid
           container
@@ -108,7 +130,6 @@ export default function MultiStepForm<S>({ configProps, defaultValues, resolver 
             {getActiveForm()}
           </StepActions>
         </Grid>
-        {/* </form> */}
       </FormProvider>
     </Stack>
   );
