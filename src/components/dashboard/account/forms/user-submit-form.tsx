@@ -4,40 +4,43 @@ import React, { useCallback, useTransition } from 'react';
 import { formatPhoneNumber } from '@/utils/format';
 import { FormControl, Input, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, useFormContext } from 'react-hook-form';
 import { PatternFormat } from 'react-number-format';
 
-import { MultiFormProps } from '@/types/forms';
+import { MultiFormProps, MultiFormPropsContext } from '@/types/forms';
 import { logger } from '@/lib/default-logger';
 import { useRegisterQuery } from '@/hooks/queries';
 import useAlertMessage from '@/hooks/use-alert-message';
 import { FormGrid, MultiStepActions } from '@/components/shared/form';
 
-import { SubmitValues } from './schemas';
+import { AccountValues } from './schemas';
 
 export function SubmitFormContent({
-  control,
   formData,
-  handleBack,
-  handleSubmit,
+  submitHandlers,
   handleNext,
-}: MultiFormProps<SubmitValues>): React.JSX.Element {
+}: MultiFormPropsContext<AccountValues>): React.JSX.Element {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext<AccountValues>();
+
   const { mutate, isPending: isLoading } = useRegisterQuery();
-  const [isPending, startTransition] = useTransition();
   const { AlertMessage, updateAlertMessage } = useAlertMessage();
 
   const renderFields = (
-    data: SubmitValues['user_meta'] | SubmitValues = formData,
+    data: AccountValues['user_meta'] | AccountValues = formData,
     parentKey: string | undefined = undefined
   ): React.ReactNode[] => {
     return Object.keys(data).map((key) => {
-      const previousKey = parentKey as keyof SubmitValues['user_meta'];
+      const previousKey = parentKey as keyof AccountValues['user_meta'];
       const fieldName = parentKey ? `${previousKey}.${key}` : key;
 
       const value =
         parentKey && fieldName
-          ? formData[previousKey][key as keyof SubmitValues['user_meta']]
-          : formData[key as keyof SubmitValues];
+          ? formData[previousKey][key as keyof AccountValues['user_meta']]
+          : formData[key as keyof AccountValues];
 
       if (typeof value === 'object' && value !== null) {
         return renderFields(value, fieldName);
@@ -97,9 +100,8 @@ export function SubmitFormContent({
         <Grid size={12}>
           <AlertMessage />
         </Grid>
-        <Grid size={12}>
-          <MultiStepActions activeStep={2} handleBack={handleBack} loading={isLoading} isEnd />
-        </Grid>
+
+        {submitHandlers(true, isLoading)}
       </FormGrid>
     </form>
   );
@@ -111,7 +113,7 @@ function Field({
   value,
   cellNumberFormat = false,
 }: {
-  control: Control<SubmitValues>;
+  control: Control<AccountValues>;
   name: string;
   value: string;
   cellNumberFormat?: boolean;
@@ -120,7 +122,7 @@ function Field({
     <Grid size={4} key={name}>
       <Controller
         control={control}
-        name={name as keyof SubmitValues}
+        name={name as keyof AccountValues}
         defaultValue={value}
         disabled={!Boolean(value)}
         render={({ field }) => (

@@ -1,30 +1,26 @@
-import { useCallback, useEffect } from 'react';
 import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-import { MultiFormProps } from '@/types/forms';
-import { logger } from '@/lib/default-logger';
-import { FormGrid, MultiStepActions } from '@/components/shared/form';
+import { MultiFormPropsContext } from '@/types/forms';
+import { FormGrid } from '@/components/shared/form';
 
-import { ProfileValues, SubmitValues } from './schemas';
+import { AccountValues } from './schemas';
 
 export function ProfileFormContent({
-  control,
   formData,
   updateFormState,
   handleBack,
-  handleSubmit,
-}: MultiFormProps<ProfileValues, SubmitValues>): React.JSX.Element {
-  const handleSubmitProfile = useCallback(
-    async (values: ProfileValues) => {
-      updateFormState(values);
-    },
-    [updateFormState]
-  );
+  submitHandlers,
+}: MultiFormPropsContext<AccountValues>): React.JSX.Element {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext<AccountValues>();
 
   return (
-    <form onSubmit={handleSubmit(handleSubmitProfile)}>
+    <form onSubmit={handleSubmit(updateFormState)}>
       <FormGrid title="Profile Details">
         <Grid size={6}>
           <Controller
@@ -74,9 +70,8 @@ export function ProfileFormContent({
             )}
           />
         </Grid>
-        <Grid size={12}>
-          <MultiStepActions activeStep={1} handleBack={handleBack} />
-        </Grid>
+
+        {submitHandlers()}
       </FormGrid>
     </form>
   );

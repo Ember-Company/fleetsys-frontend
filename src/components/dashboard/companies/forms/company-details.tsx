@@ -13,9 +13,8 @@ type Props = {};
 
 export default function CompanyDetails({
   formData,
-  handleBack,
-  handleNext,
   updateFormState,
+  submitHandlers,
 }: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {
   const {
     control,
@@ -101,9 +100,7 @@ export default function CompanyDetails({
           />
         </Grid>
 
-        <Grid size={12}>
-          <MultiStepActions activeStep={0} handleBack={handleBack} />
-        </Grid>
+        {submitHandlers()}
       </FormGrid>
     </form>
   );

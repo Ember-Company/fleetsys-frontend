@@ -13,9 +13,6 @@ export const AccountFormSchema = zod.object({
     }),
   role: zod.enum(['ADMIN', 'USER', 'DRIVER']),
   password: zod.string().min(1, { message: 'Password is required' }),
-});
-
-export const ProfileFormSchema = zod.object({
   user_meta: zod
     .object({
       industry: zod.string().optional(),
@@ -26,11 +23,6 @@ export const ProfileFormSchema = zod.object({
     .optional(),
 });
 
-export const SubmitFormSchema = AccountFormSchema.merge(ProfileFormSchema);
-
-export type RegisterValues = zod.infer<typeof AccountFormSchema>;
-export type ProfileValues = zod.infer<typeof ProfileFormSchema>;
-export type SubmitValues = zod.infer<typeof SubmitFormSchema>;
-
+export type AccountValues = zod.infer<typeof AccountFormSchema>;
 export type UserRoles = 'ADMIN' | 'USER' | 'DRIVER';
 export const roles: UserRoles[] = ['ADMIN', 'USER', 'DRIVER'];

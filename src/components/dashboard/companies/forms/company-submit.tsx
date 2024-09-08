@@ -17,6 +17,7 @@ export default function CompanySubmit({
   handleBack,
   handleNext,
   updateFormState,
+  submitHandlers,
 }: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {
   const { mutate, isPending: isLoading } = useCreateCompany();
   const {
@@ -74,9 +75,7 @@ export default function CompanySubmit({
         <Grid size={12}>
           <AlertMessage />
         </Grid>
-        <Grid size={12}>
-          <MultiStepActions activeStep={3} handleBack={handleBack} loading={isSubmitting || isLoading} isEnd />
-        </Grid>
+        {submitHandlers(true, isSubmitting || isLoading)}
       </FormGrid>
     </form>
   );

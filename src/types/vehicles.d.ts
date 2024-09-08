@@ -20,9 +20,15 @@ export interface VehicleType {
   id: string;
   company_id: string;
   name: string;
+  attributes: VehicleTypeAttribute[];
   vehicles_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface VehicleTypeAttribute {
+  id: string;
+  name: string;
 }
 
 export interface VehicleStatus {

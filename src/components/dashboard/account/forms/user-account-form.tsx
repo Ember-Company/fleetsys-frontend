@@ -13,48 +13,31 @@ import {
 import Grid from '@mui/material/Grid2';
 import { Eye as EyeIcon } from '@phosphor-icons/react/dist/ssr/Eye';
 import { EyeSlash as EyeSlashIcon } from '@phosphor-icons/react/dist/ssr/EyeSlash';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useFormContext } from 'react-hook-form';
 import { useIMask } from 'react-imask';
 import { NumberFormatBase, PatternFormat } from 'react-number-format';
 
-import { MultiFormProps } from '@/types/forms';
+import { MultiFormProps, MultiFormPropsContext } from '@/types/forms';
 import { logger } from '@/lib/default-logger';
 import { FormGrid, MultiStepActions } from '@/components/shared/form/index';
 
-import { AccountFormSchema, RegisterValues, roles, SubmitValues } from './schemas';
-
-const defaultRegister = {
-  name: '',
-  email: '',
-  phone_number: '',
-  role: 'USER',
-  password: '',
-} satisfies RegisterValues;
+import { AccountValues, roles } from './schemas';
 
 export function AccountFormContent({
-  control,
-  handleSubmit,
   formData,
   updateFormState,
   handleBack,
-  formState: { errors },
-}: MultiFormProps<RegisterValues, SubmitValues>): React.JSX.Element {
+  submitHandlers,
+}: MultiFormPropsContext<AccountValues>): React.JSX.Element {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useFormContext<AccountValues>();
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
 
-  const submitAccountDetails = useCallback(
-    async (values: RegisterValues): Promise<void> => {
-      updateFormState(values);
-      logger.debug(values);
-    },
-    [updateFormState, errors]
-  );
-
-  useEffect(() => {
-    logger.debug(formData);
-  }, [formData]);
-
   return (
-    <form onSubmit={handleSubmit(submitAccountDetails)}>
+    <form onSubmit={handleSubmit(updateFormState)}>
       <FormGrid title="Account Details">
         <Grid size={6}>
           <Controller
@@ -184,9 +167,7 @@ export function AccountFormContent({
           />
         </Grid>
 
-        <Grid size={12} direction="row" justifyContent="space-between" width="100%">
-          <MultiStepActions activeStep={0} handleBack={handleBack} />
-        </Grid>
+        {submitHandlers()}
       </FormGrid>
     </form>
   );

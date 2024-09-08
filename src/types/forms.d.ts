@@ -31,4 +31,5 @@ export interface MultiFormPropsContext<T extends FieldValues, S extends FieldVal
   updateFormState: (data: Partial<S>) => void;
   handleBack: () => void;
   handleNext: () => void;
+  submitHandlers: (isEnd?: boolean, loading?: boolean) => React.ReactNode;
 }
