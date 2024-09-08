@@ -1,37 +1,29 @@
-import React, { useCallback } from 'react';
-import { CheckCircle } from '@mui/icons-material';
+import React from 'react';
 import {
   FormControl,
   FormControlLabel,
   FormGroup,
   FormHelperText,
   FormLabel,
-  Input,
   InputLabel,
-  MenuItem,
   OutlinedInput,
   Radio,
   RadioGroup,
-  Select,
   Stack,
   Switch,
-  TextField,
 } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { MultiFormPropsContext } from '@/types/forms';
-import { logger } from '@/lib/default-logger';
-import { FormGrid, MultiStepActions } from '@/components/shared/form';
+import { FormGrid } from '@/components/shared/form';
 
-import { roles } from '../../account/forms/schemas';
 import { CompanySchemaValues, subscriptions } from './schemas';
 
 function ConfigurationDetails({
   formData,
-  handleBack,
-  handleNext,
   updateFormState,
+  submitHandlers,
 }: MultiFormPropsContext<CompanySchemaValues>) {
   const {
     control,
@@ -156,9 +148,7 @@ function ConfigurationDetails({
           </FormControl>
         </Grid>
 
-        <Grid size={12}>
-          <MultiStepActions activeStep={2} handleBack={handleBack} />
-        </Grid>
+        {submitHandlers()}
       </FormGrid>
     </form>
   );

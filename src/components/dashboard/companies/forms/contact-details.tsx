@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Controller, useFormContext } from 'react-hook-form';
 import { PatternFormat } from 'react-number-format';
 
 import { MultiFormPropsContext } from '@/types/forms';
-import { logger } from '@/lib/default-logger';
-import { FormGrid, MultiStepActions } from '@/components/shared/form';
+import { FormGrid } from '@/components/shared/form';
 
 import { CompanySchemaValues } from './schemas';
 
@@ -14,9 +13,8 @@ type Props = {};
 
 export default function ContactDetails({
   formData,
-  handleBack,
-  handleNext,
   updateFormState,
+  submitHandlers,
 }: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {
   const {
     control,
@@ -95,9 +93,7 @@ export default function ContactDetails({
           />
         </Grid>
 
-        <Grid size={12}>
-          <MultiStepActions activeStep={1} handleBack={handleBack} />
-        </Grid>
+        {submitHandlers()}
       </FormGrid>
     </form>
   );
