@@ -46,12 +46,12 @@ export function getUserTableFields(): GridColDef<User>[] {
       type: 'string',
       align: 'left',
       valueGetter: (_, row) => {
-        return row.profile.country;
+        return row.profile?.country ?? 'Not Registered';
       },
       renderCell: ({ value, row }: GridRenderCellParams<User, Profile['country']>) => (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <Typography variant="subtitle2" color={value ? 'secondary' : 'warning'}>
-            {value ?? 'Not Registered'}
+            {value}
           </Typography>
         </Box>
       ),
@@ -65,12 +65,12 @@ export function getUserTableFields(): GridColDef<User>[] {
       type: 'string',
       align: 'left',
       valueGetter: (_, row) => {
-        return row.profile.city;
+        return row.profile?.city ?? 'Not Registered';
       },
       renderCell: ({ value, row }: GridRenderCellParams<User, Profile['city']>) => (
         <Box sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           <Typography variant="subtitle2" color={value ? 'secondary' : 'warning'}>
-            {value ?? 'Not Registered'}
+            {value}
           </Typography>
         </Box>
       ),
