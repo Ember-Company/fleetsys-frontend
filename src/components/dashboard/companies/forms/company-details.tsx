@@ -13,8 +13,6 @@ type Props = {};
 
 export default function CompanyDetails({
   formData,
-  handleBack,
-  handleNext,
   updateFormState,
   submitHandlers,
 }: MultiFormPropsContext<CompanySchemaValues>): React.JSX.Element {

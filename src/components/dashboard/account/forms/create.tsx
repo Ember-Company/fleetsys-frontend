@@ -45,7 +45,7 @@ const defaultValues = {
 export function CreateUserForm(): React.JSX.Element {
   return (
     <Card sx={{ maxHeight: '800px', minHeight: '600px' }}>
-      <MultiStepForm
+      <MultiStepForm<AccountValues>
         configProps={formConfig}
         defaultValues={defaultValues}
         resolver={zodResolver(AccountFormSchema)}

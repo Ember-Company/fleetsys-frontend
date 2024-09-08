@@ -6,6 +6,7 @@ import { Edit } from '@mui/icons-material';
 import {
   Box,
   Card,
+  Chip,
   CircularProgress,
   Divider,
   Stack,
@@ -37,7 +38,7 @@ interface VTypesPanelProps {
   rowsPerPage?: number;
 }
 
-const tableHeaders: readonly string[] = ['ID', 'Name', 'Vehicle Amount', 'Actions'];
+const tableHeaders: readonly string[] = ['Name', 'Attributes', 'Vehicle Amount', 'Actions'];
 
 function VehicleTypesPanel({ count = 0, page = 0, rowsPerPage = 0 }: VTypesPanelProps): React.JSX.Element {
   const { data: rows, isLoading } = useGetVehicleTypes();
@@ -122,13 +123,25 @@ function VTypesPanelRows({
 
         return (
           <TableRow hover key={row.id} selected={isSelected}>
-            <TableCell>
+            {/* <TableCell>
               <Typography variant="overline" component="div">
                 {row.id}
               </Typography>
-            </TableCell>
+            </TableCell> */}
             <TableCell>
               <Typography variant="subtitle2">{row.name}</Typography>
+            </TableCell>
+            <TableCell>
+              {row.attributes.map((attr) => (
+                <Chip
+                  size="medium"
+                  sx={{ mr: 0.5 }}
+                  key={attr.id}
+                  label={attr.name}
+                  variant="filled"
+                  color="secondary"
+                />
+              ))}
             </TableCell>
             <TableCell>
               <Typography variant="overline" component="div">
