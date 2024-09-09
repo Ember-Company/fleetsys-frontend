@@ -24,6 +24,7 @@ import {
   type FormVariantTitle,
   type RootFormProps,
 } from '@/types/forms';
+import { logger } from '@/lib/default-logger';
 import { useCreateVehicleType, useGetTargetVehicleType, useUpdateVehicleType } from '@/hooks/queries';
 import { useGetAttributes } from '@/hooks/queries/attributes';
 import useAlertMessage from '@/hooks/use-alert-message';
@@ -95,6 +96,8 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
 
   const handleEdit = useCallback(
     async (values: Values) => {
+      logger.debug(values);
+
       mutate(values, {
         onSuccess: () => {
           updateAlertMessage({
@@ -135,7 +138,11 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
   );
 }
 
-function Create({ children, submitHandler }: CreateFormProps<Values> & PropsWithChildren): React.JSX.Element {
+function Create({
+  children,
+  defaultValues,
+  submitHandler,
+}: CreateFormProps<Values> & PropsWithChildren): React.JSX.Element {
   const { AlertMessage, updateAlertMessage } = useAlertMessage();
   const { mutate, isPending } = useCreateVehicleType();
 

@@ -29,6 +29,7 @@ CoreAPI.interceptors.response.use(
     return response;
   },
   (error: AxiosError) => {
+    logger.error(error);
     return handleHttpErrors(error);
   }
 );
