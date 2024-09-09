@@ -16,13 +16,15 @@ interface CustomToolBarProps extends GridToolbarProps {
 
 export function ToolBar({ title }: CustomToolBarProps & ToolbarPropsOverrides): React.JSX.Element {
   return (
-    <GridToolbarContainer sx={{ paddingY: '0.75rem' }}>
-      <GridToolbarColumnsButton />
-      <GridToolbarDensitySelector />
-      <GridToolbarExport />
-      <Box sx={{ marginLeft: 'auto' }} display="flex" gap={4}>
-        <GridToolbarQuickFilter />
+    <GridToolbarContainer sx={{ paddingY: '0.75rem', paddingX: 2 }}>
+      <GridToolbarQuickFilter sx={{ minWidth: 400 }} variant="outlined" size="small" />
+
+      <Box sx={{ marginLeft: 'auto' }} display="flex" gap={0}>
+        <GridToolbarColumnsButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
         {/* <Button variant="contained" size="small" {...createButtonProps}>
+
           Add {title}
         </Button> */}
       </Box>

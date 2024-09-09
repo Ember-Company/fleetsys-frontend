@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { DataGrid, type GridSlots } from '@mui/x-data-grid';
 
@@ -19,16 +19,9 @@ import CreateCompanyForm from './forms/create';
 export default function CompanyList(): React.JSX.Element {
   const { data, isLoading } = useGetCompanies();
 
-  const handleDeleteClick = useCallback((id: string) => {
-    logger.warn(id);
-  }, []);
-
-  const actionCols = useActionFields<Company>([
-    {
-      name: 'delete',
-      handler: handleDeleteClick,
-    },
-  ]);
+  useEffect(() => {
+    logger.debug(data);
+  }, [data]);
 
   return (
     <Stack direction="column" width="100%" rowGap={3}>
@@ -49,12 +42,12 @@ export default function CompanyList(): React.JSX.Element {
         </Box>
       </Stack>
       <DataGrid
-        columns={[...getCompaniesTableFields(), ...actionCols]}
+        columns={[...getCompaniesTableFields()]}
         rows={data}
         loading={isLoading}
         pageSizeOptions={[5, 10, 25, 50]}
         autoHeight
-        disableColumnFilter
+        // disableColumnFilter
         checkboxSelection
         initialState={{
           pagination: {

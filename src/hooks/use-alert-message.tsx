@@ -23,7 +23,7 @@ export default function useAlertMessage(props: UseAlertProps = {}): UseAlertMess
 
     setTimeout(() => {
       setAlertMessage(null);
-    }, 3000);
+    }, 2000);
   };
 
   function AlertMessage(): React.JSX.Element {
