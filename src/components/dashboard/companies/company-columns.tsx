@@ -102,7 +102,7 @@ export function getCompaniesTableFields(): GridColDef<Company[][number]>[] {
       type: 'string',
       display: 'flex',
       renderCell: ({ value, row }: GridRenderCellParams<Company, Company['subscription_type']>) => (
-        <Chip variant="outlined" color={value === 'Monthly' ? 'default' : 'secondary'} size="small" label={value} />
+        <Chip variant="filled" color={value === 'Monthly' ? 'default' : 'secondary'} size="small" label={value} />
       ),
     },
     {

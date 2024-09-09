@@ -18,7 +18,13 @@ import CreateCompanyForm from './forms/create';
 
 export default function CompanyList(): React.JSX.Element {
   const { data, isLoading } = useGetCompanies();
-  const { columnVisibilityModel, handleColumnVisibilityChange } = useColumnVisibility('company-column-model-key');
+  const { columnVisibilityModel, handleColumnVisibilityChange } = useColumnVisibility('company-column-model-key', {
+    city: false,
+    subscription_type: false,
+    contact_name: false,
+    contact_phone: false,
+    has_support_access: false,
+  });
 
   useEffect(() => {
     logger.debug(data);
