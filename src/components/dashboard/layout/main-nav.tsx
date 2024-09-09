@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { AccountCircle, AccountCircleRounded } from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
@@ -70,9 +71,21 @@ export function MainNav(): React.JSX.Element {
             <Avatar
               onClick={userPopover.handleOpen}
               ref={userPopover.anchorRef}
-              src="/assets/avatar.png"
+              sx={{ cursor: 'pointer', background: 'none' }}
+            >
+              <IconButton size="large">
+                <AccountCircleRounded sx={{ width: 32, height: 32 }} />
+              </IconButton>
+            </Avatar>
+            {/* <IconButton
+              href="#"
+              onClick={userPopover.handleOpen}
+              ref={userPopover.anchorRef}
               sx={{ cursor: 'pointer' }}
-            />
+
+            >
+              <AccountCircleRounded />
+            </IconButton> */}
           </Stack>
         </Stack>
       </Box>
