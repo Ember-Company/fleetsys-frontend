@@ -5,6 +5,7 @@ import {
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarExport,
+  GridToolbarFilterButton,
   GridToolbarQuickFilter,
   type GridToolbarProps,
   type ToolbarPropsOverrides,

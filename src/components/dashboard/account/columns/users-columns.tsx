@@ -11,7 +11,15 @@ import { logger } from '@/lib/default-logger';
 
 export function getUserTableFields(): GridColDef<User>[] {
   const userColumns: GridColDef<User>[] = [
-    { field: 'name', headerName: 'User Name', width: 200, editable: false, sortable: true, type: 'string' },
+    {
+      field: 'name',
+      headerName: 'User Name',
+      width: 200,
+      editable: false,
+      sortable: true,
+      type: 'string',
+      pinnable: true,
+    },
     {
       field: 'email',
       headerName: 'Email',
@@ -64,6 +72,7 @@ export function getUserTableFields(): GridColDef<User>[] {
       sortable: true,
       type: 'string',
       align: 'left',
+
       valueGetter: (_, row) => {
         return row.profile?.city ?? 'Not Registered';
       },

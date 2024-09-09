@@ -7,7 +7,7 @@ import { DataGrid, type GridSlots } from '@mui/x-data-grid';
 import { type Company } from '@/types/company';
 import { logger } from '@/lib/default-logger';
 import { useGetCompanies } from '@/hooks/queries';
-import { useActionFields } from '@/hooks/tables';
+import { useActionFields, useColumnVisibility } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 import Modal from '@/components/shared/modal';
 
@@ -18,6 +18,7 @@ import CreateCompanyForm from './forms/create';
 
 export default function CompanyList(): React.JSX.Element {
   const { data, isLoading } = useGetCompanies();
+  const { columnVisibilityModel, handleColumnVisibilityChange } = useColumnVisibility('company-column-model-key');
 
   useEffect(() => {
     logger.debug(data);
@@ -27,7 +28,7 @@ export default function CompanyList(): React.JSX.Element {
     <Stack direction="column" width="100%" rowGap={3}>
       <Stack direction="row" width="100%" justifyContent="space-between" alignItems="center">
         <Box>
-          <Typography variant="h5">Client List</Typography>
+          <Typography variant="h4">Registered Clients</Typography>
         </Box>
         <Box>
           <Modal
@@ -48,6 +49,8 @@ export default function CompanyList(): React.JSX.Element {
         pageSizeOptions={[5, 10, 25, 50]}
         autoHeight
         // disableColumnFilter
+        columnVisibilityModel={columnVisibilityModel}
+        onColumnVisibilityModelChange={handleColumnVisibilityChange}
         checkboxSelection
         initialState={{
           pagination: {

@@ -1,4 +1,4 @@
-export const formatPhoneNumber = (phoneNumber: string): string | null => {
+export const formatPhoneNumber = (phoneNumber: string | null): string | null => {
   if (!phoneNumber) return null;
 
   const cleanNumber = phoneNumber.replace(/\D+/g, '');
