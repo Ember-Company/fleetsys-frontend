@@ -132,16 +132,22 @@ function VTypesPanelRows({
               <Typography variant="subtitle2">{row.name}</Typography>
             </TableCell>
             <TableCell>
-              {row.attributes.map((attr) => (
-                <Chip
-                  size="medium"
-                  sx={{ mr: 0.5 }}
-                  key={attr.id}
-                  label={attr.name}
-                  variant="filled"
-                  color="secondary"
-                />
-              ))}
+              {row.attributes.length > 0 ? (
+                row.attributes.map((attr) => (
+                  <Chip
+                    size="medium"
+                    sx={{ mr: 0.5 }}
+                    key={attr.id}
+                    label={attr.name}
+                    variant="filled"
+                    color="default"
+                  />
+                ))
+              ) : (
+                <Typography variant="subtitle2" color="textDisabled">
+                  None Registered
+                </Typography>
+              )}
             </TableCell>
             <TableCell>
               <Typography variant="overline" component="div">
