@@ -71,6 +71,16 @@ const CoreApiRoutes = {
       }),
     },
   },
+  attributes: {
+    find: {
+      method: 'get',
+      path: 'api/attributes',
+    },
+    create: {
+      method: 'get',
+      path: 'api/attributes',
+    },
+  },
   user: {
     showUser: {
       method: 'get',

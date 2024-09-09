@@ -1,17 +1,20 @@
-import React, { useCallback, useEffect, type PropsWithChildren } from 'react';
+import React, { useCallback, useEffect, useMemo, type PropsWithChildren } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Alert,
+  Autocomplete,
   Button,
   CircularProgress,
+  createFilterOptions,
   FormControl,
   FormHelperText,
   InputLabel,
   OutlinedInput,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
 import {
@@ -22,14 +25,16 @@ import {
   type RootFormProps,
 } from '@/types/forms';
 import { useCreateVehicleType, useGetTargetVehicleType, useUpdateVehicleType } from '@/hooks/queries';
+import { useGetAttributes } from '@/hooks/queries/attributes';
 import useAlertMessage from '@/hooks/use-alert-message';
 
 const schema = zod.object({
   name: zod.string().min(1, { message: 'Type Name is required' }),
+  attributes: zod.array(zod.string()).max(3, 'Max 3 Items').optional(),
 });
 
 type Values = zod.infer<typeof schema>;
-const defaultValues = { name: '' } satisfies Values;
+const defaultValues = { name: '', attributes: [] } satisfies Values;
 
 export function TypesForm({ variant, targetId }: RootFormProps): React.JSX.Element {
   const { data, isLoading } = useGetTargetVehicleType(targetId);
@@ -48,9 +53,13 @@ export function TypesForm({ variant, targetId }: RootFormProps): React.JSX.Eleme
   useEffect(() => {
     if (isEdit() && !isLoading) {
       if (data) {
-        const { name } = data;
+        const { name, attributes } = data;
 
         formHandlers.setValue('name', name);
+        formHandlers.setValue(
+          'attributes',
+          attributes.flatMap((attr) => attr.name)
+        );
       }
     }
   }, [data, formHandlers, isEdit, isLoading]);
@@ -163,6 +172,82 @@ function Create({ children, submitHandler }: CreateFormProps<Values> & PropsWith
   );
 }
 
+const filter = createFilterOptions<string>();
+
+function AttributeSelect({ value, onChange, ...rest }: ControllerRenderProps): React.JSX.Element {
+  const { data = [], isLoading } = useGetAttributes();
+
+  const existingAttributes = useMemo((): string[] => {
+    return data.flatMap((item) => item.name);
+  }, [data]);
+
+  return (
+    <Autocomplete
+      multiple
+      value={value}
+      onChange={(event, newValue) => {
+        if (newValue.length <= 3) {
+          onChange(newValue);
+        }
+      }}
+      {...rest}
+      filterOptions={(options, params) => {
+        const filtered = filter(options, params);
+
+        const { inputValue } = params;
+        const isExisting = options.some((option) => inputValue === option);
+        if (inputValue !== '' && !isExisting) {
+          filtered.push(inputValue);
+        }
+
+        return filtered;
+      }}
+      selectOnFocus
+      clearOnBlur
+      handleHomeEndKeys
+      id="attribute-select"
+      loading={isLoading}
+      options={existingAttributes}
+      getOptionLabel={(option) => {
+        if (typeof option === 'string') {
+          return option;
+        }
+        if (option) {
+          return option;
+        }
+        return option;
+      }}
+      renderOption={(props, option) => {
+        const { key, ...optionProps } = props;
+        return (
+          <li key={key} {...optionProps}>
+            {option}
+          </li>
+        );
+      }}
+      freeSolo
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Select Attributes (Max 3)"
+          fullWidth
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            },
+          }}
+        />
+      )}
+    />
+  );
+}
+
 function FormContent({ control, formState: { errors } }: FormContentProps<Values>): React.JSX.Element {
   return (
     <>
@@ -171,9 +256,19 @@ function FormContent({ control, formState: { errors } }: FormContentProps<Values
         name="name"
         render={({ field }) => (
           <FormControl error={Boolean(errors.name)}>
-            <InputLabel>Status Title</InputLabel>
-            <OutlinedInput {...field} label="Vehicle Type Title" type="text" />
+            <InputLabel>Name</InputLabel>
+            <OutlinedInput {...field} label="Name" type="text" />
             <FormHelperText>{errors?.name?.message ?? null}</FormHelperText>
+          </FormControl>
+        )}
+      />
+      <Controller
+        control={control}
+        name="attributes"
+        render={({ field, fieldState: { error } }) => (
+          <FormControl error={Boolean(errors.attributes)}>
+            <AttributeSelect {...field} />
+            <FormHelperText>{errors?.attributes?.message ?? null}</FormHelperText>
           </FormControl>
         )}
       />

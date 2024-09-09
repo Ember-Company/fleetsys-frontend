@@ -54,7 +54,7 @@ function Modal({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: size === 'normal' ? 450 : 800,
+    width: size === 'normal' ? 500 : 800,
     boxShadow: 24,
     p: 4,
   };

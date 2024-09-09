@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
 import { DataGrid, type GridSlots } from '@mui/x-data-grid';
 
-import { type Company } from '@/types/company';
 import { logger } from '@/lib/default-logger';
 import { useGetCompanies } from '@/hooks/queries';
-import { useActionFields, useColumnVisibility } from '@/hooks/tables';
+import { useColumnVisibility } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 import Modal from '@/components/shared/modal';
 
@@ -25,10 +24,6 @@ export default function CompanyList(): React.JSX.Element {
     contact_phone: false,
     has_support_access: false,
   });
-
-  useEffect(() => {
-    logger.debug(data);
-  }, [data]);
 
   return (
     <Stack direction="column" width="100%" rowGap={3}>

@@ -31,6 +31,8 @@ export interface VehicleTypeAttribute {
   name: string;
 }
 
+export type AttributePayload = Pick<VehicleTypeAttribute, 'name'>;
+
 export interface VehicleStatus {
   // map(arg0: (t: any) => any): any;
   id: string;
