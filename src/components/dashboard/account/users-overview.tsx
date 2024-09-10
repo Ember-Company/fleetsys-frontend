@@ -12,7 +12,7 @@ import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 import { getUserTableFields } from './columns';
 import { DeleteAction } from './columns/action-columns';
 
-export function AccountDetailsForm(): React.JSX.Element {
+export function UsersOverviewTable(): React.JSX.Element {
   const { data, isLoading } = useGetUsers();
   const { columnVisibilityModel, handleColumnVisibilityChange } = useColumnVisibility('users-column-model-key');
 

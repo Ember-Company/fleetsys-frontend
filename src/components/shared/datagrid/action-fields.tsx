@@ -1,6 +1,5 @@
 import React from 'react';
-import { GridActionsCellItem, type GridValidRowModel } from '@mui/x-data-grid';
-import { Trash } from '@phosphor-icons/react';
+import { type GridValidRowModel } from '@mui/x-data-grid';
 
 import { type ColDefRow, type DTableActionHandler, type TableActionHandler } from '@/types/tables';
 
