@@ -123,11 +123,6 @@ function VTypesPanelRows({
 
         return (
           <TableRow hover key={row.id} selected={isSelected}>
-            {/* <TableCell>
-              <Typography variant="overline" component="div">
-                {row.id}
-              </Typography>
-            </TableCell> */}
             <TableCell>
               <Typography variant="subtitle2">{row.name}</Typography>
             </TableCell>

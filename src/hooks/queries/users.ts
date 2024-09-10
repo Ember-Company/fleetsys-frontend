@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 
 import { User } from '@/types/user';
 import { makeRequest } from '@/lib/api';
@@ -27,5 +27,23 @@ export function useGetTargetUser(id?: string): UseQueryResult<User> {
       return await makeRequest<User>(findOne);
     },
     enabled: Boolean(id),
+  });
+}
+
+export function useDeleteUser(id?: string): UseMutationResult {
+  const { findAll } = CoreApiRoutes.user;
+  const { deleteUser } = findAll.routeById(id);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [deleteUser.path],
+    mutationFn: async () => {
+      return await makeRequest<unknown>(deleteUser);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [findAll.path],
+      });
+    },
   });
 }

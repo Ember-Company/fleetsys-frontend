@@ -96,8 +96,6 @@ function Edit({ targetId, children, submitHandler }: EditFormProps<Values> & Pro
 
   const handleEdit = useCallback(
     async (values: Values) => {
-      logger.debug(values);
-
       mutate(values, {
         onSuccess: () => {
           updateAlertMessage({
