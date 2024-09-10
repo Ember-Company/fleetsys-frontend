@@ -10,14 +10,16 @@ import { useActionFields, useColumnVisibility } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 
 import { getUserTableFields } from './columns';
+import { DeleteAction } from './columns/action-columns';
 
-export function AccountDetailsForm(): React.JSX.Element {
+export function UsersOverviewTable(): React.JSX.Element {
   const { data, isLoading } = useGetUsers();
   const { columnVisibilityModel, handleColumnVisibilityChange } = useColumnVisibility('users-column-model-key');
+
   const actionCols = useActionFields<User>([
     {
       name: 'delete',
-      handler: () => 'hello',
+      component: DeleteAction,
     },
   ]);
 
@@ -33,7 +35,7 @@ export function AccountDetailsForm(): React.JSX.Element {
       pageSizeOptions={[5, 10, 25, 50]}
       autoHeight
       disableColumnFilter
-      disableRowSelectionOnClick
+      onCellClick={(_, event) => event.stopPropagation}
       columnVisibilityModel={columnVisibilityModel}
       onColumnVisibilityModelChange={handleColumnVisibilityChange}
       initialState={{

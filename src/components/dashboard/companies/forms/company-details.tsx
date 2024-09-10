@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect } from 'react';
-import { FormControl, FormHelperText, InputLabel, OutlinedInput, Typography } from '@mui/material';
+import React from 'react';
+import { FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Controller, useFormContext } from 'react-hook-form';
 
 import { MultiFormPropsContext } from '@/types/forms';
-import { logger } from '@/lib/default-logger';
-import { FormGrid, MultiStepActions } from '@/components/shared/form';
+import { FormGrid } from '@/components/shared/form';
 
 import { CompanySchemaValues } from './schemas';
-
-type Props = {};
 
 export default function CompanyDetails({
   formData,

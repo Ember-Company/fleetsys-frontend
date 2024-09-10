@@ -89,10 +89,14 @@ const CoreApiRoutes = {
     findAll: {
       method: 'get',
       path: 'api/users',
-      routeById: (id?: string) => ({
+      routeById: (id?: string = '') => ({
         findOne: {
           method: 'get',
-          path: `api/users/${id ?? ''}`,
+          path: `api/users/${id}`,
+        },
+        deleteUser: {
+          method: 'delete',
+          path: `api/users/${id}`,
         },
       }),
     },

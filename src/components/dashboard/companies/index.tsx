@@ -10,8 +10,6 @@ import { useColumnVisibility } from '@/hooks/tables';
 import { ToolBar } from '@/components/shared/datagrid/tool-bar';
 import Modal from '@/components/shared/modal';
 
-// import ToolBar from '@/components/shared/datagrid/tool-bar';
-
 import { getCompaniesTableFields } from './company-columns';
 import CreateCompanyForm from './forms/create';
 
