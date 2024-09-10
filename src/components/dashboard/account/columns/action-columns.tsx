@@ -31,7 +31,7 @@ export function DeleteAction({ props, data: { name, id } }: DActionComponent<Use
       color="inherit"
       ref={actionRef}
       // onClick={(event) => event.stopPropagation()}
-      onClick={(event) => event.stopPropagation}
+      // onClick={(event) => }
       component={forwardRef((itemProps, ref) => (
         <Dialog
           title="Delete User"
