@@ -35,7 +35,6 @@ export function AccountDetailsForm(): React.JSX.Element {
       pageSizeOptions={[5, 10, 25, 50]}
       autoHeight
       disableColumnFilter
-      // disableRowSelectionOnClick
       onCellClick={(_, event) => event.stopPropagation}
       columnVisibilityModel={columnVisibilityModel}
       onColumnVisibilityModelChange={handleColumnVisibilityChange}

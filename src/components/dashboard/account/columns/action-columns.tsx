@@ -30,14 +30,12 @@ export function DeleteAction({ props, data: { name, id } }: DActionComponent<Use
       label="Delete"
       color="inherit"
       ref={actionRef}
-      // onClick={(event) => event.stopPropagation()}
-      // onClick={(event) => }
       component={forwardRef((itemProps, ref) => (
         <Dialog
           title="Delete User"
           isIcon
           Icon={<Delete color="error" />}
-          iconButtonProps={{ color: 'secondary' }} // Assign the ref here
+          iconButtonProps={{ color: 'secondary' }}
           customBody={
             <>
               Are you sure you want to delete{' '}

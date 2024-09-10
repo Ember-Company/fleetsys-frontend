@@ -18,23 +18,7 @@ class TableActionSelecter<T extends GridValidRowModel> implements TableActionHan
       disableColumnMenu: true,
       disableExport: true,
       getActions: ({ id, row }) => {
-        return [
-          <Component data={row} />,
-          // <component  />
-          // <GridActionsCellItem
-          //   icon={<Trash fill="var(--NavItem-icon-active-color)" fontSize="2rem" weight="fill" />}
-          //   title="Delete"
-          //   key={id}
-          //   role="button"
-          //   name={name}
-          //   label="Delete"
-          //   color="inherit"
-          //   size="large"
-          //   sx={{
-          //     fontSize: '2rem',
-          //   }}
-          // />,
-        ];
+        return [<Component data={row} />];
       },
     };
   }
