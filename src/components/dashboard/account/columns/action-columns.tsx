@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useRef } from 'react';
+import React, { forwardRef, useCallback, useMemo, useRef } from 'react';
 import { Delete } from '@mui/icons-material';
 import { Button, CircularProgress, IconButton, Typography } from '@mui/material';
 import { Box } from '@mui/system';
@@ -8,13 +8,19 @@ import { Trash } from '@phosphor-icons/react';
 import { DActionComponent } from '@/types/tables';
 import { User } from '@/types/user';
 import { useDeleteUser } from '@/hooks/queries';
+import { useUser } from '@/hooks/use-user';
 import Dialog from '@/components/shared/dialog';
 
 type Props = {};
 
 export function DeleteAction({ props, data: { name, id } }: DActionComponent<User>): React.JSX.Element {
   const actionRef = useRef<HTMLButtonElement | null>(null);
+  const { user } = useUser();
   const { mutate, isPending } = useDeleteUser(id);
+
+  const isCurrentUser = useMemo((): boolean => {
+    return (user && user.id === id) || false;
+  }, [user, id]);
 
   const handleDelete = useCallback(() => {
     mutate(null);
@@ -34,8 +40,8 @@ export function DeleteAction({ props, data: { name, id } }: DActionComponent<Use
         <Dialog
           title="Delete User"
           isIcon
-          Icon={<Delete color="error" />}
-          iconButtonProps={{ color: 'secondary' }}
+          Icon={<Delete color={isCurrentUser ? 'disabled' : 'error'} />}
+          iconButtonProps={{ color: 'secondary', disabled: isCurrentUser }}
           customBody={
             <>
               Are you sure you want to delete{' '}

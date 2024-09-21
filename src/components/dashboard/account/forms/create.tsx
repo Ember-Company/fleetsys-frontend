@@ -6,7 +6,7 @@ import { Card } from '@mui/material';
 
 import MultiStepForm, { MultiStepFormConfig } from '@/components/shared/form/multi-step-form';
 
-import { AccountFormSchema, AccountValues } from './schemas';
+import { AccountFormSchema, AccountValues, defaultAccountValues } from './schemas';
 import { AccountFormContent } from './user-account-form';
 import { ProfileFormContent } from './user-profile-form';
 import { UserResetForm } from './user-reset-form';
@@ -28,26 +28,12 @@ const formConfig: MultiStepFormConfig<AccountValues> = {
   },
 };
 
-const defaultValues = {
-  name: '',
-  email: '',
-  role: 'USER',
-  phone_number: '',
-  password: '',
-  user_meta: {
-    industry: '',
-    city: '',
-    region: '',
-    country: '',
-  },
-} satisfies AccountValues;
-
 export function CreateUserForm(): React.JSX.Element {
   return (
     <Card sx={{ maxHeight: '800px', minHeight: '600px' }}>
       <MultiStepForm<AccountValues>
         configProps={formConfig}
-        defaultValues={defaultValues}
+        defaultValues={defaultAccountValues}
         resolver={zodResolver(AccountFormSchema)}
         ResetComponent={UserResetForm}
         asChild

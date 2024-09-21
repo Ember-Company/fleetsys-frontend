@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 
-import { User } from '@/types/user';
+import { UpdateUserPayload, User } from '@/types/user';
 import { makeRequest } from '@/lib/api';
 import CoreApiRoutes from '@/lib/api/api-routes';
 
@@ -27,6 +27,30 @@ export function useGetTargetUser(id?: string): UseQueryResult<User> {
       return await makeRequest<User>(findOne);
     },
     enabled: Boolean(id),
+  });
+}
+
+export function useUpdateUser(id?: string): UseMutationResult<unknown, Error, UpdateUserPayload> {
+  const {
+    findAll: { routeById },
+    showUser,
+  } = CoreApiRoutes.user;
+  const { updateUser, findOne } = routeById(id);
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [updateUser.path],
+    mutationFn: async (payload) => {
+      return await makeRequest<unknown, UpdateUserPayload>(updateUser, payload);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [findOne.path],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [showUser.path],
+      });
+    },
   });
 }
 

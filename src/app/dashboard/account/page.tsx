@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import { config } from '@/config';
 import { AccountInfo } from '@/components/dashboard/account/account-info';
-import { AccountDetailsForm } from '@/components/dashboard/account/users-overview';
+import UpdateCurrentAccountForm from '@/components/dashboard/account/forms/edit-account';
 
 export const metadata = { title: `Account | Dashboard | ${config.site.name}` } satisfies Metadata;
 
@@ -21,7 +21,8 @@ export default function Page(): React.JSX.Element {
           <AccountInfo />
         </Grid>
         <Grid size={{ lg: 8, md: 6, xs: 12 }}>
-          <AccountDetailsForm />
+          <UpdateCurrentAccountForm />
+          {/* <AccountDetailsForm /> */}
         </Grid>
       </Grid>
     </Stack>

@@ -23,10 +23,10 @@ const CoreApiRoutes = {
     find: {
       method: 'get',
       path: 'api/vehicle-status',
-      routeById: (id?: string) => ({
+      routeById: (id: string = '') => ({
         findOne: {
           method: 'get',
-          path: `api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id}`,
         },
       }),
     },
@@ -36,11 +36,11 @@ const CoreApiRoutes = {
       routeById: (id?: string) => ({
         update: {
           method: 'put',
-          path: `api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id}`,
         },
         remove: {
           method: 'delete',
-          path: `api/vehicle-status/${id ?? ''}`,
+          path: `api/vehicle-status/${id}`,
         },
       }),
     },
@@ -49,7 +49,7 @@ const CoreApiRoutes = {
     find: {
       method: 'get',
       path: 'api/vehicle-types',
-      routeById: (id?: string) => ({
+      routeById: (id: string = '') => ({
         findOne: {
           method: 'get',
           path: `api/vehicle-types/${id ?? ''}`,
@@ -59,14 +59,14 @@ const CoreApiRoutes = {
     create: {
       method: 'post',
       path: 'api/vehicle-types',
-      routeById: (id?: string) => ({
+      routeById: (id: string = '') => ({
         update: {
           method: 'put',
-          path: `api/vehicle-types/${id ?? ''}`,
+          path: `api/vehicle-types/${id}`,
         },
         remove: {
           method: 'delete',
-          path: `api/vehicle-types/${id ?? ''}`,
+          path: `api/vehicle-types/${id}`,
         },
       }),
     },
@@ -89,13 +89,17 @@ const CoreApiRoutes = {
     findAll: {
       method: 'get',
       path: 'api/users',
-      routeById: (id?: string = '') => ({
+      routeById: (id: string = '') => ({
         findOne: {
           method: 'get',
           path: `api/users/${id}`,
         },
         deleteUser: {
           method: 'delete',
+          path: `api/users/${id}`,
+        },
+        updateUser: {
+          method: 'put',
           path: `api/users/${id}`,
         },
       }),
@@ -115,7 +119,7 @@ const CoreApiRoutes = {
     listCompanies: {
       method: 'get',
       path: 'api/companies',
-      routeById: (id?: string) => ({
+      routeById: (id: string = '') => ({
         findOne: {
           method: 'get',
           path: `api/companies/${id}`,

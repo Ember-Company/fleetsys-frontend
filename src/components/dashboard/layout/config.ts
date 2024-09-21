@@ -15,7 +15,7 @@ function withRoleAccess(config: NavItemConfig[], role: Role | Role[]): NavItemCo
 const defaultNavItems = [
   { key: 'overview', title: 'Overview', href: paths.dashboard.overview, icon: 'chart-pie' },
   { key: 'settings', title: 'Settings', href: paths.dashboard.settings, icon: 'gear-six' },
-  { key: 'account', title: 'Account', href: paths.dashboard.account, icon: 'user' },
+  { key: 'account', title: 'Account', href: paths.dashboard.account, icon: 'user', hidden: true },
   { key: 'not-authorized', disabled: true, href: '/dashboard/not-authorized/', hidden: true },
 ] satisfies NavItemConfig[];
 
@@ -44,6 +44,7 @@ const AdminNavItems = withRoleAccess(
           title: 'Register Employee',
           href: paths.dashboard.createEmployee,
           icon: 'new-user',
+          hidden: true,
           isChild: true,
         },
         {

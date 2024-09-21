@@ -46,10 +46,6 @@ export function SubmitFormContent({
         return renderFields(value, fieldName);
       }
 
-      if (fieldName === 'phone_number') {
-        logger.debug(value);
-      }
-
       return (
         <>
           <Field
@@ -151,7 +147,7 @@ function Field({
                 type={name === 'email' ? 'email' : name === 'password' ? 'password' : 'text'}
                 readOnly
                 sx={{ paddingLeft: 1.5 }}
-                value={value}
+                // value={value}
               />
             )}
           </FormControl>

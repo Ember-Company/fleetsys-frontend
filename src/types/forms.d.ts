@@ -18,7 +18,11 @@ export interface EditFormProps<T> extends CreateFormProps<T> {
   targetId?: string;
 }
 
-export type FormContentProps<T> = Omit<UseFormReturn<T>, 'handleSubmit'>;
+export type FormContentProps<T> = Omit<UseFormReturn<T>, 'handleSubmit'> & {
+  handleReset: () => void;
+  formData: TSchema | {};
+};
+
 export interface MultiFormProps<T extends FieldValues, S extends FieldValues = T> extends UseFormReturn<T> {
   formData: S;
   updateFormState: (data: Partial<S>) => void;
